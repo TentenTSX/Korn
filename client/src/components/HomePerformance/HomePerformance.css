@@ -67,7 +67,7 @@
     height: 100%;
     object-fit: cover;
     object-position: center;
-    filter: grayscale(100%) brightness(0.42) contrast(1.08);
+    filter: grayscale(100%) brightness(0.92) contrast(1.08);
   }
 }
 
@@ -77,8 +77,8 @@
   background: linear-gradient(
     180deg,
     rgba(0, 0, 0, 0.09) 0%,
-    rgba(0, 0, 0, 0.28) 58%,
-    rgba(0, 0, 0, 0.48) 100%
+    rgba(0, 0, 0, 0.28) 15%,
+    rgba(0, 0, 0, 0.48) 25%
   );
 }
 
