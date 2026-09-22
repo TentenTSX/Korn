@@ -83,20 +83,38 @@ const products = [
 
 function MenCatalogue() {
   const [activeFilter, setActiveFilter] = useState("Tout");
+  const [sort, setSort] = useState("newest");
   const visibleProducts =
     activeFilter === "Tout"
       ? products
       : products.filter((product) => product.categoryFilter === activeFilter);
+  const sortedProducts = [...visibleProducts].sort(
+    (firstProduct, secondProduct) => {
+      if (sort === "price-low") {
+        return (
+          Number.parseInt(firstProduct.price, 10) -
+          Number.parseInt(secondProduct.price, 10)
+        );
+      }
+      if (sort === "price-high") {
+        return (
+          Number.parseInt(secondProduct.price, 10) -
+          Number.parseInt(firstProduct.price, 10)
+        );
+      }
+      return 0;
+    },
+  );
 
   return (
     <>
-      <MenFilters onFilterChange={setActiveFilter} />
+      <MenFilters onFilterChange={setActiveFilter} onSortChange={setSort} />
       <section className="men-catalogue" aria-labelledby="men-products-title">
         <h2 id="men-products-title" className="men-product-count">
           {visibleProducts.length} produits
         </h2>
         <div className="men-product-grid">
-          {visibleProducts.map((product) => (
+          {sortedProducts.map((product) => (
             <MenProductCard key={product.name} {...product} />
           ))}
         </div>

@@ -1,21 +1,30 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const filters = [
   "Tout",
-  "Brassières",
-  "Leggings",
-  "Shorts",
-  "Sweats",
-  "T-shirts",
+  "Homme",
+  "Femme",
+  "Nouveautés",
+  "Soldes",
+  "Bestsellers",
 ];
 
-type GirlFiltersProps = {
+type CollectionFiltersProps = {
+  initialFilter: string;
   onFilterChange: (filter: string) => void;
   onSortChange: (sort: string) => void;
 };
 
-function GirlFilters({ onFilterChange, onSortChange }: GirlFiltersProps) {
-  const [activeFilter, setActiveFilter] = useState("Tout");
+function CollectionFilters({
+  initialFilter,
+  onFilterChange,
+  onSortChange,
+}: CollectionFiltersProps) {
+  const [activeFilter, setActiveFilter] = useState(initialFilter);
+
+  useEffect(() => {
+    setActiveFilter(initialFilter);
+  }, [initialFilter]);
 
   const handleFilterChange = (filter: string) => {
     setActiveFilter(filter);
@@ -23,16 +32,19 @@ function GirlFilters({ onFilterChange, onSortChange }: GirlFiltersProps) {
   };
 
   return (
-    <div className="girl-toolbar">
-      <p className="girl-breadcrumb">
-        Accueil <span aria-hidden="true">›</span> Femme
+    <div className="collection-toolbar">
+      <p className="collection-breadcrumb">
+        Accueil <span aria-hidden="true">›</span> Collection
       </p>
-      <div className="girl-filters">
-        <ul className="girl-filter-list" aria-label="Filtrer les produits">
+      <div className="collection-filters">
+        <ul
+          className="collection-filter-list"
+          aria-label="Filtrer les produits"
+        >
           {filters.map((filter) => (
             <li key={filter}>
               <button
-                className={`girl-filter-button ${activeFilter === filter ? "is-active" : ""}`}
+                className={`collection-filter-button ${activeFilter === filter ? "is-active" : ""}`}
                 type="button"
                 aria-pressed={activeFilter === filter}
                 onClick={() => handleFilterChange(filter)}
@@ -46,7 +58,7 @@ function GirlFilters({ onFilterChange, onSortChange }: GirlFiltersProps) {
         <label>
           <span className="sr-only">Trier les produits</span>
           <select
-            className="girl-sort-select"
+            className="collection-sort-select"
             defaultValue="newest"
             onChange={(event) => onSortChange(event.target.value)}
           >
@@ -60,4 +72,4 @@ function GirlFilters({ onFilterChange, onSortChange }: GirlFiltersProps) {
   );
 }
 
-export default GirlFilters;
+export default CollectionFilters;

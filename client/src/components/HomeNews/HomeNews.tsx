@@ -44,7 +44,7 @@ function HomeNews() {
     <section className="home-news" aria-labelledby="home-news-title">
       <header className="home-news-header">
         <h2 id="home-news-title">Nouveautés</h2>
-        <a className="home-news-link" href="/collection">
+        <a className="home-news-link" href="/collection/news">
           Tout voir
         </a>
       </header>
