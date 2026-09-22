@@ -15,7 +15,7 @@ function Hero() {
             <a className="hero-button hero-button-primary" href="/collection">
               Découvrir la collection
             </a>
-            <a className="hero-button hero-button-secondary" href="/soldes">
+            <a className="hero-button hero-button-secondary" href="/collection">
               Voir les soldes
             </a>
           </div>
@@ -23,28 +23,28 @@ function Hero() {
       </div>
 
       <div className="home-hero-grid">
-        <a className="home-hero-card home-hero-card-woman" href="/femme">
+        <a className="home-hero-card home-hero-card-woman" href="/girl">
           <img
             src="https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?w=900&h=700&fit=crop&auto=format"
             alt="Femme portant une tenue de mode"
           />
           <span className="grid-img-label">FEMME</span>
         </a>
-        <a className="home-hero-card home-hero-card-man" href="/homme">
+        <a className="home-hero-card home-hero-card-man" href="/men">
           <img
             src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=900&h=700&fit=crop&auto=format"
             alt="Homme portant une tenue de mode"
           />
           <span className="grid-img-label">HOMME</span>
         </a>
-        <a className="home-hero-card home-hero-card-news" href="/news">
+        <a className="home-hero-card home-hero-card-news" href="/collection">
           <img
             src="https://images.unsplash.com/photo-1525507119028-ed4c629a60a3?w=900&h=700&fit=crop&auto=format"
             alt="Nouveautés de la collection Korn"
           />
           <span className="grid-img-label">NOUVEAUTES</span>
         </a>
-        <a className="home-hero-card home-hero-card-sale" href="/soldes">
+        <a className="home-hero-card home-hero-card-sale" href="/collection">
           <img
             src="https://images.unsplash.com/photo-1445205170230-053b83016050?w=900&h=700&fit=crop&auto=format"
             alt="Vêtements en promotion pendant les soldes"

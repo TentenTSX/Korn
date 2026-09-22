@@ -38,7 +38,7 @@ function HomeBestSeller() {
     >
       <header className="home-best-sellers-header">
         <h2 id="home-best-sellers-title">Bestsellers</h2>
-        <a className="home-best-sellers-link" href="/bestsellers">
+        <a className="home-best-sellers-link" href="/collection">
           Tout voir
         </a>
       </header>

@@ -16,7 +16,7 @@ function HomeStory() {
           réduit. Des textures techniques et des coupes pensées pour le
           mouvement, sans compromis sur le style.
         </p>
-        <a className="home-story-link" href="/notre-histoire">
+        <a className="home-story-link" href="/">
           Notre histoire
         </a>
       </div>
