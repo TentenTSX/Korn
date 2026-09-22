@@ -6,13 +6,13 @@ import HomeStory from "../../components/HomeStory/HomeStory";
 
 function Home() {
   return (
-    <>
+    <main>
       <Hero />
       <HomeNews />
       <HomeStory />
       <HomeBestSeller />
       <HomePerformance />
-    </>
+    </main>
   );
 }
 
