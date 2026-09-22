@@ -1,7 +1,11 @@
+import MenCatalogue from "../../components/MenCatalogue/MenCatalogue";
+import MenHero from "../../components/MenHero/MenHero";
+
 function Men() {
   return (
-    <main>
-      <h1>Men</h1>
+    <main className="men-page">
+      <MenHero />
+      <MenCatalogue />
     </main>
   );
 }
