@@ -11,9 +11,10 @@ const filters = [
 
 type MenFiltersProps = {
   onFilterChange: (filter: string) => void;
+  onSortChange: (sort: string) => void;
 };
 
-function MenFilters({ onFilterChange }: MenFiltersProps) {
+function MenFilters({ onFilterChange, onSortChange }: MenFiltersProps) {
   const [activeFilter, setActiveFilter] = useState("Tout");
 
   const handleFilterChange = (filter: string) => {
@@ -44,7 +45,11 @@ function MenFilters({ onFilterChange }: MenFiltersProps) {
         </ul>
         <label>
           <span className="sr-only">Trier les produits</span>
-          <select className="men-sort-select" defaultValue="newest">
+          <select
+            className="men-sort-select"
+            defaultValue="newest"
+            onChange={(event) => onSortChange(event.target.value)}
+          >
             <option value="newest">Trier : nouveautés</option>
             <option value="price-low">Prix croissant</option>
             <option value="price-high">Prix décroissant</option>

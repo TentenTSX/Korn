@@ -25,13 +25,13 @@ function Navbar() {
             <a href="/girl">Femme</a>
           </li>
           <li className="nav-link">
-            <a href="/">Nouveautés</a>
+            <a href="/collection/news">Nouveautés</a>
           </li>
           <li className="nav-link">
             <a href="/collection">Collection</a>
           </li>
           <li className="nav-link">
-            <a href="/collection">Soldes</a>
+            <a href="/collection/sales">Soldes</a>
             <span aria-label={`${soldes[0].discount}% de réduction`}>
               {soldes[0].discount}%
             </span>

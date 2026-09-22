@@ -42,6 +42,10 @@ const router = createBrowserRouter([
         element: <Collection />,
       },
       {
+        path: "/collection/:filter",
+        element: <Collection />,
+      },
+      {
         path: "/girl",
         element: <Girl />,
       },

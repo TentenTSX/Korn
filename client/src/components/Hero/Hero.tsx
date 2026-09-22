@@ -15,7 +15,10 @@ function Hero() {
             <a className="hero-button hero-button-primary" href="/collection">
               Découvrir la collection
             </a>
-            <a className="hero-button hero-button-secondary" href="/collection">
+            <a
+              className="hero-button hero-button-secondary"
+              href="/collection/sales"
+            >
               Voir les soldes
             </a>
           </div>
@@ -37,14 +40,20 @@ function Hero() {
           />
           <span className="grid-img-label">HOMME</span>
         </a>
-        <a className="home-hero-card home-hero-card-news" href="/collection">
+        <a
+          className="home-hero-card home-hero-card-news"
+          href="/collection/news"
+        >
           <img
             src="https://images.unsplash.com/photo-1525507119028-ed4c629a60a3?w=900&h=700&fit=crop&auto=format"
             alt="Nouveautés de la collection Korn"
           />
           <span className="grid-img-label">NOUVEAUTES</span>
         </a>
-        <a className="home-hero-card home-hero-card-sale" href="/collection">
+        <a
+          className="home-hero-card home-hero-card-sale"
+          href="/collection/sales"
+        >
           <img
             src="https://images.unsplash.com/photo-1445205170230-053b83016050?w=900&h=700&fit=crop&auto=format"
             alt="Vêtements en promotion pendant les soldes"
