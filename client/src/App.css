@@ -1,7 +1,7 @@
 :root {
-  --font-body: "Archivo-Black", sans-serif;
+  --font-body: "Archivo Black", sans-serif;
   --font-display: "Playfair Display", Georgia, serif;
-
+  --font-third: "Archivo", serif;
   --color-ink: #191817;
   --color-muted: #706c67;
   --color-paper: #f7f5f1;
@@ -25,6 +25,15 @@
 
 a {
   text-decoration: none;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  font-family: var(--font-body);
 }
 * {
   box-sizing: border-box;
