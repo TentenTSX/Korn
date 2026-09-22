@@ -19,19 +19,19 @@ function Navbar() {
       <nav className="Navbar-nav" aria-label="Navigation principale">
         <ul className="Nav-links">
           <li className="nav-link">
-            <a href="/homme">Homme</a>
+            <a href="/men">Homme</a>
           </li>
           <li className="nav-link">
-            <a href="/femme">Femme</a>
+            <a href="/girl">Femme</a>
           </li>
           <li className="nav-link">
-            <a href="/news">Nouveautés</a>
+            <a href="/">Nouveautés</a>
           </li>
           <li className="nav-link">
             <a href="/collection">Collection</a>
           </li>
           <li className="nav-link">
-            <a href="/soldes">Soldes</a>
+            <a href="/collection">Soldes</a>
             <span aria-label={`${soldes[0].discount}% de réduction`}>
               {soldes[0].discount}%
             </span>
@@ -73,19 +73,15 @@ function Navbar() {
 
         <a
           className="Nav-profile-button"
-          href="/profil"
+          href="/profile"
           aria-label="Voir le profil"
         >
           <UserRound size={18} strokeWidth={1.8} />
         </a>
 
-        <button
-          className="Nav-bag-button"
-          type="button"
-          aria-label="Voir le panier"
-        >
+        <a className="Nav-bag-button" href="/cart" aria-label="Voir le panier">
           <ShoppingBag size={18} strokeWidth={1.8} />
-        </button>
+        </a>
       </div>
     </header>
   );
