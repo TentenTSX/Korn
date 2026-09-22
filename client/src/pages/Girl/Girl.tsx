@@ -1,7 +1,12 @@
+import GirlCatalogue from "../../components/GirlCatalogue/GirlCatalogue";
+import GirlHero from "../../components/GirlHero/GirlHero";
+import "./Girl.css";
+
 function Girl() {
   return (
-    <main>
-      <h1>Girl</h1>
+    <main className="girl-page">
+      <GirlHero />
+      <GirlCatalogue />
     </main>
   );
 }
