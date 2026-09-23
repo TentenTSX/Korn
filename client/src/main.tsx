@@ -13,6 +13,7 @@ import Girl from "./pages/Girl/Girl";
 import Home from "./pages/Home/Home";
 import Men from "./pages/Men/Men";
 import Profile from "./pages/Profile/Profile";
+import ProfileDashboard from "./pages/ProfileDashboard/ProfileDashboard";
 
 // Import additional components for new routes
 // Try creating these components in the "pages" folder
@@ -56,6 +57,10 @@ const router = createBrowserRouter([
       {
         path: "/profile",
         element: <Profile />,
+      },
+      {
+        path: "/profile/dashboard",
+        element: <ProfileDashboard />,
       },
     ],
   },

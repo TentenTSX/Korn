@@ -1,0 +1,195 @@
+.profile-login {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(18rem, 28rem);
+  align-items: center;
+  gap: clamp(3rem, 10vw, 10rem);
+  max-width: 76rem;
+  min-height: 100vh;
+  margin: 0 auto;
+  padding: 5rem var(--space-4) 7rem;
+}
+
+.profile-login-intro {
+  max-width: 34rem;
+}
+
+.profile-eyebrow {
+  display: block;
+  margin-bottom: var(--space-4);
+  color: var(--color-accent);
+  font-family: var(--font-body);
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.profile-login-intro h1 {
+  max-width: 12ch;
+  color: var(--color-ink);
+  font-size: clamp(2.5rem, 6vw, 5rem);
+  letter-spacing: -0.05em;
+  line-height: 0.95;
+}
+
+.profile-login-intro p {
+  max-width: 30rem;
+  margin-top: var(--space-5);
+  color: var(--color-muted);
+  font-family: var(--font-third);
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.profile-login-form {
+  position: relative;
+  padding: clamp(1.5rem, 4vw, 3rem);
+  border: 1px solid var(--color-line);
+  border-radius: 4px;
+  background: var(--color-surface);
+  box-shadow: 0 1.5rem 4rem rgba(25, 24, 23, 0.08);
+}
+
+.profile-mode-switch {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid var(--color-line);
+}
+
+.profile-mode-switch button {
+  padding: 0.75rem 0.5rem;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  background: transparent;
+  color: var(--color-muted);
+  cursor: pointer;
+  font-family: var(--font-body);
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.profile-mode-switch button.is-active,
+.profile-mode-switch button:hover,
+.profile-mode-switch button:focus-visible {
+  border-bottom-color: var(--color-ink);
+  color: var(--color-ink);
+  outline: none;
+}
+
+.profile-field + .profile-field {
+  margin-top: var(--space-5);
+}
+
+.profile-field label {
+  display: block;
+  margin-bottom: var(--space-2);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.profile-input-wrapper {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: 0 0.15rem;
+  border-bottom: 1px solid var(--color-line);
+  color: var(--color-muted);
+  transition: border-color 180ms ease, color 180ms ease;
+}
+
+.profile-input-wrapper:focus-within {
+  border-color: var(--color-ink);
+  color: var(--color-ink);
+}
+
+.profile-field input {
+  width: 100%;
+  padding: 0.85rem 0;
+  border: 0;
+  border-radius: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--color-ink);
+  font-family: var(--font-third);
+  font-size: 1rem;
+}
+
+.profile-field input:focus {
+  border-color: transparent;
+}
+
+.profile-password-toggle {
+  display: grid;
+  flex: 0 0 auto;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  border: 0;
+  background: transparent;
+  color: var(--color-muted);
+  cursor: pointer;
+}
+
+.profile-password-toggle:hover,
+.profile-password-toggle:focus-visible {
+  color: var(--color-ink);
+  outline: none;
+}
+
+.profile-form-error {
+  margin-top: var(--space-4);
+  color: var(--color-accent-dark);
+  font-family: var(--font-third);
+  font-size: 0.85rem;
+  line-height: 1.4;
+}
+
+.profile-submit-button {
+  width: 100%;
+  margin-top: var(--space-6);
+  padding: 1rem;
+  border: 1px solid var(--color-ink);
+  border-radius: 2px;
+  background: var(--color-ink);
+  color: var(--color-surface);
+  cursor: pointer;
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  transition: background 180ms ease, color 180ms ease;
+}
+
+.profile-submit-button:hover,
+.profile-submit-button:focus-visible {
+  background: transparent;
+  color: var(--color-ink);
+  outline: none;
+}
+
+.profile-forgot-link {
+  display: block;
+  margin-top: var(--space-4);
+  color: var(--color-muted);
+  font-family: var(--font-third);
+  font-size: 0.85rem;
+  text-align: center;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+@media (max-width: 700px) {
+  .profile-login {
+    display: block;
+    min-height: auto;
+    padding-block: 3rem;
+  }
+
+  .profile-login-form {
+    margin-top: 3rem;
+  }
+}
