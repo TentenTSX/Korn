@@ -1,5 +1,5 @@
-import MenCatalogue from "../../components/MenCatalogue/MenCatalogue";
-import MenHero from "../../components/MenHero/MenHero";
+import MenCatalogue from "../../components/catalog/Men/MenCatalogue/MenCatalogue";
+import MenHero from "../../components/catalog/Men/MenHero/MenHero";
 
 function Men() {
   return (

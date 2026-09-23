@@ -1,0 +1,68 @@
+.girl-product-card {
+  min-width: 0;
+}
+
+.girl-product-card-image {
+  position: relative;
+  display: block;
+  aspect-ratio: 0.8;
+  overflow: hidden;
+  background: #e9e9e9;
+}
+
+.girl-product-card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 450ms var(--ease-out);
+}
+
+.girl-product-card-image:hover img {
+  transform: scale(1.04);
+}
+
+.girl-product-card-badge {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  padding: 0.6rem 0.8rem;
+  background: var(--color-ink);
+  color: var(--color-surface);
+  font-family: var(--font-body);
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+}
+
+.girl-product-card-info {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding-top: var(--space-3);
+}
+
+.girl-product-card-info h2,
+.girl-product-card-info strong {
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.girl-product-card-info p {
+  margin-top: 0.4rem;
+  color: var(--color-muted);
+  font-family: var(--font-third);
+  font-size: 0.8rem;
+}
+
+@media (max-width: 640px) {
+  .girl-product-card-info {
+    display: block;
+  }
+
+  .girl-product-card-info strong {
+    display: block;
+    margin-top: 0.5rem;
+  }
+}
