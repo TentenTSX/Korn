@@ -1,6 +1,5 @@
-import GirlCatalogue from "../../components/GirlCatalogue/GirlCatalogue";
-import GirlHero from "../../components/GirlHero/GirlHero";
-import "./Girl.css";
+import GirlCatalogue from "../../components/catalog/Girl/GirlCatalogue/GirlCatalogue";
+import GirlHero from "../../components/catalog/Girl/GirlHero/GirlHero";
 
 function Girl() {
   return (

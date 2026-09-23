@@ -1,6 +1,5 @@
-import CollectionCatalogue from "../../components/CollectionCatalogue/CollectionCatalogue";
-import CollectionHero from "../../components/CollectionHero/CollectionHero";
-import "./Collection.css";
+import CollectionCatalogue from "../../components/catalog/Collection/CollectionCatalogue/CollectionCatalogue";
+import CollectionHero from "../../components/catalog/Collection/CollectionHero/CollectionHero";
 
 function Collection() {
   return (
