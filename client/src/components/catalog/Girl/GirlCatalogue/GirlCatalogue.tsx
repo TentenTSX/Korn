@@ -1,9 +1,24 @@
 import { useState } from "react";
+import { useProducts } from "../../../../hooks/useProducts";
 import GirlFilters from "../GirlFilters/GirlFilters";
 import GirlProductCard from "../GirlProductCard/GirlProductCard";
 import "./GirlCatalogue.css";
 
-const products = [
+type CatalogProduct = {
+  name: string;
+  category: string;
+  price: string;
+  badge?: string;
+  categoryFilter: string;
+  image: string;
+  alt: string;
+  variantId?: number | null;
+  size?: string | null;
+  color?: string | null;
+  stockQuantity?: number;
+};
+
+const demoProducts: CatalogProduct[] = [
   {
     name: "Motion Bra",
     category: "Brassière maintien moyen",
@@ -83,8 +98,24 @@ const products = [
 ];
 
 function GirlCatalogue() {
+  const { products: apiProducts } = useProducts("gender=Femme");
   const [activeFilter, setActiveFilter] = useState("Tout");
   const [sort, setSort] = useState("newest");
+  const products: CatalogProduct[] =
+    apiProducts.length > 0
+      ? apiProducts.map((product) => ({
+          name: product.name,
+          category: product.description ?? "Collection Femme",
+          price: `${product.price} €`,
+          categoryFilter: product.category_name ?? "Tout",
+          image: product.image ?? "",
+          alt: product.alt_text ?? product.name,
+          variantId: product.id_variant,
+          size: product.size,
+          color: product.color,
+          stockQuantity: product.stock_quantity,
+        }))
+      : demoProducts;
   const visibleProducts =
     activeFilter === "Tout"
       ? products
@@ -116,7 +147,10 @@ function GirlCatalogue() {
         </h2>
         <div className="girl-product-grid">
           {sortedProducts.map((product) => (
-            <GirlProductCard key={product.name} {...product} />
+            <GirlProductCard
+              key={`${product.name}-${product.variantId ?? "demo"}`}
+              {...product}
+            />
           ))}
         </div>
       </section>

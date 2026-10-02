@@ -1,3 +1,4 @@
+import AddToCartButton from "../../../cart/AddToCartButton";
 import "./CollectionProductCard.css";
 
 type CollectionProductCardProps = {
@@ -7,6 +8,10 @@ type CollectionProductCardProps = {
   badge?: string;
   image: string;
   alt: string;
+  variantId?: number | null;
+  size?: string | null;
+  color?: string | null;
+  stockQuantity?: number;
 };
 
 function CollectionProductCard({
@@ -16,11 +21,15 @@ function CollectionProductCard({
   badge,
   image,
   alt,
+  variantId,
+  size,
+  color,
+  stockQuantity,
 }: CollectionProductCardProps) {
   return (
     <article className="collection-product-card">
       <a className="collection-product-card-image" href="/collection">
-        <img src={image} alt={alt} />
+        {image && <img src={image} alt={alt} />}
         {badge && (
           <span className="collection-product-card-badge">{badge}</span>
         )}
@@ -29,9 +38,17 @@ function CollectionProductCard({
         <div>
           <h2>{name}</h2>
           <p>{category}</p>
+          {(size || color) && (
+            <p>{[color, size].filter(Boolean).join(" · ")}</p>
+          )}
         </div>
         <strong>{price}</strong>
       </div>
+      <AddToCartButton
+        variantId={variantId ?? undefined}
+        stockQuantity={stockQuantity}
+        label={[name, color, size].filter(Boolean).join(" · ")}
+      />
     </article>
   );
 }

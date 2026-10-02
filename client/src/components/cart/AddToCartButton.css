@@ -1,0 +1,44 @@
+.add-to-cart-control {
+  min-height: 2.5rem;
+  margin-top: 0.75rem;
+}
+
+.add-to-cart-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  min-height: 2.5rem;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--color-ink);
+  border-radius: 2px;
+  background: var(--color-ink);
+  color: var(--color-surface);
+  cursor: pointer;
+  font-family: var(--font-body);
+  font-size: 0.65rem;
+  text-transform: uppercase;
+}
+
+.add-to-cart-button:hover:not(:disabled),
+.add-to-cart-button:focus-visible {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  outline: none;
+}
+
+.add-to-cart-button:disabled {
+  border-color: var(--color-line);
+  background: var(--color-paper);
+  color: var(--color-muted);
+  cursor: not-allowed;
+}
+
+.add-to-cart-error {
+  display: block;
+  padding-top: 0.35rem;
+  color: var(--color-accent-dark);
+  font-family: var(--font-third);
+  font-size: 0.75rem;
+}
