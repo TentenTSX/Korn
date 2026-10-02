@@ -2,6 +2,7 @@ import { Search, ShoppingBag, UserRound, X } from "lucide-react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { useCartContext } from "../../contexts/CartContext";
+import { useActiveSale } from "../../hooks/useActiveSale";
 import "../Navbar/Navbar.css";
 
 function Navbar() {
@@ -9,11 +10,7 @@ function Navbar() {
   const { itemCount, openCart } = useCartContext();
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [search, setSearch] = useState("");
-  const soldes = [
-    { name: "Winter", discount: -20 },
-    { name: "Summer", discount: -30 },
-    { name: "Spring", discount: -30 },
-  ];
+  const activeSale = useActiveSale();
 
   return (
     <header className="Navbar">
@@ -35,12 +32,14 @@ function Navbar() {
           <li className="nav-link">
             <Link to="/collection">Collection</Link>
           </li>
-          <li className="nav-link">
-            <Link to="/collection/sales">Soldes</Link>
-            <span aria-label={`${soldes[0].discount}% de réduction`}>
-              {soldes[0].discount}%
-            </span>
-          </li>
+          {activeSale && (
+            <li className="nav-link">
+              <Link to="/collection/sales">Soldes</Link>
+              <span aria-label={`${activeSale.discount_percent}% de réduction`}>
+                -{activeSale.discount_percent}%
+              </span>
+            </li>
+          )}
         </ul>
       </nav>
 
