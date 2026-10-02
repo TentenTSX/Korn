@@ -1,3 +1,4 @@
+import { Link } from "react-router";
 import { useProducts } from "../../../hooks/useProducts";
 import "./HomeBestSeller.css";
 
@@ -14,16 +15,16 @@ function HomeBestSeller() {
     >
       <header className="home-best-sellers-header">
         <h2 id="home-best-sellers-title">Bestsellers</h2>
-        <a className="home-best-sellers-link" href="/collection/bestsellers">
+        <Link className="home-best-sellers-link" to="/collection/bestsellers">
           Tout voir
-        </a>
+        </Link>
       </header>
 
       <div className="home-best-sellers-grid">
         {uniqueProducts.map((product) => (
-          <a
+          <Link
             className="home-best-sellers-product"
-            href={`/product/${product.id_product}`}
+            to={`/product/${product.id_product}`}
             key={product.id_product}
           >
             <div className="home-best-sellers-image-wrapper">
@@ -40,7 +41,7 @@ function HomeBestSeller() {
               <span className="home-best-sellers-price">{product.price} €</span>
               <p>{product.description ?? product.category_name}</p>
             </div>
-          </a>
+          </Link>
         ))}
       </div>
     </section>
