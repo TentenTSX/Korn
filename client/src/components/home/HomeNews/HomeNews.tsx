@@ -1,5 +1,6 @@
 import { Link } from "react-router";
 import { useProducts } from "../../../hooks/useProducts";
+import AddToCartButton from "../../cart/AddToCartButton";
 import "./HomeNews.css";
 
 function HomeNews() {
@@ -19,27 +20,37 @@ function HomeNews() {
 
       <div className="home-news-grid">
         {uniqueProducts.map((product) => (
-          <Link
-            className="home-news-product"
-            to={`/product/${product.id_product}`}
-            key={product.id_product}
-          >
+          <article className="home-news-product" key={product.id_product}>
             <div className="home-news-image-wrapper">
-              {product.image && (
-                <img
-                  src={product.image}
-                  alt={product.alt_text ?? product.name}
+              <Link
+                className="home-news-image-link"
+                to={`/product/${product.id_product}`}
+              >
+                {product.image && (
+                  <img
+                    src={product.image}
+                    alt={product.alt_text ?? product.name}
+                  />
+                )}
+                <span className="home-news-badge">NOUVEAU</span>
+              </Link>
+              <div className="home-news-add">
+                <AddToCartButton
+                  variantId={product.id_variant ?? undefined}
+                  stockQuantity={product.stock_quantity}
+                  label={product.name}
                 />
-              )}
-              <span className="home-news-badge">NOUVEAU</span>
-              <span className="home-news-add">Ajouter au panier</span>
+              </div>
             </div>
-            <div className="home-news-product-info">
+            <Link
+              className="home-news-product-info"
+              to={`/product/${product.id_product}`}
+            >
               <h3>{product.name}</h3>
               <span className="home-news-price">{product.price} €</span>
               <p>{product.description ?? product.category_name}</p>
-            </div>
-          </Link>
+            </Link>
+          </article>
         ))}
       </div>
     </section>

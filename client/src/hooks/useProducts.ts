@@ -15,6 +15,7 @@ export type Product = {
   stock_quantity: number;
   image: string | null;
   alt_text: string | null;
+  created_at: string;
 };
 
 export function useProducts(searchParams = "") {

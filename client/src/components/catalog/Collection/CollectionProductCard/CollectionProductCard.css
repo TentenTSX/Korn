@@ -1,4 +1,7 @@
 .collection-product-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
   min-width: 0;
 }
 
@@ -36,6 +39,7 @@
 
 .collection-product-card-info {
   display: flex;
+  flex: 1;
   justify-content: space-between;
   gap: var(--space-3);
   padding-top: var(--space-3);
