@@ -27,7 +27,7 @@ function MenCatalogue() {
     name: product.name,
     category: product.description ?? "Collection Homme",
     price: `${product.price} €`,
-    categoryFilter: product.category_name ?? "Tout",
+    categoryFilter: product.subcategory_name ?? "Tout",
     image: product.image ?? "",
     alt: product.alt_text ?? product.name,
     variantId: product.id_variant,

@@ -160,12 +160,21 @@ CREATE TABLE payments (
 
 INSERT INTO categories (name, slug) VALUES
     ('Homme', 'homme'),
-    ('Femme', 'femme');
+    ('Femme', 'femme'),
+    ('Débardeurs', 'debardeurs'),
+    ('Pantalons', 'pantalons'),
+    ('Shorts', 'shorts'),
+    ('Sweats', 'sweats'),
+    ('T-shirts', 't-shirts'),
+    ('Brassières', 'brassieres'),
+    ('Leggings', 'leggings');
 
 INSERT INTO products (name, description) VALUES ('Training Tank', 'Debardeur respirant pour l''entrainement.');
 SET @product_id = LAST_INSERT_ID();
 INSERT INTO product_categories (product_id, category_id)
-    VALUES (@product_id, (SELECT id_category FROM categories WHERE slug = 'homme'));
+    VALUES
+        (@product_id, (SELECT id_category FROM categories WHERE slug = 'homme')),
+        (@product_id, (SELECT id_category FROM categories WHERE slug = 'debardeurs'));
 INSERT INTO product_variants (product_id, size, color, price, stock_quantity) VALUES
     (@product_id, 'M', 'Noir', 45.00, 20),
     (@product_id, 'L', 'Noir', 45.00, 15);
@@ -175,7 +184,9 @@ INSERT INTO product_images (product_id, url, alt_text, position) VALUES
 INSERT INTO products (name, description) VALUES ('Motion Pant', 'Pantalon technique polyvalent pour l''entrainement et le quotidien.');
 SET @product_id = LAST_INSERT_ID();
 INSERT INTO product_categories (product_id, category_id)
-    VALUES (@product_id, (SELECT id_category FROM categories WHERE slug = 'homme'));
+    VALUES
+        (@product_id, (SELECT id_category FROM categories WHERE slug = 'homme')),
+        (@product_id, (SELECT id_category FROM categories WHERE slug = 'pantalons'));
 INSERT INTO product_variants (product_id, size, color, price, stock_quantity) VALUES
     (@product_id, 'M', 'Noir', 95.00, 10),
     (@product_id, 'L', 'Noir', 95.00, 10);
@@ -185,7 +196,9 @@ INSERT INTO product_images (product_id, url, alt_text, position) VALUES
 INSERT INTO products (name, description) VALUES ('Core Short', 'Short d''entrainement leger et resistant.');
 SET @product_id = LAST_INSERT_ID();
 INSERT INTO product_categories (product_id, category_id)
-    VALUES (@product_id, (SELECT id_category FROM categories WHERE slug = 'homme'));
+    VALUES
+        (@product_id, (SELECT id_category FROM categories WHERE slug = 'homme')),
+        (@product_id, (SELECT id_category FROM categories WHERE slug = 'shorts'));
 INSERT INTO product_variants (product_id, size, color, price, stock_quantity) VALUES
     (@product_id, 'M', 'Noir', 55.00, 15);
 INSERT INTO product_images (product_id, url, alt_text, position) VALUES
@@ -194,7 +207,9 @@ INSERT INTO product_images (product_id, url, alt_text, position) VALUES
 INSERT INTO products (name, description) VALUES ('Essential Tee', 'T-shirt coupe droite en coton respirant.');
 SET @product_id = LAST_INSERT_ID();
 INSERT INTO product_categories (product_id, category_id)
-    VALUES (@product_id, (SELECT id_category FROM categories WHERE slug = 'homme'));
+    VALUES
+        (@product_id, (SELECT id_category FROM categories WHERE slug = 'homme')),
+        (@product_id, (SELECT id_category FROM categories WHERE slug = 't-shirts'));
 INSERT INTO product_variants (product_id, size, color, price, stock_quantity) VALUES
     (@product_id, 'S', 'Blanc', 39.00, 12),
     (@product_id, 'M', 'Blanc', 39.00, 18),
@@ -205,7 +220,9 @@ INSERT INTO product_images (product_id, url, alt_text, position) VALUES
 INSERT INTO products (name, description) VALUES ('Motion Bra', 'Brassiere a maintien moyen pour un confort optimal.');
 SET @product_id = LAST_INSERT_ID();
 INSERT INTO product_categories (product_id, category_id)
-    VALUES (@product_id, (SELECT id_category FROM categories WHERE slug = 'femme'));
+    VALUES
+        (@product_id, (SELECT id_category FROM categories WHERE slug = 'femme')),
+        (@product_id, (SELECT id_category FROM categories WHERE slug = 'brassieres'));
 INSERT INTO product_variants (product_id, size, color, price, stock_quantity) VALUES
     (@product_id, 'S', 'Noir', 49.00, 15),
     (@product_id, 'M', 'Noir', 49.00, 15);
@@ -215,7 +232,9 @@ INSERT INTO product_images (product_id, url, alt_text, position) VALUES
 INSERT INTO products (name, description) VALUES ('Contour Legging', 'Legging sculptant taille haute.');
 SET @product_id = LAST_INSERT_ID();
 INSERT INTO product_categories (product_id, category_id)
-    VALUES (@product_id, (SELECT id_category FROM categories WHERE slug = 'femme'));
+    VALUES
+        (@product_id, (SELECT id_category FROM categories WHERE slug = 'femme')),
+        (@product_id, (SELECT id_category FROM categories WHERE slug = 'leggings'));
 INSERT INTO product_variants (product_id, size, color, price, stock_quantity) VALUES
     (@product_id, 'S', 'Noir', 75.00, 10),
     (@product_id, 'M', 'Noir', 75.00, 10),
@@ -226,7 +245,9 @@ INSERT INTO product_images (product_id, url, alt_text, position) VALUES
 INSERT INTO products (name, description) VALUES ('Studio Short', 'Short d''entrainement feminin, coupe ajustee.');
 SET @product_id = LAST_INSERT_ID();
 INSERT INTO product_categories (product_id, category_id)
-    VALUES (@product_id, (SELECT id_category FROM categories WHERE slug = 'femme'));
+    VALUES
+        (@product_id, (SELECT id_category FROM categories WHERE slug = 'femme')),
+        (@product_id, (SELECT id_category FROM categories WHERE slug = 'shorts'));
 INSERT INTO product_variants (product_id, size, color, price, stock_quantity) VALUES
     (@product_id, 'S', 'Noir', 49.00, 12);
 INSERT INTO product_images (product_id, url, alt_text, position) VALUES
@@ -235,7 +256,9 @@ INSERT INTO product_images (product_id, url, alt_text, position) VALUES
 INSERT INTO products (name, description) VALUES ('Soft Crewneck', 'Sweat col rond doux et chaud.');
 SET @product_id = LAST_INSERT_ID();
 INSERT INTO product_categories (product_id, category_id)
-    VALUES (@product_id, (SELECT id_category FROM categories WHERE slug = 'femme'));
+    VALUES
+        (@product_id, (SELECT id_category FROM categories WHERE slug = 'femme')),
+        (@product_id, (SELECT id_category FROM categories WHERE slug = 'sweats'));
 INSERT INTO product_variants (product_id, size, color, price, stock_quantity) VALUES
     (@product_id, 'S', 'Gris', 79.00, 10),
     (@product_id, 'M', 'Gris', 79.00, 10);

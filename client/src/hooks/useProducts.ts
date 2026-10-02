@@ -7,6 +7,7 @@ export type Product = {
   description: string | null;
   category_name: string | null;
   category_slug: string | null;
+  subcategory_name: string | null;
   id_variant: number | null;
   size: string | null;
   color: string | null;
