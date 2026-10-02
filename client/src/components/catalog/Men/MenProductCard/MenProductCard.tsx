@@ -9,6 +9,7 @@ type MenProductCardProps = {
   image: string;
   alt: string;
   variantId?: number | null;
+  productId?: number | null;
   size?: string | null;
   color?: string | null;
   stockQuantity?: number;
@@ -22,13 +23,17 @@ function MenProductCard({
   image,
   alt,
   variantId,
+  productId,
   size,
   color,
   stockQuantity,
 }: MenProductCardProps) {
   return (
     <article className="men-product-card">
-      <a className="men-product-card-image" href="/collection">
+      <a
+        className="men-product-card-image"
+        href={productId ? `/product/${productId}` : "/collection"}
+      >
         {image && <img src={image} alt={alt} />}
         {badge && <span className="men-product-card-badge">{badge}</span>}
       </a>
