@@ -1,3 +1,4 @@
+import { Link } from "react-router";
 import AddToCartButton from "../../../cart/AddToCartButton";
 import "./MenProductCard.css";
 
@@ -30,13 +31,13 @@ function MenProductCard({
 }: MenProductCardProps) {
   return (
     <article className="men-product-card">
-      <a
+      <Link
         className="men-product-card-image"
-        href={productId ? `/product/${productId}` : "/collection"}
+        to={productId ? `/product/${productId}` : "/collection"}
       >
         {image && <img src={image} alt={alt} />}
         {badge && <span className="men-product-card-badge">{badge}</span>}
-      </a>
+      </Link>
       <div className="men-product-card-info">
         <div>
           <h2>{name}</h2>

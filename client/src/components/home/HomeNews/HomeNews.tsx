@@ -1,3 +1,4 @@
+import { Link } from "react-router";
 import { useProducts } from "../../../hooks/useProducts";
 import "./HomeNews.css";
 
@@ -11,16 +12,16 @@ function HomeNews() {
     <section className="home-news" aria-labelledby="home-news-title">
       <header className="home-news-header">
         <h2 id="home-news-title">Nouveautés</h2>
-        <a className="home-news-link" href="/collection/news">
+        <Link className="home-news-link" to="/collection/news">
           Tout voir
-        </a>
+        </Link>
       </header>
 
       <div className="home-news-grid">
         {uniqueProducts.map((product) => (
-          <a
+          <Link
             className="home-news-product"
-            href={`/product/${product.id_product}`}
+            to={`/product/${product.id_product}`}
             key={product.id_product}
           >
             <div className="home-news-image-wrapper">
@@ -38,7 +39,7 @@ function HomeNews() {
               <span className="home-news-price">{product.price} €</span>
               <p>{product.description ?? product.category_name}</p>
             </div>
-          </a>
+          </Link>
         ))}
       </div>
     </section>

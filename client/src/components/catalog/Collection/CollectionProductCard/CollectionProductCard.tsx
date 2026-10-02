@@ -1,3 +1,4 @@
+import { Link } from "react-router";
 import AddToCartButton from "../../../cart/AddToCartButton";
 import "./CollectionProductCard.css";
 
@@ -30,15 +31,15 @@ function CollectionProductCard({
 }: CollectionProductCardProps) {
   return (
     <article className="collection-product-card">
-      <a
+      <Link
         className="collection-product-card-image"
-        href={productId ? `/product/${productId}` : "/collection"}
+        to={productId ? `/product/${productId}` : "/collection"}
       >
         {image && <img src={image} alt={alt} />}
         {badge && (
           <span className="collection-product-card-badge">{badge}</span>
         )}
-      </a>
+      </Link>
       <div className="collection-product-card-info">
         <div>
           <h2>{name}</h2>
