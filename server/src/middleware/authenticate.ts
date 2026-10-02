@@ -1,5 +1,6 @@
 import type { RequestHandler } from "express";
 import jwtUtil from "../modules/auth/Jwt";
+import authRepository from "../modules/auth/authRepository";
 
 export function readAuthCookie(cookieHeader?: string) {
   const cookie = cookieHeader
@@ -9,7 +10,7 @@ export function readAuthCookie(cookieHeader?: string) {
   return cookie ? decodeURIComponent(cookie.slice("auth_token=".length)) : null;
 }
 
-function attachAuthenticatedUser(
+async function attachAuthenticatedUser(
   req: Parameters<RequestHandler>[0],
   token: string,
 ) {
@@ -17,10 +18,17 @@ function attachAuthenticatedUser(
   if (!Number.isInteger(payload.id_user) || payload.id_user < 1) {
     throw new Error("Invalid authentication token.");
   }
+  // A syntactically valid token can still reference a deleted account
+  // (e.g. a stale cookie after the user was removed): treat that the
+  // same as no authentication rather than letting it reach the routes.
+  const user = await authRepository.findById(payload.id_user);
+  if (!user) {
+    throw new Error("Authenticated user no longer exists.");
+  }
   req.authUser = { id_user: payload.id_user };
 }
 
-const authenticate: RequestHandler = (req, res, next) => {
+const authenticate: RequestHandler = async (req, res, next) => {
   try {
     const token = readAuthCookie(req.headers.cookie);
     if (!token) {
@@ -28,21 +36,24 @@ const authenticate: RequestHandler = (req, res, next) => {
       return;
     }
 
-    attachAuthenticatedUser(req, token);
+    await attachAuthenticatedUser(req, token);
     next();
   } catch {
     res.status(401).json({ message: "Authentification requise." });
   }
 };
 
-export const authenticateOptional: RequestHandler = (req, res, next) => {
-  try {
-    const token = readAuthCookie(req.headers.cookie);
-    if (token) attachAuthenticatedUser(req, token);
-    next();
-  } catch {
-    res.status(401).json({ message: "Authentification requise." });
+export const authenticateOptional: RequestHandler = async (req, _res, next) => {
+  const token = readAuthCookie(req.headers.cookie);
+  if (token) {
+    try {
+      await attachAuthenticatedUser(req, token);
+    } catch {
+      // Invalid, expired or stale (deleted account) token: fall back to
+      // guest behaviour instead of rejecting the whole request.
+    }
   }
+  next();
 };
 
 export default authenticate;
