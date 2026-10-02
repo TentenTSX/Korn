@@ -1,4 +1,5 @@
 .collection-page {
+  min-height: calc(100vh - var(--nav-height));
   color: var(--color-ink);
   background: var(--color-surface);
 }

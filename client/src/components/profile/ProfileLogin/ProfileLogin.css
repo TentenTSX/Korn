@@ -3,10 +3,8 @@
   grid-template-columns: minmax(0, 1fr) minmax(18rem, 28rem);
   align-items: center;
   gap: clamp(3rem, 10vw, 10rem);
-  max-width: 76rem;
-  min-height: 100vh;
-  margin: 0 auto;
-  padding: 5rem var(--space-4) 7rem;
+  min-height: calc(100vh - var(--nav-height));
+  padding: 5rem;
 }
 
 .profile-login-intro {
