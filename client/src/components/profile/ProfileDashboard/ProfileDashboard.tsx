@@ -1,3 +1,4 @@
+import { Link } from "react-router";
 import "./ProfileDashboard.css";
 
 type ProfileDashboardProps = {
@@ -107,7 +108,7 @@ function ProfileDashboard({
               <span className="profile-eyebrow">Historique</span>
               <h2 id="profile-orders-title">Mes commandes</h2>
             </div>
-            <a href="/collection">Continuer mes achats</a>
+            <Link to="/collection">Continuer mes achats</Link>
           </div>
 
           <div className="profile-orders-list">
@@ -121,7 +122,9 @@ function ProfileDashboard({
               orders.map((order) => (
                 <article className="profile-order-row" key={order.id_order}>
                   <div>
-                    <strong>Commande #{order.id_order}</strong>
+                    <Link to={`/profile/orders/${order.id_order}`}>
+                      <strong>Commande #{order.id_order}</strong>
+                    </Link>
                     <span>
                       {new Date(order.created_at).toLocaleDateString("fr-FR")}
                     </span>
