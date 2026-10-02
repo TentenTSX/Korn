@@ -18,6 +18,25 @@ function getTransporter() {
   });
 }
 
+export async function sendNewsletterWelcomeEmail(email: string) {
+  const from = process.env.EMAIL_FROM;
+  if (!from) throw new Error("EMAIL_FROM is required to send confirmations.");
+
+  await getTransporter().sendMail({
+    from,
+    to: email,
+    subject: "Bienvenue dans la communauté Korn",
+    text: [
+      "Bienvenue,",
+      "",
+      "Merci de vous être inscrit à la newsletter Korn.",
+      "Vous recevrez en avant-première nos nouvelles collections, drops exclusifs et offres membres.",
+      "",
+      "L'équipe Korn",
+    ].join("\n"),
+  });
+}
+
 export async function sendPaymentConfirmationEmail(
   invoice: InvoiceData,
   pdf: Buffer,

@@ -156,6 +156,12 @@ CREATE TABLE payments (
         ON DELETE CASCADE
 );
 
+CREATE TABLE newsletter_subscribers (
+    id_subscriber INT AUTO_INCREMENT PRIMARY KEY,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    subscribed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
 -- Seed data --------------------------------------------------------------
 
 INSERT INTO categories (name, slug) VALUES
