@@ -1,6 +1,13 @@
+import { Link } from "react-router";
 import "./Footer.css";
 
-const boutiqueLinks = ["Home", "Femme", "Accessoires", "Nouveautés", "Soldes"];
+const boutiqueLinks = [
+  { label: "Home", to: "/" },
+  { label: "Femme", to: "/girl" },
+  { label: "Accessoires", to: "/" },
+  { label: "Nouveautés", to: "/collection/news" },
+  { label: "Soldes", to: "/collection/sales" },
+];
 
 const aideLinks = [
   "FAQ",
@@ -67,8 +74,8 @@ function Footer() {
           <h3>BOUTIQUE</h3>
           <ul>
             {boutiqueLinks.map((link) => (
-              <li key={link}>
-                <a href="/">{link}</a>
+              <li key={link.label}>
+                <Link to={link.to}>{link.label}</Link>
               </li>
             ))}
           </ul>
@@ -79,7 +86,7 @@ function Footer() {
           <ul>
             {aideLinks.map((link) => (
               <li key={link}>
-                <a href="/">{link}</a>
+                <Link to="/">{link}</Link>
               </li>
             ))}
           </ul>
@@ -90,7 +97,7 @@ function Footer() {
           <ul>
             {marqueLinks.map((link) => (
               <li key={link}>
-                <a href="/">{link}</a>
+                <Link to="/">{link}</Link>
               </li>
             ))}
           </ul>
@@ -100,9 +107,9 @@ function Footer() {
       <div className="site-footer-bottom">
         <p>© 2026 KORN SAS. Tous droits réservés.</p>
         <div className="bottom-links">
-          <a href="/">Confidentialité</a>
-          <a href="/">CGV</a>
-          <a href="/">Mentions légales</a>
+          <Link to="/">Confidentialité</Link>
+          <Link to="/">CGV</Link>
+          <Link to="/">Mentions légales</Link>
         </div>
       </div>
     </footer>

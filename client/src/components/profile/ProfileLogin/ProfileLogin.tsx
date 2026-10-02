@@ -1,6 +1,7 @@
 import { Eye, EyeOff, LockKeyhole, Mail } from "lucide-react";
 import { useState } from "react";
 import type { FormEvent } from "react";
+import { Link } from "react-router";
 import "./ProfileLogin.css";
 
 type ProfileLoginProps = {
@@ -236,9 +237,9 @@ function ProfileLogin({ onLogin, onRegister }: ProfileLoginProps) {
         </button>
 
         {mode === "login" && (
-          <a className="profile-forgot-link" href="/profile">
+          <Link className="profile-forgot-link" to="/profile">
             Mot de passe oublié ?
-          </a>
+          </Link>
         )}
       </form>
     </section>

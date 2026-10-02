@@ -1,3 +1,4 @@
+import { Link } from "react-router";
 import "./Hero.css";
 
 function Hero() {
@@ -12,54 +13,54 @@ function Hero() {
           <i className="home-hero-text">Collection été 2027</i>
           <h1 className="home-hero-label">DEFINE YOUR FORM.</h1>
           <div className="hero-actions">
-            <a className="hero-button hero-button-primary" href="/collection">
+            <Link className="hero-button hero-button-primary" to="/collection">
               Découvrir la collection
-            </a>
-            <a
+            </Link>
+            <Link
               className="hero-button hero-button-secondary"
-              href="/collection/sales"
+              to="/collection/sales"
             >
               Voir les soldes
-            </a>
+            </Link>
           </div>
         </div>
       </div>
 
       <div className="home-hero-grid">
-        <a className="home-hero-card home-hero-card-woman" href="/girl">
+        <Link className="home-hero-card home-hero-card-woman" to="/girl">
           <img
             src="https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?w=900&h=700&fit=crop&auto=format"
             alt="Femme portant une tenue de mode"
           />
           <span className="grid-img-label">FEMME</span>
-        </a>
-        <a className="home-hero-card home-hero-card-man" href="/men">
+        </Link>
+        <Link className="home-hero-card home-hero-card-man" to="/men">
           <img
             src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=900&h=700&fit=crop&auto=format"
             alt="Homme portant une tenue de mode"
           />
           <span className="grid-img-label">HOMME</span>
-        </a>
-        <a
+        </Link>
+        <Link
           className="home-hero-card home-hero-card-news"
-          href="/collection/news"
+          to="/collection/news"
         >
           <img
             src="https://images.unsplash.com/photo-1525507119028-ed4c629a60a3?w=900&h=700&fit=crop&auto=format"
             alt="Nouveautés de la collection Korn"
           />
           <span className="grid-img-label">NOUVEAUTES</span>
-        </a>
-        <a
+        </Link>
+        <Link
           className="home-hero-card home-hero-card-sale"
-          href="/collection/sales"
+          to="/collection/sales"
         >
           <img
             src="https://images.unsplash.com/photo-1445205170230-053b83016050?w=900&h=700&fit=crop&auto=format"
             alt="Vêtements en promotion pendant les soldes"
           />
           <span className="grid-img-label">SOLDES</span>
-        </a>
+        </Link>
       </div>
     </section>
   );
