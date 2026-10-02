@@ -24,6 +24,22 @@
   animation: cart-panel-in 240ms var(--ease-out);
 }
 
+.cart-page {
+  display: flex;
+  justify-content: center;
+  min-height: calc(100vh - var(--nav-height));
+  padding: 3rem var(--space-4);
+  background: var(--color-paper);
+}
+
+.cart-page-panel {
+  display: flex;
+  flex-direction: column;
+  width: min(100%, 40rem);
+  background: var(--color-surface);
+  border: 1px solid var(--color-line);
+}
+
 .cart-modal-header {
   display: flex;
   align-items: center;

@@ -3,6 +3,7 @@ import type { ChangeEvent, FormEvent } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router";
 import { useCartContext } from "../../contexts/CartContext";
 import type { ShippingInput, StripeCheckoutStatus } from "../../hooks/useCart";
+import { useDocumentHead } from "../../hooks/useDocumentHead";
 import { apiRequest } from "../../services/api";
 import "./Checkout.css";
 
@@ -14,6 +15,10 @@ const currency = new Intl.NumberFormat("fr-FR", {
 function Checkout() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
+  useDocumentHead({
+    title: "Commande",
+    description: "Finalisez votre commande Korn en toute sécurité avec Stripe.",
+  });
   const {
     user,
     isAuthLoading,

@@ -2,11 +2,16 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import ProfileDashboardView from "../../components/profile/ProfileDashboard/ProfileDashboard";
 import { useCartContext } from "../../contexts/CartContext";
+import { useDocumentHead } from "../../hooks/useDocumentHead";
 import { useOrders } from "../../hooks/useOrders";
 
 function ProfileDashboard() {
   const navigate = useNavigate();
   const { user, isAuthLoading, logout } = useCartContext();
+  useDocumentHead({
+    title: "Mon espace",
+    description: "Retrouvez vos commandes, vos factures et vos informations.",
+  });
   const {
     orders,
     isLoading: areOrdersLoading,

@@ -1,7 +1,13 @@
 import { Link } from "react-router";
+import { useDocumentHead } from "../../hooks/useDocumentHead";
 import "./NotFound.css";
 
 function NotFound() {
+  useDocumentHead({
+    title: "Page introuvable",
+    description: "Cette page n'existe pas ou a été déplacée.",
+  });
+
   return (
     <main className="not-found-page">
       <img

@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { Link, useParams } from "react-router";
 import AddToCartButton from "../../components/cart/AddToCartButton";
+import { useDocumentHead } from "../../hooks/useDocumentHead";
 import { useProduct } from "../../hooks/useProduct";
 import "./Product.css";
 
@@ -25,6 +26,11 @@ function Product() {
     );
     return selected ?? variants[0];
   }, [variants, selectedVariantId]);
+
+  useDocumentHead({
+    title: activeVariant?.name ?? "Produit",
+    description: activeVariant?.description ?? "Découvrez ce produit Korn.",
+  });
 
   if (!productId || !Number.isInteger(productId)) {
     return (

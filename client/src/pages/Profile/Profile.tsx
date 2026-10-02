@@ -2,11 +2,17 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router";
 import ProfileLogin from "../../components/profile/ProfileLogin/ProfileLogin";
 import { useCartContext } from "../../contexts/CartContext";
+import { useDocumentHead } from "../../hooks/useDocumentHead";
 import { apiRequest } from "../../services/api";
 
 function Profile() {
   const navigate = useNavigate();
   const { user, isAuthLoading, login, register } = useCartContext();
+  useDocumentHead({
+    title: "Connexion",
+    description:
+      "Connectez-vous ou créez votre compte Korn pour suivre vos commandes et vos factures.",
+  });
 
   useEffect(() => {
     if (!isAuthLoading && user) {

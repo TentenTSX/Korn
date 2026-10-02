@@ -1,6 +1,7 @@
 import { Link, useParams } from "react-router";
 import { staticPages } from "../../content/staticPages";
 import type { StaticPageCategory } from "../../content/staticPages";
+import { useDocumentHead } from "../../hooks/useDocumentHead";
 import NotFound from "../NotFound/NotFound";
 import "./StaticPage.css";
 
@@ -15,6 +16,10 @@ const entries = Object.entries(staticPages);
 function StaticPage() {
   const { slug } = useParams();
   const content = slug ? staticPages[slug] : undefined;
+  useDocumentHead({
+    title: content?.title ?? "Page introuvable",
+    description: content?.intro ?? content?.sections[0]?.paragraphs?.[0] ?? "",
+  });
 
   if (!content) return <NotFound />;
 

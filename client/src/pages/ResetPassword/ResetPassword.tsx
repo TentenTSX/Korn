@@ -3,12 +3,17 @@ import { useState } from "react";
 import type { FormEvent } from "react";
 import { Link, useSearchParams } from "react-router";
 import "../../components/profile/ProfileLogin/ProfileLogin.css";
+import { useDocumentHead } from "../../hooks/useDocumentHead";
 import { apiRequest } from "../../services/api";
 import "./ResetPassword.css";
 
 function ResetPassword() {
   const [searchParams] = useSearchParams();
   const token = searchParams.get("token") ?? "";
+  useDocumentHead({
+    title: "Nouveau mot de passe",
+    description: "Choisissez un nouveau mot de passe pour votre compte Korn.",
+  });
   const [password, setPassword] = useState("");
   const [passwordConfirmation, setPasswordConfirmation] = useState("");
   const [showPassword, setShowPassword] = useState(false);
