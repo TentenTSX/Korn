@@ -25,6 +25,7 @@ type CollectionProduct = {
   image: string;
   alt: string;
   variantId?: number | null;
+  productId?: number | null;
   size?: string | null;
   color?: string | null;
   stockQuantity?: number;
@@ -140,6 +141,7 @@ function CollectionCatalogue() {
           alt: product.alt_text ?? product.name,
           sale: false,
           variantId: product.id_variant,
+          productId: product.id_product,
           size: product.size,
           color: product.color,
           stockQuantity: product.stock_quantity,

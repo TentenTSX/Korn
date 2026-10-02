@@ -14,6 +14,7 @@ import Collection from "./pages/Collection/Collection";
 import Girl from "./pages/Girl/Girl";
 import Home from "./pages/Home/Home";
 import Men from "./pages/Men/Men";
+import Product from "./pages/Product/Product";
 import Profile from "./pages/Profile/Profile";
 import ProfileDashboard from "./pages/ProfileDashboard/ProfileDashboard";
 
@@ -59,6 +60,10 @@ const router = createBrowserRouter([
       {
         path: "/men",
         element: <Men />,
+      },
+      {
+        path: "/product/:id",
+        element: <Product />,
       },
       {
         path: "/profile",
