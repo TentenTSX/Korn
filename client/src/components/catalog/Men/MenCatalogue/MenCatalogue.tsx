@@ -1,9 +1,24 @@
 import { useState } from "react";
+import { useProducts } from "../../../../hooks/useProducts";
 import MenFilters from "../MenFilters/MenFilters";
 import MenProductCard from "../MenProductCard/MenProductCard";
 import "./MenCatalogue.css";
 
-const products = [
+type CatalogProduct = {
+  name: string;
+  category: string;
+  price: string;
+  badge?: string;
+  categoryFilter: string;
+  image: string;
+  alt: string;
+  variantId?: number | null;
+  size?: string | null;
+  color?: string | null;
+  stockQuantity?: number;
+};
+
+const demoProducts: CatalogProduct[] = [
   {
     name: "Training Tank",
     category: "Débardeur performance",
@@ -83,8 +98,24 @@ const products = [
 ];
 
 function MenCatalogue() {
+  const { products: apiProducts } = useProducts("gender=Homme");
   const [activeFilter, setActiveFilter] = useState("Tout");
   const [sort, setSort] = useState("newest");
+  const products: CatalogProduct[] =
+    apiProducts.length > 0
+      ? apiProducts.map((product) => ({
+          name: product.name,
+          category: product.description ?? "Collection Homme",
+          price: `${product.price} €`,
+          categoryFilter: product.category_name ?? "Tout",
+          image: product.image ?? "",
+          alt: product.alt_text ?? product.name,
+          variantId: product.id_variant,
+          size: product.size,
+          color: product.color,
+          stockQuantity: product.stock_quantity,
+        }))
+      : demoProducts;
   const visibleProducts =
     activeFilter === "Tout"
       ? products
@@ -116,7 +147,10 @@ function MenCatalogue() {
         </h2>
         <div className="men-product-grid">
           {sortedProducts.map((product) => (
-            <MenProductCard key={product.name} {...product} />
+            <MenProductCard
+              key={`${product.name}-${product.variantId ?? "demo"}`}
+              {...product}
+            />
           ))}
         </div>
       </section>

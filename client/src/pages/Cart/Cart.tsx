@@ -1,8 +1,14 @@
+import { useNavigate } from "react-router";
+import CartView from "../../components/cart/CartView/CartView";
+
 function Cart() {
+  const navigate = useNavigate();
+
   return (
-    <main>
-      <h1>Cart</h1>
-    </main>
+    <CartView
+      onClose={() => navigate("/collection")}
+      onCheckout={() => navigate("/checkout")}
+    />
   );
 }
 

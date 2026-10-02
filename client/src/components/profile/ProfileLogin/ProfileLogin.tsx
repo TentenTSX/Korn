@@ -4,13 +4,21 @@ import type { FormEvent } from "react";
 import "./ProfileLogin.css";
 
 type ProfileLoginProps = {
-  onLogin: (email: string) => void;
+  onLogin: (email: string, password: string) => Promise<void>;
+  onRegister: (
+    firstName: string,
+    lastName: string,
+    email: string,
+    password: string,
+  ) => Promise<void>;
 };
 
 type ProfileMode = "login" | "register";
 
-function ProfileLogin({ onLogin }: ProfileLoginProps) {
+function ProfileLogin({ onLogin, onRegister }: ProfileLoginProps) {
   const [mode, setMode] = useState<ProfileMode>("login");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirmation, setPasswordConfirmation] = useState("");
@@ -18,11 +26,17 @@ function ProfileLogin({ onLogin }: ProfileLoginProps) {
   const [showPasswordConfirmation, setShowPasswordConfirmation] =
     useState(false);
   const [error, setError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    if (!email || !password || (mode === "register" && !passwordConfirmation)) {
+    if (
+      !email ||
+      !password ||
+      (mode === "register" &&
+        (!firstName || !lastName || !passwordConfirmation))
+    ) {
       setError("Renseignez tous les champs obligatoires.");
       return;
     }
@@ -33,7 +47,22 @@ function ProfileLogin({ onLogin }: ProfileLoginProps) {
     }
 
     setError("");
-    onLogin(email);
+    setIsSubmitting(true);
+    try {
+      if (mode === "login") {
+        await onLogin(email, password);
+      } else {
+        await onRegister(firstName, lastName, email, password);
+      }
+    } catch (requestError) {
+      setError(
+        requestError instanceof Error
+          ? requestError.message
+          : "La demande n'a pas pu aboutir.",
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -79,6 +108,35 @@ function ProfileLogin({ onLogin }: ProfileLoginProps) {
             Inscription
           </button>
         </div>
+
+        {mode === "register" && (
+          <>
+            <div className="profile-field">
+              <label htmlFor="profile-first-name">Prénom</label>
+              <div className="profile-input-wrapper">
+                <input
+                  id="profile-first-name"
+                  type="text"
+                  autoComplete="given-name"
+                  value={firstName}
+                  onChange={(event) => setFirstName(event.target.value)}
+                />
+              </div>
+            </div>
+            <div className="profile-field">
+              <label htmlFor="profile-last-name">Nom</label>
+              <div className="profile-input-wrapper">
+                <input
+                  id="profile-last-name"
+                  type="text"
+                  autoComplete="family-name"
+                  value={lastName}
+                  onChange={(event) => setLastName(event.target.value)}
+                />
+              </div>
+            </div>
+          </>
+        )}
 
         <div className="profile-field">
           <label htmlFor="profile-email">Adresse email</label>
@@ -165,8 +223,16 @@ function ProfileLogin({ onLogin }: ProfileLoginProps) {
 
         {error && <p className="profile-form-error">{error}</p>}
 
-        <button className="profile-submit-button" type="submit">
-          {mode === "login" ? "Se connecter" : "Créer mon compte"}
+        <button
+          className="profile-submit-button"
+          type="submit"
+          disabled={isSubmitting}
+        >
+          {isSubmitting
+            ? "Veuillez patienter..."
+            : mode === "login"
+              ? "Se connecter"
+              : "Créer mon compte"}
         </button>
 
         {mode === "login" && (

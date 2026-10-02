@@ -1,6 +1,6 @@
 // Load the express module to create a web application
 
-import express from "express";
+import express, { type ErrorRequestHandler } from "express";
 
 const app = express();
 
@@ -21,7 +21,7 @@ const app = express();
 import cors from "cors";
 
 if (process.env.CLIENT_URL != null) {
-  app.use(cors({ origin: [process.env.CLIENT_URL] }));
+  app.use(cors({ origin: process.env.CLIENT_URL, credentials: true }));
 }
 
 // If you need to allow extra origins, you can add something like this:
@@ -52,10 +52,12 @@ app.use(
 
 // Uncomment one or more of these options depending on the format of the data sent by your client:
 
+app.use(
+  "/api/payments/stripe/webhook",
+  express.raw({ type: "application/json" }),
+);
 app.use(express.json());
-app.use(express.urlencoded());
-app.use(express.text());
-app.use(express.raw());
+app.use(express.urlencoded({ extended: false }));
 
 /* ************************************************************************* */
 
@@ -64,6 +66,9 @@ import router from "./router";
 
 // Mount the API router under the "/api" endpoint
 app.use(router);
+app.use("/api", (_req, res) => {
+  res.status(404).json({ message: "Route API introuvable." });
+});
 
 /* ************************************************************************* */
 
@@ -105,20 +110,45 @@ if (fs.existsSync(clientBuildPath)) {
 // Middleware for Error Logging
 // Important: Error-handling middleware should be defined last, after other app.use() and routes calls.
 
-import type { ErrorRequestHandler } from "express";
-
-// Define a middleware function to log errors
 const logErrors: ErrorRequestHandler = (err, req, res, next) => {
-  // Log the error to the console for debugging purposes
   console.error(err);
   console.error("on req:", req.method, req.path);
-
-  // Pass the error to the next middleware in the stack
   next(err);
 };
 
-// Mount the logErrors middleware globally
 app.use(logErrors);
+
+const errorHandler: ErrorRequestHandler = (err, _req, res, _next) => {
+  if (
+    typeof err === "object" &&
+    err !== null &&
+    "type" in err &&
+    err.type === "entity.parse.failed"
+  ) {
+    res.status(400).json({ message: "Corps de requête invalide." });
+    return;
+  }
+
+  const statusByCode: Record<string, number> = {
+    BAD_REQUEST: 400,
+    UNAUTHORIZED: 401,
+    FORBIDDEN: 403,
+    NOT_FOUND: 404,
+    CONFLICT: 409,
+  };
+  const code =
+    typeof err === "object" && err !== null && "code" in err
+      ? String(err.code)
+      : "";
+  const status = statusByCode[code] ?? 500;
+  const message =
+    status < 500 && typeof err.message === "string"
+      ? err.message
+      : "Une erreur interne est survenue.";
+  res.status(status).json({ message });
+};
+
+app.use(errorHandler);
 
 /* ************************************************************************* */
 

@@ -149,6 +149,28 @@
   text-decoration: none;
 }
 
+.Nav-bag-button {
+  position: relative;
+  cursor: pointer;
+}
+
+.Nav-bag-count {
+  position: absolute;
+  top: -0.15rem;
+  right: -0.2rem;
+  display: grid;
+  place-items: center;
+  min-width: 1rem;
+  height: 1rem;
+  padding: 0 0.2rem;
+  border-radius: 50%;
+  background: var(--color-accent);
+  color: var(--color-surface);
+  font-family: var(--font-third);
+  font-size: 0.62rem;
+  line-height: 1;
+}
+
 .Nav-Search-Inupt {
   width: 100%;
   min-width: 0;

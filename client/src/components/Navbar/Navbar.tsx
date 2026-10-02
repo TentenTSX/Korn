@@ -1,9 +1,14 @@
 import { Search, ShoppingBag, UserRound, X } from "lucide-react";
 import { useState } from "react";
+import { useNavigate } from "react-router";
+import { useCartContext } from "../../contexts/CartContext";
 import "../Navbar/Navbar.css";
 
 function Navbar() {
+  const navigate = useNavigate();
+  const { itemCount, openCart } = useCartContext();
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [search, setSearch] = useState("");
   const soldes = [
     { name: "Winter", discount: -20 },
     { name: "Summer", discount: -30 },
@@ -43,7 +48,12 @@ function Navbar() {
         <form
           className={`Navbar-search ${isSearchOpen ? "is-open" : ""}`}
           aria-label="Recherche"
-          onSubmit={(event) => event.preventDefault()}
+          onSubmit={(event) => {
+            event.preventDefault();
+            const query = search.trim();
+            if (query)
+              navigate(`/collection?search=${encodeURIComponent(query)}`);
+          }}
         >
           <label htmlFor="main-search" className="sr-only">
             Rechercher un article
@@ -55,6 +65,8 @@ function Navbar() {
             aria-label="Rechercher un article"
             placeholder="Rechercher..."
             aria-expanded={isSearchOpen}
+            value={search}
+            onChange={(event) => setSearch(event.target.value)}
           />
         </form>
 
@@ -79,9 +91,16 @@ function Navbar() {
           <UserRound size={18} strokeWidth={1.8} />
         </a>
 
-        <a className="Nav-bag-button" href="/cart" aria-label="Voir le panier">
+        <button
+          className="Nav-bag-button"
+          type="button"
+          onClick={openCart}
+          aria-label={`Ouvrir le panier, ${itemCount} article${itemCount === 1 ? "" : "s"}`}
+          title="Ouvrir le panier"
+        >
           <ShoppingBag size={18} strokeWidth={1.8} />
-        </a>
+          {itemCount > 0 && <span className="Nav-bag-count">{itemCount}</span>}
+        </button>
       </div>
     </header>
   );

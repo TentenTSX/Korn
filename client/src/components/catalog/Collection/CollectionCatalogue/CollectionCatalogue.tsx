@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router";
+import { useParams, useSearchParams } from "react-router";
+import { useProducts } from "../../../../hooks/useProducts";
 import CollectionFilters from "../CollectionFilters/CollectionFilters";
 import CollectionProductCard from "../CollectionProductCard/CollectionProductCard";
 import "./CollectionCatalogue.css";
@@ -23,9 +24,13 @@ type CollectionProduct = {
   categoryFilter: string;
   image: string;
   alt: string;
+  variantId?: number | null;
+  size?: string | null;
+  color?: string | null;
+  stockQuantity?: number;
 };
 
-const products: CollectionProduct[] = [
+const demoProducts: CollectionProduct[] = [
   {
     name: "Essential Tee",
     category: "T-shirt coupe droite",
@@ -116,9 +121,30 @@ const products: CollectionProduct[] = [
 
 function CollectionCatalogue() {
   const { filter } = useParams();
+  const [searchParams] = useSearchParams();
+  const search = searchParams.get("search")?.trim() ?? "";
+  const { products: apiProducts } = useProducts(
+    search ? `search=${encodeURIComponent(search)}` : "",
+  );
   const routeFilter = filter ? filterByRoute[filter.toLowerCase()] : undefined;
   const [activeFilter, setActiveFilter] = useState(routeFilter ?? "Tout");
   const [sort, setSort] = useState("newest");
+  const products: CollectionProduct[] =
+    apiProducts.length > 0 || search
+      ? apiProducts.map((product) => ({
+          name: product.name,
+          category: product.description ?? "Collection Korn",
+          price: `${product.price} €`,
+          categoryFilter: product.category_name ?? "Tout",
+          image: product.image ?? "",
+          alt: product.alt_text ?? product.name,
+          sale: false,
+          variantId: product.id_variant,
+          size: product.size,
+          color: product.color,
+          stockQuantity: product.stock_quantity,
+        }))
+      : demoProducts;
 
   useEffect(() => {
     setActiveFilter(routeFilter ?? "Tout");
@@ -173,7 +199,10 @@ function CollectionCatalogue() {
         </h2>
         <div className="collection-product-grid">
           {sortedProducts.map((product) => (
-            <CollectionProductCard key={product.name} {...product} />
+            <CollectionProductCard
+              key={`${product.name}-${product.variantId ?? "demo"}`}
+              {...product}
+            />
           ))}
         </div>
       </section>

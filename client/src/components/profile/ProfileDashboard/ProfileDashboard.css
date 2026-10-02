@@ -161,6 +161,21 @@
   color: #3d7352;
 }
 
+.profile-order-payment > span {
+  display: block;
+  margin-top: 0.25rem;
+}
+
+.profile-invoice-pending {
+  color: var(--color-muted);
+}
+
+.profile-orders-empty {
+  padding: 1.25rem 0;
+  color: var(--color-muted);
+  font-family: var(--font-third);
+}
+
 .profile-order-row > strong {
   font-family: var(--font-body);
   font-size: 0.85rem;
@@ -209,7 +224,8 @@
     grid-template-columns: 1fr auto;
   }
 
-  .profile-order-row > a {
+  .profile-order-row > a,
+  .profile-order-row > .profile-invoice-pending {
     grid-column: 2;
     grid-row: 1 / span 2;
   }

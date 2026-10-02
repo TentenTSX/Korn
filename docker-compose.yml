@@ -3,6 +3,8 @@ version: "3.4"
 services:
   web:
     build: .
+    env_file:
+      - ./server/.env
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules
@@ -18,10 +20,22 @@ services:
       DB_PASSWORD: password
       DB_NAME: js_template_fullstack
       VITE_API_URL: "http://localhost:3310"
+      SMTP_HOST: mailpit
+      SMTP_PORT: 1025
+      SMTP_SECURE: "false"
     command: sh -c "npm run dev"
     depends_on:
       database:
         condition: service_healthy
+      mailpit:
+        condition: service_started
+
+  mailpit:
+    image: axllent/mailpit:latest
+    restart: unless-stopped
+    ports:
+      - "1025:1025"
+      - "8025:8025"
 
   database:
     image: mysql/mysql-server:8.0
