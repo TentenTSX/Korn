@@ -107,14 +107,22 @@ function CollectionCatalogue() {
         <h2 id="collection-products-title" className="collection-product-count">
           {visibleProducts.length} produits
         </h2>
-        <div className="collection-product-grid">
-          {sortedProducts.map((product) => (
-            <CollectionProductCard
-              key={`${product.name}-${product.variantId ?? "demo"}`}
-              {...product}
-            />
-          ))}
-        </div>
+        {visibleProducts.length === 0 ? (
+          <p className="collection-empty-state">
+            {search
+              ? `Aucun résultat pour "${search}".`
+              : "Aucun produit ne correspond à ce filtre."}
+          </p>
+        ) : (
+          <div className="collection-product-grid">
+            {sortedProducts.map((product) => (
+              <CollectionProductCard
+                key={`${product.name}-${product.variantId ?? "demo"}`}
+                {...product}
+              />
+            ))}
+          </div>
+        )}
       </section>
     </>
   );
