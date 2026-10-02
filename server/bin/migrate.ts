@@ -14,6 +14,17 @@ const { DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, DB_NAME } = process.env;
 import mysql from "mysql2/promise";
 
 const migrate = async () => {
+  // This command drops and recreates the whole database: never let it run
+  // against a production database, whether by mistake in a deploy script
+  // or a stray local command pointed at the wrong environment.
+  if (process.env.NODE_ENV === "production" || /prod/i.test(DB_NAME ?? "")) {
+    console.error(
+      `Refusing to run db:migrate: this would drop and recreate '${DB_NAME}', which looks like a production database.`,
+    );
+    process.exitCode = 1;
+    return;
+  }
+
   try {
     // Read the SQL statements from the schema file
     const sql = fs.readFileSync(schema, "utf8");
