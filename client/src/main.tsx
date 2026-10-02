@@ -15,6 +15,7 @@ import Girl from "./pages/Girl/Girl";
 import Home from "./pages/Home/Home";
 import Men from "./pages/Men/Men";
 import NotFound from "./pages/NotFound/NotFound";
+import OrderDetail from "./pages/OrderDetail/OrderDetail";
 import Product from "./pages/Product/Product";
 import Profile from "./pages/Profile/Profile";
 import ProfileDashboard from "./pages/ProfileDashboard/ProfileDashboard";
@@ -73,6 +74,10 @@ const router = createBrowserRouter([
       {
         path: "/profile/dashboard",
         element: <ProfileDashboard />,
+      },
+      {
+        path: "/profile/orders/:orderId",
+        element: <OrderDetail />,
       },
       {
         path: "*",
