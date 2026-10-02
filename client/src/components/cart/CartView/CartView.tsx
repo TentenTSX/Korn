@@ -1,6 +1,8 @@
-import { Minus, Plus, Trash2, X } from "lucide-react";
+import { X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useCartContext } from "../../../contexts/CartContext";
+import { currency } from "../../../utils/currency";
+import CartLineItem from "./CartLineItem";
 import "./CartView.css";
 
 type CartViewProps = {
@@ -8,11 +10,6 @@ type CartViewProps = {
   onCheckout: () => void;
   asPage?: boolean;
 };
-
-const currency = new Intl.NumberFormat("fr-FR", {
-  style: "currency",
-  currency: "EUR",
-});
 
 function CartView({ onClose, onCheckout, asPage = false }: CartViewProps) {
   const {
@@ -119,71 +116,18 @@ function CartView({ onClose, onCheckout, asPage = false }: CartViewProps) {
         ) : (
           <div className="cart-view-items">
             {items.map((item) => (
-              <article className="cart-view-item" key={item.id_cart_item}>
-                {item.image ? (
-                  <img src={item.image} alt={item.name} />
-                ) : (
-                  <div className="cart-item-image-placeholder" />
-                )}
-                <div className="cart-item-details">
-                  <h2>{item.name}</h2>
-                  <p>{[item.color, item.size].filter(Boolean).join(" · ")}</p>
-                  <div
-                    className="cart-quantity-control"
-                    aria-label={`Quantité de ${item.name}`}
-                  >
-                    <button
-                      type="button"
-                      aria-label="Diminuer la quantité"
-                      title="Diminuer"
-                      disabled={
-                        item.quantity <= 1 || busyItemId === item.id_cart_item
-                      }
-                      onClick={() =>
-                        void changeQuantity(
-                          item.id_cart_item,
-                          item.quantity - 1,
-                        )
-                      }
-                    >
-                      <Minus size={14} />
-                    </button>
-                    <span>{item.quantity}</span>
-                    <button
-                      type="button"
-                      aria-label="Augmenter la quantité"
-                      title="Augmenter"
-                      disabled={
-                        item.quantity >= item.stock_quantity ||
-                        busyItemId === item.id_cart_item
-                      }
-                      onClick={() =>
-                        void changeQuantity(
-                          item.id_cart_item,
-                          item.quantity + 1,
-                        )
-                      }
-                    >
-                      <Plus size={14} />
-                    </button>
-                  </div>
-                </div>
-                <div className="cart-item-total">
-                  <strong>
-                    {currency.format(Number(item.price_unit) * item.quantity)}
-                  </strong>
-                  <button
-                    className="cart-icon-button cart-remove-button"
-                    type="button"
-                    aria-label={`Supprimer ${item.name} du panier`}
-                    title="Supprimer"
-                    disabled={busyItemId === item.id_cart_item}
-                    onClick={() => void deleteItem(item.id_cart_item)}
-                  >
-                    <Trash2 size={16} />
-                  </button>
-                </div>
-              </article>
+              <CartLineItem
+                key={item.id_cart_item}
+                item={item}
+                isBusy={busyItemId === item.id_cart_item}
+                onIncrement={() =>
+                  void changeQuantity(item.id_cart_item, item.quantity + 1)
+                }
+                onDecrement={() =>
+                  void changeQuantity(item.id_cart_item, item.quantity - 1)
+                }
+                onRemove={() => void deleteItem(item.id_cart_item)}
+              />
             ))}
           </div>
         )}

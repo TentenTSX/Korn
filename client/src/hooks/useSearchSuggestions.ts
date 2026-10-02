@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { apiRequest } from "../services/api";
-import type { Product } from "./useProducts";
+import type { Product } from "../types/product";
 
 const MIN_QUERY_LENGTH = 2;
 const MAX_SUGGESTIONS = 5;

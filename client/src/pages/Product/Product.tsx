@@ -3,12 +3,8 @@ import { Link, useParams } from "react-router";
 import AddToCartButton from "../../components/cart/AddToCartButton";
 import { useDocumentHead } from "../../hooks/useDocumentHead";
 import { useProduct } from "../../hooks/useProduct";
+import { currency as money } from "../../utils/currency";
 import "./Product.css";
-
-const money = new Intl.NumberFormat("fr-FR", {
-  style: "currency",
-  currency: "EUR",
-});
 
 function Product() {
   const { id } = useParams();

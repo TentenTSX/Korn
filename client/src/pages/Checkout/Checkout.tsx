@@ -2,15 +2,13 @@ import { useEffect, useState } from "react";
 import type { ChangeEvent, FormEvent } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router";
 import { useCartContext } from "../../contexts/CartContext";
-import type { ShippingInput, StripeCheckoutStatus } from "../../hooks/useCart";
 import { useDocumentHead } from "../../hooks/useDocumentHead";
 import { apiRequest } from "../../services/api";
+import type { ShippingInput, StripeCheckoutStatus } from "../../types/cart";
+import CheckoutConfirmation from "./CheckoutConfirmation";
+import CheckoutForm from "./CheckoutForm";
+import CheckoutSummary from "./CheckoutSummary";
 import "./Checkout.css";
-
-const currency = new Intl.NumberFormat("fr-FR", {
-  style: "currency",
-  currency: "EUR",
-});
 
 function Checkout() {
   const navigate = useNavigate();
@@ -128,40 +126,11 @@ function Checkout() {
   if (paymentResult) {
     return (
       <main className="checkout-page">
-        <section
-          className="checkout-confirmation"
-          aria-labelledby="checkout-title"
-        >
-          <span className="checkout-kicker">
-            {paymentResult.paymentStatus === "paid"
-              ? "Paiement confirmé"
-              : "Paiement en cours"}
-          </span>
-          <h1 id="checkout-title">
-            Merci{user ? `, ${user.first_name}` : ""}.
-          </h1>
-          <p>
-            Commande <strong>#{paymentResult.orderId}</strong>.
-          </p>
-          <p className="checkout-payment-note">
-            {paymentResult.paymentStatus === "paid"
-              ? "Stripe a confirmé le paiement. Un reçu sera envoyé par email."
-              : "Stripe traite encore votre paiement. Votre commande sera mise à jour dès confirmation."}
-          </p>
-          <strong className="checkout-confirmation-total">
-            {currency.format(paymentResult.totalPrice)}
-          </strong>
-          <div className="checkout-confirmation-actions">
-            {user && (
-              <Link className="checkout-primary-link" to="/profile/dashboard">
-                Voir mes commandes
-              </Link>
-            )}
-            <Link className="checkout-secondary-link" to="/collection">
-              Continuer mes achats
-            </Link>
-          </div>
-        </section>
+        <CheckoutConfirmation
+          paymentResult={paymentResult}
+          isLoggedIn={!!user}
+          userFirstName={user?.first_name}
+        />
       </main>
     );
   }
@@ -224,145 +193,18 @@ function Checkout() {
           <span className="checkout-kicker">Votre commande</span>
           <h1 id="checkout-title">Livraison et paiement</h1>
 
-          <form className="checkout-form" onSubmit={handleSubmit}>
-            <fieldset>
-              <legend>Contact et adresse de livraison</legend>
-              <div className="checkout-field-grid">
-                <label className="checkout-field-wide">
-                  Email de confirmation
-                  <input
-                    required
-                    type="email"
-                    autoComplete="email"
-                    value={shipping.customer_email}
-                    onChange={handleChange("customer_email")}
-                  />
-                </label>
-                <label>
-                  Prénom
-                  <input
-                    required
-                    autoComplete="given-name"
-                    value={shipping.shipping_first_name}
-                    onChange={handleChange("shipping_first_name")}
-                  />
-                </label>
-                <label>
-                  Nom
-                  <input
-                    required
-                    autoComplete="family-name"
-                    value={shipping.shipping_last_name}
-                    onChange={handleChange("shipping_last_name")}
-                  />
-                </label>
-                <label className="checkout-field-wide">
-                  Adresse
-                  <input
-                    required
-                    autoComplete="street-address"
-                    value={shipping.shipping_address}
-                    onChange={handleChange("shipping_address")}
-                  />
-                </label>
-                <label>
-                  Ville
-                  <input
-                    required
-                    autoComplete="address-level2"
-                    value={shipping.shipping_city}
-                    onChange={handleChange("shipping_city")}
-                  />
-                </label>
-                <label>
-                  Code postal
-                  <input
-                    required
-                    autoComplete="postal-code"
-                    value={shipping.shipping_postal_code}
-                    onChange={handleChange("shipping_postal_code")}
-                  />
-                </label>
-                <label className="checkout-field-wide">
-                  Pays
-                  <input
-                    required
-                    autoComplete="country-name"
-                    value={shipping.shipping_country}
-                    onChange={handleChange("shipping_country")}
-                  />
-                </label>
-              </div>
-            </fieldset>
-
-            <section
-              className="checkout-payment-section"
-              aria-labelledby="payment-title"
-            >
-              <h2 id="payment-title">Paiement</h2>
-              <p>
-                Vous serez redirigé vers la page sécurisée de Stripe pour payer
-                par carte.
-              </p>
-            </section>
-
-            {isPaymentCancelled && (
-              <output className="checkout-payment-note">
-                Le paiement a été annulé. Votre panier est conservé.
-              </output>
-            )}
-            {error && (
-              <p className="checkout-error" role="alert">
-                {error}
-              </p>
-            )}
-            <button
-              className="checkout-submit-button"
-              type="submit"
-              disabled={isSubmitting}
-            >
-              {isSubmitting
-                ? "Ouverture de Stripe..."
-                : `Payer avec Stripe · ${currency.format(total)}`}
-            </button>
-          </form>
+          <CheckoutForm
+            shipping={shipping}
+            onChange={handleChange}
+            onSubmit={handleSubmit}
+            isSubmitting={isSubmitting}
+            isPaymentCancelled={isPaymentCancelled}
+            error={error}
+            total={total}
+          />
         </section>
 
-        <aside className="checkout-summary" aria-labelledby="summary-title">
-          <h2 id="summary-title">
-            Récapitulatif <span>({items.length})</span>
-          </h2>
-          <div className="checkout-summary-items">
-            {items.map((item) => (
-              <article
-                className="checkout-summary-item"
-                key={item.id_cart_item}
-              >
-                {item.image ? (
-                  <img src={item.image} alt={item.name} />
-                ) : (
-                  <div className="checkout-image-placeholder" />
-                )}
-                <div>
-                  <h3>{item.name}</h3>
-                  <p>{[item.color, item.size].filter(Boolean).join(" · ")}</p>
-                  <p>Quantité : {item.quantity}</p>
-                </div>
-                <strong>
-                  {currency.format(Number(item.price_unit) * item.quantity)}
-                </strong>
-              </article>
-            ))}
-          </div>
-          <div className="checkout-summary-total">
-            <span>Total produits</span>
-            <strong>{currency.format(total)}</strong>
-          </div>
-          <p className="checkout-summary-footnote">
-            Les frais de livraison seront précisés avant la mise en place du
-            paiement.
-          </p>
-        </aside>
+        <CheckoutSummary items={items} total={total} />
       </div>
     </main>
   );

@@ -1,15 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { apiRequest } from "../services/api";
-
-export type User = {
-  id_user: number;
-  first_name: string;
-  last_name: string;
-  email: string;
-};
-
-type Credentials = { email: string; password: string };
-type RegisterInput = Credentials & { first_name: string; last_name: string };
+import type { Credentials, RegisterInput, User } from "../types/auth";
 
 export function useAuth() {
   const [user, setUser] = useState<User | null>(null);
