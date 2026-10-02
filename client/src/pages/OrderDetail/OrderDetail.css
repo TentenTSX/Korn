@@ -1,6 +1,6 @@
 .order-detail-page {
   min-height: calc(100vh - var(--nav-height));
-  padding: 2rem max(var(--space-4), calc((100vw - 1260px) / 2)) 5rem;
+  padding: 3rem;
   background: var(--color-paper);
   color: var(--color-ink);
 }
