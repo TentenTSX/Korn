@@ -14,6 +14,7 @@ import authActions from "./modules/auth/authActions";
 import type CartOwner from "./modules/cart/CartOwner";
 import cartActions from "./modules/cart/cartActions";
 import invoiceActions from "./modules/invoice/invoiceActions";
+import newsletterActions from "./modules/newsletter/newsletterActions";
 import orderActions from "./modules/order/orderActions";
 import paymentActions from "./modules/payment/paymentActions";
 import stripeActions from "./modules/payment/stripeActions";
@@ -147,6 +148,14 @@ router.get(
   "/api/categories",
   runAction(async (_req, res) => {
     res.json(await productActions.getCategoriesAction());
+  }),
+);
+
+router.post(
+  "/api/newsletter/subscribe",
+  runAction(async (req, res) => {
+    await newsletterActions.subscribeAction(req.body?.email);
+    res.sendStatus(204);
   }),
 );
 

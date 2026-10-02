@@ -1,4 +1,7 @@
+import { useState } from "react";
+import type { FormEvent } from "react";
 import { Link } from "react-router";
+import { apiRequest } from "../../services/api";
 import "./Footer.css";
 
 const boutiqueLinks = [
@@ -26,6 +29,33 @@ const marqueLinks = [
 ];
 
 function Footer() {
+  const [email, setEmail] = useState("");
+  const [status, setStatus] = useState<"idle" | "loading" | "done" | "error">(
+    "idle",
+  );
+  const [error, setError] = useState<string | null>(null);
+
+  const handleSubscribe = async (event: FormEvent) => {
+    event.preventDefault();
+    setStatus("loading");
+    setError(null);
+    try {
+      await apiRequest<void>("/api/newsletter/subscribe", {
+        method: "POST",
+        body: JSON.stringify({ email }),
+      });
+      setStatus("done");
+      setEmail("");
+    } catch (requestError) {
+      setStatus("error");
+      setError(
+        requestError instanceof Error
+          ? requestError.message
+          : "L'inscription a échoué.",
+      );
+    }
+  };
+
   return (
     <footer className="site-footer">
       <div className="site-footer-newsletter">
@@ -39,17 +69,34 @@ function Footer() {
           et offres membres.
         </p>
 
-        <form className="newsletter-form">
-          <label className="sr-only" htmlFor="newsletter-email">
-            Votre adresse email
-          </label>
-          <input
-            id="newsletter-email"
-            type="email"
-            placeholder="VOTRE ADRESSE EMAIL"
-          />
-          <button type="submit">S'INSCRIRE</button>
-        </form>
+        {status === "done" ? (
+          <output className="newsletter-success">
+            Merci ! Vérifiez votre boîte mail.
+          </output>
+        ) : (
+          <form className="newsletter-form" onSubmit={handleSubscribe}>
+            <label className="sr-only" htmlFor="newsletter-email">
+              Votre adresse email
+            </label>
+            <input
+              id="newsletter-email"
+              type="email"
+              placeholder="VOTRE ADRESSE EMAIL"
+              value={email}
+              onChange={(event) => setEmail(event.target.value)}
+              required
+            />
+            <button type="submit" disabled={status === "loading"}>
+              {status === "loading" ? "Inscription..." : "S'INSCRIRE"}
+            </button>
+          </form>
+        )}
+
+        {status === "error" && (
+          <p className="newsletter-error" role="alert">
+            {error}
+          </p>
+        )}
 
         <p className="newsletter-note">
           Pas de spam. Désinscription à tout moment.
