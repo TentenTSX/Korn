@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { Link, useNavigate, useParams } from "react-router";
 import { useCartContext } from "../../contexts/CartContext";
+import { useDocumentHead } from "../../hooks/useDocumentHead";
 import { useOrder } from "../../hooks/useOrder";
 import "./OrderDetail.css";
 
@@ -27,6 +28,10 @@ function OrderDetail() {
     user?.id_user ?? null,
     orderId ? Number(orderId) : null,
   );
+  useDocumentHead({
+    title: order ? `Commande #${order.id_order}` : "Commande",
+    description: "Détail de votre commande Korn.",
+  });
 
   useEffect(() => {
     if (!isAuthLoading && !user) navigate("/profile", { replace: true });
