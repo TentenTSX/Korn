@@ -51,7 +51,6 @@ function CollectionFilters({
                 onClick={() => handleFilterChange(filter)}
               >
                 {filter}
-                {filter === "Tout" && " (8)"}
               </button>
             </li>
           ))}

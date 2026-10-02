@@ -1,5 +1,6 @@
 import { Link } from "react-router";
 import { useProducts } from "../../../hooks/useProducts";
+import AddToCartButton from "../../cart/AddToCartButton";
 import "./HomeBestSeller.css";
 
 function HomeBestSeller() {
@@ -22,26 +23,39 @@ function HomeBestSeller() {
 
       <div className="home-best-sellers-grid">
         {uniqueProducts.map((product) => (
-          <Link
+          <article
             className="home-best-sellers-product"
-            to={`/product/${product.id_product}`}
             key={product.id_product}
           >
             <div className="home-best-sellers-image-wrapper">
-              {product.image && (
-                <img
-                  src={product.image}
-                  alt={product.alt_text ?? product.name}
+              <Link
+                className="home-best-sellers-image-link"
+                to={`/product/${product.id_product}`}
+              >
+                {product.image && (
+                  <img
+                    src={product.image}
+                    alt={product.alt_text ?? product.name}
+                  />
+                )}
+              </Link>
+              <div className="home-best-sellers-add">
+                <AddToCartButton
+                  variantId={product.id_variant ?? undefined}
+                  stockQuantity={product.stock_quantity}
+                  label={product.name}
                 />
-              )}
-              <span className="home-best-sellers-add">Ajouter au panier</span>
+              </div>
             </div>
-            <div className="home-best-sellers-product-info">
+            <Link
+              className="home-best-sellers-product-info"
+              to={`/product/${product.id_product}`}
+            >
               <h3>{product.name}</h3>
               <span className="home-best-sellers-price">{product.price} €</span>
               <p>{product.description ?? product.category_name}</p>
-            </div>
-          </Link>
+            </Link>
+          </article>
         ))}
       </div>
     </section>

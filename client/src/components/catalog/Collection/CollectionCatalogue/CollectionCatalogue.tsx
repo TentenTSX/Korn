@@ -1,9 +1,18 @@
 import { useEffect, useState } from "react";
 import { useParams, useSearchParams } from "react-router";
+import { useActiveSale } from "../../../../hooks/useActiveSale";
 import { useProducts } from "../../../../hooks/useProducts";
 import CollectionFilters from "../CollectionFilters/CollectionFilters";
 import CollectionProductCard from "../CollectionProductCard/CollectionProductCard";
 import "./CollectionCatalogue.css";
+
+const NEW_PRODUCT_WINDOW_DAYS = 30;
+
+function isRecentlyAdded(createdAt: string) {
+  const ageInDays =
+    (Date.now() - new Date(createdAt).getTime()) / (1000 * 60 * 60 * 24);
+  return ageInDays <= NEW_PRODUCT_WINDOW_DAYS;
+}
 
 const filterByRoute: Record<string, string> = {
   bestsellers: "Bestsellers",
@@ -41,6 +50,7 @@ function CollectionCatalogue() {
   const routeFilter = filter ? filterByRoute[filter.toLowerCase()] : undefined;
   const [activeFilter, setActiveFilter] = useState(routeFilter ?? "Tout");
   const [sort, setSort] = useState("newest");
+  const activeSale = useActiveSale();
   const products: CollectionProduct[] = apiProducts.map((product) => ({
     name: product.name,
     category: product.description ?? "Collection Korn",
@@ -48,7 +58,8 @@ function CollectionCatalogue() {
     categoryFilter: product.category_name ?? "Tout",
     image: product.image ?? "",
     alt: product.alt_text ?? product.name,
-    sale: false,
+    badge: isRecentlyAdded(product.created_at) ? "NOUVEAU" : undefined,
+    sale: Boolean(activeSale),
     variantId: product.id_variant,
     productId: product.id_product,
     size: product.size,

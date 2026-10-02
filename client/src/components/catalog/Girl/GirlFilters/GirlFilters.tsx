@@ -39,7 +39,6 @@ function GirlFilters({ onFilterChange, onSortChange }: GirlFiltersProps) {
                 onClick={() => handleFilterChange(filter)}
               >
                 {filter}
-                {filter === "Tout" && " (8)"}
               </button>
             </li>
           ))}

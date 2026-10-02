@@ -170,6 +170,7 @@ function ProfileLogin({
                       id="profile-first-name"
                       type="text"
                       autoComplete="given-name"
+                      placeholder="Votre prénom"
                       value={firstName}
                       onChange={(event) => setFirstName(event.target.value)}
                     />
@@ -182,6 +183,7 @@ function ProfileLogin({
                       id="profile-last-name"
                       type="text"
                       autoComplete="family-name"
+                      placeholder="Votre nom"
                       value={lastName}
                       onChange={(event) => setLastName(event.target.value)}
                     />
