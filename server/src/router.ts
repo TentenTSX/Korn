@@ -19,6 +19,7 @@ import orderActions from "./modules/order/orderActions";
 import paymentActions from "./modules/payment/paymentActions";
 import stripeActions from "./modules/payment/stripeActions";
 import productActions from "./modules/product/productActions";
+import salePeriodActions from "./modules/salePeriod/salePeriodActions";
 
 const router = express.Router();
 type RouteAction = (req: Request, res: Response) => Promise<void>;
@@ -156,6 +157,13 @@ router.post(
   runAction(async (req, res) => {
     await newsletterActions.subscribeAction(req.body?.email);
     res.sendStatus(204);
+  }),
+);
+
+router.get(
+  "/api/sales/active",
+  runAction(async (_req, res) => {
+    res.json((await salePeriodActions.getActiveSalePeriodAction()) ?? null);
   }),
 );
 

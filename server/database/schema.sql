@@ -162,6 +162,15 @@ CREATE TABLE newsletter_subscribers (
     subscribed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TABLE sale_periods (
+    id_sale_period INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    slug VARCHAR(100) NOT NULL UNIQUE,
+    discount_percent INT NOT NULL,
+    start_date DATE NOT NULL,
+    end_date DATE NOT NULL
+);
+
 -- Seed data --------------------------------------------------------------
 
 INSERT INTO categories (name, slug) VALUES
@@ -270,3 +279,8 @@ INSERT INTO product_variants (product_id, size, color, price, stock_quantity) VA
     (@product_id, 'M', 'Gris', 79.00, 10);
 INSERT INTO product_images (product_id, url, alt_text, position) VALUES
     (@product_id, 'https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=900&h=1125&fit=crop&auto=format', 'Sweat gris oversize', 0);
+
+INSERT INTO sale_periods (name, slug, discount_percent, start_date, end_date) VALUES
+    ('Soldes d''hiver', 'winter', 30, '2026-01-07', '2026-02-03'),
+    ('Soldes d''ete', 'summer', 40, '2026-06-24', '2026-07-21'),
+    ('Soldes d''automne', 'autumn', 20, '2026-09-23', '2026-10-20');
