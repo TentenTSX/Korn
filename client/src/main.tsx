@@ -20,6 +20,7 @@ import Product from "./pages/Product/Product";
 import Profile from "./pages/Profile/Profile";
 import ProfileDashboard from "./pages/ProfileDashboard/ProfileDashboard";
 import ResetPassword from "./pages/ResetPassword/ResetPassword";
+import StaticPage from "./pages/StaticPage/StaticPage";
 
 // Import additional components for new routes
 // Try creating these components in the "pages" folder
@@ -83,6 +84,10 @@ const router = createBrowserRouter([
       {
         path: "/reset-password",
         element: <ResetPassword />,
+      },
+      {
+        path: "/pages/:slug",
+        element: <StaticPage />,
       },
       {
         path: "*",

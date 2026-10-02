@@ -13,19 +13,19 @@ const boutiqueLinks = [
 ];
 
 const aideLinks = [
-  "FAQ",
-  "Livraison",
-  "Retours",
-  "Guide des tailles",
-  "Contact",
+  { label: "FAQ", to: "/pages/faq" },
+  { label: "Livraison", to: "/pages/livraison" },
+  { label: "Retours", to: "/pages/retours" },
+  { label: "Guide des tailles", to: "/pages/guide-des-tailles" },
+  { label: "Contact", to: "/pages/contact" },
 ];
 
 const marqueLinks = [
-  "Notre histoire",
-  "Durabilité",
-  "Presse",
-  "Affiliation",
-  "Carrières",
+  { label: "Notre histoire", to: "/pages/notre-histoire" },
+  { label: "Durabilité", to: "/pages/durabilite" },
+  { label: "Presse", to: "/pages/presse" },
+  { label: "Affiliation", to: "/pages/affiliation" },
+  { label: "Carrières", to: "/pages/carrieres" },
 ];
 
 function Footer() {
@@ -132,8 +132,8 @@ function Footer() {
           <h3>AIDE</h3>
           <ul>
             {aideLinks.map((link) => (
-              <li key={link}>
-                <Link to="/">{link}</Link>
+              <li key={link.label}>
+                <Link to={link.to}>{link.label}</Link>
               </li>
             ))}
           </ul>
@@ -143,8 +143,8 @@ function Footer() {
           <h3>MARQUE</h3>
           <ul>
             {marqueLinks.map((link) => (
-              <li key={link}>
-                <Link to="/">{link}</Link>
+              <li key={link.label}>
+                <Link to={link.to}>{link.label}</Link>
               </li>
             ))}
           </ul>
@@ -154,9 +154,9 @@ function Footer() {
       <div className="site-footer-bottom">
         <p>© 2026 KORN SAS. Tous droits réservés.</p>
         <div className="bottom-links">
-          <Link to="/">Confidentialité</Link>
-          <Link to="/">CGV</Link>
-          <Link to="/">Mentions légales</Link>
+          <Link to="/pages/confidentialite">Confidentialité</Link>
+          <Link to="/pages/cgv">CGV</Link>
+          <Link to="/pages/mentions-legales">Mentions légales</Link>
         </div>
       </div>
     </footer>
