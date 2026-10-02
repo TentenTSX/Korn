@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router";
 import ProfileLogin from "../../components/profile/ProfileLogin/ProfileLogin";
 import { useCartContext } from "../../contexts/CartContext";
+import { apiRequest } from "../../services/api";
 
 function Profile() {
   const navigate = useNavigate();
@@ -39,9 +40,20 @@ function Profile() {
     navigate("/profile/dashboard");
   };
 
+  const handleRequestPasswordReset = async (email: string) => {
+    await apiRequest<void>("/api/auth/password-reset/request", {
+      method: "POST",
+      body: JSON.stringify({ email }),
+    });
+  };
+
   return (
     <main>
-      <ProfileLogin onLogin={handleLogin} onRegister={handleRegister} />
+      <ProfileLogin
+        onLogin={handleLogin}
+        onRegister={handleRegister}
+        onRequestPasswordReset={handleRequestPasswordReset}
+      />
     </main>
   );
 }

@@ -1,7 +1,11 @@
+import { createHash, randomBytes } from "node:crypto";
 import argon2 from "argon2";
 import ActionError from "../ActionError";
+import { sendPasswordResetEmail } from "../email/emailService";
 import jwtUtil from "./Jwt";
 import authRepository from "./authRepository";
+
+const PASSWORD_RESET_EXPIRY_MS = 60 * 60 * 1000;
 
 type RegisterInput = {
   first_name: string;
@@ -115,4 +119,66 @@ const getProfile = async (
 
 const logout = () => undefined;
 
-export default { register, login, getCurrentUser, getProfile, logout };
+const requestPasswordReset = async (emailInput: unknown) => {
+  if (
+    typeof emailInput !== "string" ||
+    !/^\S+@\S+\.\S+$/.test(emailInput.trim())
+  ) {
+    throw new ActionError("BAD_REQUEST", "Adresse email invalide.");
+  }
+  const email = emailInput.trim().toLowerCase();
+  const user = await authRepository.findByEmail(email);
+  // Always behave the same way whether the account exists or not, so a
+  // caller cannot use this endpoint to discover registered emails.
+  if (!user) return;
+
+  const token = randomBytes(32).toString("hex");
+  const tokenHash = createHash("sha256").update(token).digest("hex");
+  const expiresAt = new Date(Date.now() + PASSWORD_RESET_EXPIRY_MS);
+  await authRepository.createPasswordReset(user.id_user, tokenHash, expiresAt);
+
+  const resetUrl = `${process.env.CLIENT_URL ?? ""}/reset-password?token=${token}`;
+  await sendPasswordResetEmail(email, resetUrl);
+};
+
+const confirmPasswordReset = async (
+  tokenInput: unknown,
+  passwordInput: unknown,
+) => {
+  if (typeof tokenInput !== "string" || !tokenInput.trim()) {
+    throw new ActionError("BAD_REQUEST", "Lien de réinitialisation invalide.");
+  }
+  if (typeof passwordInput !== "string" || passwordInput.length < 8) {
+    throw new ActionError(
+      "BAD_REQUEST",
+      "Le mot de passe doit contenir au moins 8 caractères.",
+    );
+  }
+
+  const tokenHash = createHash("sha256")
+    .update(tokenInput.trim())
+    .digest("hex");
+  const reset = await authRepository.findPasswordReset(tokenHash);
+  if (!reset || new Date(reset.expires_at).getTime() < Date.now()) {
+    throw new ActionError(
+      "BAD_REQUEST",
+      "Ce lien de réinitialisation est invalide ou a expiré.",
+    );
+  }
+
+  await authRepository.updatePassword(
+    reset.user_id,
+    await argon2.hash(passwordInput),
+  );
+  await authRepository.deletePasswordResetsForUser(reset.user_id);
+};
+
+export default {
+  register,
+  login,
+  getCurrentUser,
+  getProfile,
+  logout,
+  requestPasswordReset,
+  confirmPasswordReset,
+};

@@ -173,13 +173,38 @@
 
 .profile-forgot-link {
   display: block;
+  width: 100%;
   margin-top: var(--space-4);
+  border: 0;
+  background: transparent;
   color: var(--color-muted);
+  cursor: pointer;
   font-family: var(--font-third);
   font-size: 0.85rem;
   text-align: center;
   text-decoration: underline;
   text-underline-offset: 0.2em;
+}
+
+.profile-forgot-back {
+  display: block;
+  margin-bottom: var(--space-4);
+  border: 0;
+  background: transparent;
+  color: var(--color-muted);
+  cursor: pointer;
+  font-family: var(--font-third);
+  font-size: 0.85rem;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.profile-forgot-success {
+  display: block;
+  color: var(--color-ink);
+  font-family: var(--font-third);
+  font-size: 0.9rem;
+  line-height: 1.6;
 }
 
 @media (max-width: 700px) {

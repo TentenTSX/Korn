@@ -19,6 +19,7 @@ import OrderDetail from "./pages/OrderDetail/OrderDetail";
 import Product from "./pages/Product/Product";
 import Profile from "./pages/Profile/Profile";
 import ProfileDashboard from "./pages/ProfileDashboard/ProfileDashboard";
+import ResetPassword from "./pages/ResetPassword/ResetPassword";
 
 // Import additional components for new routes
 // Try creating these components in the "pages" folder
@@ -78,6 +79,10 @@ const router = createBrowserRouter([
       {
         path: "/profile/orders/:orderId",
         element: <OrderDetail />,
+      },
+      {
+        path: "/reset-password",
+        element: <ResetPassword />,
       },
       {
         path: "*",
