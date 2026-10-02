@@ -11,6 +11,18 @@ CREATE TABLE users (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TABLE password_resets (
+    id_password_reset INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    token_hash CHAR(64) NOT NULL UNIQUE,
+    expires_at TIMESTAMP NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_password_reset_user
+        FOREIGN KEY (user_id)
+        REFERENCES users(id_user)
+        ON DELETE CASCADE
+);
+
 CREATE TABLE products (
     id_product INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,

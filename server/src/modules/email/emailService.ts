@@ -37,6 +37,28 @@ export async function sendNewsletterWelcomeEmail(email: string) {
   });
 }
 
+export async function sendPasswordResetEmail(email: string, resetUrl: string) {
+  const from = process.env.EMAIL_FROM;
+  if (!from) throw new Error("EMAIL_FROM is required to send confirmations.");
+
+  await getTransporter().sendMail({
+    from,
+    to: email,
+    subject: "Réinitialisation de votre mot de passe Korn",
+    text: [
+      "Bonjour,",
+      "",
+      "Vous avez demandé la réinitialisation de votre mot de passe Korn.",
+      `Cliquez sur ce lien pour en choisir un nouveau : ${resetUrl}`,
+      "Ce lien expire dans 1 heure.",
+      "",
+      "Si vous n'êtes pas à l'origine de cette demande, ignorez cet email.",
+      "",
+      "L'équipe Korn",
+    ].join("\n"),
+  });
+}
+
 export async function sendPaymentConfirmationEmail(
   invoice: InvoiceData,
   pdf: Buffer,

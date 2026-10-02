@@ -40,6 +40,41 @@ class authRepository {
     );
     return this.findById(result.insertId);
   }
+
+  async updatePassword(userId: number, passwordHash: string) {
+    await databaseClient.query<Result>(
+      "update users set password_hash = ? where id_user = ?",
+      [passwordHash, userId],
+    );
+  }
+
+  async createPasswordReset(
+    userId: number,
+    tokenHash: string,
+    expiresAt: Date,
+  ) {
+    await databaseClient.query<Result>(
+      "insert into password_resets (user_id, token_hash, expires_at) values (?, ?, ?)",
+      [userId, tokenHash, expiresAt],
+    );
+  }
+
+  async findPasswordReset(tokenHash: string) {
+    const [rows] = await databaseClient.query<Rows>(
+      "select user_id, expires_at from password_resets where token_hash = ?",
+      [tokenHash],
+    );
+    return rows[0] as
+      | { user_id: number; expires_at: Date | string }
+      | undefined;
+  }
+
+  async deletePasswordResetsForUser(userId: number) {
+    await databaseClient.query<Result>(
+      "delete from password_resets where user_id = ?",
+      [userId],
+    );
+  }
 }
 
 export default new authRepository();

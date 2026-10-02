@@ -102,6 +102,22 @@ router.post(
   }),
 );
 
+router.post(
+  "/api/auth/password-reset/request",
+  runAction(async (req, res) => {
+    await authActions.requestPasswordReset(req.body?.email);
+    res.sendStatus(204);
+  }),
+);
+
+router.post(
+  "/api/auth/password-reset/confirm",
+  runAction(async (req, res) => {
+    await authActions.confirmPasswordReset(req.body?.token, req.body?.password);
+    res.sendStatus(204);
+  }),
+);
+
 router.get(
   "/api/auth/me",
   authenticate,

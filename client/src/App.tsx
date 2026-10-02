@@ -1,4 +1,4 @@
-import { Outlet, ScrollRestoration } from "react-router";
+import { Outlet, ScrollRestoration, useLocation } from "react-router";
 import { useNavigate } from "react-router";
 import Footer from "./components/Footer/Footer";
 import Navbar from "./components/Navbar/Navbar";
@@ -8,14 +8,16 @@ import "./App.css";
 
 function App() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { isOpen, closeCart } = useCartContext();
+  const hideFooter = location.pathname === "/reset-password";
 
   return (
     <>
       <ScrollRestoration />
       <Navbar />
       <Outlet />
-      <Footer />
+      {!hideFooter && <Footer />}
       {isOpen && (
         <CartView
           onClose={closeCart}
