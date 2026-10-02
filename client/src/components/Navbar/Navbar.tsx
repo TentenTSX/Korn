@@ -1,6 +1,6 @@
 import { Search, ShoppingBag, UserRound, X } from "lucide-react";
 import { useState } from "react";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { useCartContext } from "../../contexts/CartContext";
 import "../Navbar/Navbar.css";
 
@@ -17,26 +17,26 @@ function Navbar() {
 
   return (
     <header className="Navbar">
-      <a href="/" className="Navbar-logo" aria-label="Korn — accueil">
+      <Link to="/" className="Navbar-logo" aria-label="Korn — accueil">
         Korn
-      </a>
+      </Link>
 
       <nav className="Navbar-nav" aria-label="Navigation principale">
         <ul className="Nav-links">
           <li className="nav-link">
-            <a href="/men">Homme</a>
+            <Link to="/men">Homme</Link>
           </li>
           <li className="nav-link">
-            <a href="/girl">Femme</a>
+            <Link to="/girl">Femme</Link>
           </li>
           <li className="nav-link">
-            <a href="/collection/news">Nouveautés</a>
+            <Link to="/collection/news">Nouveautés</Link>
           </li>
           <li className="nav-link">
-            <a href="/collection">Collection</a>
+            <Link to="/collection">Collection</Link>
           </li>
           <li className="nav-link">
-            <a href="/collection/sales">Soldes</a>
+            <Link to="/collection/sales">Soldes</Link>
             <span aria-label={`${soldes[0].discount}% de réduction`}>
               {soldes[0].discount}%
             </span>
@@ -83,13 +83,13 @@ function Navbar() {
           {isSearchOpen ? <X size={18} /> : <Search size={18} />}
         </button>
 
-        <a
+        <Link
           className="Nav-profile-button"
-          href="/profile"
+          to="/profile"
           aria-label="Voir le profil"
         >
           <UserRound size={18} strokeWidth={1.8} />
-        </a>
+        </Link>
 
         <button
           className="Nav-bag-button"
