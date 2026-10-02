@@ -1,17 +1,9 @@
 import { useCallback, useEffect, useState } from "react";
 import { apiRequest } from "../services/api";
-
-type Order = {
-  id_order: number;
-  total_price: number;
-  status: string;
-  created_at: string;
-  payment_status: string | null;
-  invoice_number: string | null;
-};
+import type { OrderSummary } from "../types/order";
 
 export function useOrders(userId: number | null) {
-  const [orders, setOrders] = useState<Order[]>([]);
+  const [orders, setOrders] = useState<OrderSummary[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const refresh = useCallback(async () => {
@@ -22,7 +14,9 @@ export function useOrders(userId: number | null) {
     }
     setIsLoading(true);
     try {
-      setOrders(await apiRequest<Order[]>(`/api/users/${userId}/orders`));
+      setOrders(
+        await apiRequest<OrderSummary[]>(`/api/users/${userId}/orders`),
+      );
       setError(null);
     } catch (requestError) {
       setError(

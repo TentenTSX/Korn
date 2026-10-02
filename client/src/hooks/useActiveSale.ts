@@ -1,13 +1,6 @@
 import { useEffect, useState } from "react";
 import { apiRequest } from "../services/api";
-
-export type ActiveSale = {
-  name: string;
-  slug: string;
-  discount_percent: number;
-  start_date: string;
-  end_date: string;
-};
+import type { ActiveSale } from "../types/sale";
 
 export function useActiveSale() {
   const [sale, setSale] = useState<ActiveSale | null>(null);

@@ -1,4 +1,6 @@
 import { Link } from "react-router";
+import type { OrderSummary } from "../../../types/order";
+import { currency as money } from "../../../utils/currency";
 import "./ProfileDashboard.css";
 
 type ProfileDashboardProps = {
@@ -6,21 +8,9 @@ type ProfileDashboardProps = {
   firstName: string;
   email: string;
   isLoading: boolean;
-  orders?: Array<{
-    id_order: number;
-    created_at: string;
-    status: string;
-    total_price: number | string;
-    payment_status: string | null;
-    invoice_number: string | null;
-  }>;
+  orders?: OrderSummary[];
   onLogout: () => void;
 };
-
-const money = new Intl.NumberFormat("fr-FR", {
-  style: "currency",
-  currency: "EUR",
-});
 
 const orderStatusLabels: Record<string, string> = {
   pending: "En attente de paiement",

@@ -3,12 +3,8 @@ import { Link, useNavigate, useParams } from "react-router";
 import { useCartContext } from "../../contexts/CartContext";
 import { useDocumentHead } from "../../hooks/useDocumentHead";
 import { useOrder } from "../../hooks/useOrder";
+import { currency as money } from "../../utils/currency";
 import "./OrderDetail.css";
-
-const money = new Intl.NumberFormat("fr-FR", {
-  style: "currency",
-  currency: "EUR",
-});
 
 const orderStatusLabels: Record<string, string> = {
   pending: "En attente de paiement",

@@ -1,22 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { apiRequest } from "../services/api";
-
-export type Product = {
-  id_product: number;
-  name: string;
-  description: string | null;
-  category_name: string | null;
-  category_slug: string | null;
-  subcategory_name: string | null;
-  id_variant: number | null;
-  size: string | null;
-  color: string | null;
-  price: number;
-  stock_quantity: number;
-  image: string | null;
-  alt_text: string | null;
-  created_at: string;
-};
+import type { Product } from "../types/product";
 
 export function useProducts(searchParams = "") {
   const [products, setProducts] = useState<Product[]>([]);

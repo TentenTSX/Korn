@@ -1,15 +1,11 @@
-import { Search, ShoppingBag, UserRound, X } from "lucide-react";
+import { ShoppingBag, UserRound } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { useCartContext } from "../../contexts/CartContext";
 import { useActiveSale } from "../../hooks/useActiveSale";
 import { useSearchSuggestions } from "../../hooks/useSearchSuggestions";
+import NavbarSearch from "./NavbarSearch";
 import "../Navbar/Navbar.css";
-
-const money = new Intl.NumberFormat("fr-FR", {
-  style: "currency",
-  currency: "EUR",
-});
 
 function Navbar() {
   const navigate = useNavigate();
@@ -20,7 +16,6 @@ function Navbar() {
   const searchWrapperRef = useRef<HTMLDivElement>(null);
   const { suggestions, isLoading: areSuggestionsLoading } =
     useSearchSuggestions(isSearchOpen ? search : "");
-  const showSuggestions = isSearchOpen && search.trim().length >= 2;
 
   const closeSearch = () => {
     setIsSearchOpen(false);
@@ -94,93 +89,20 @@ function Navbar() {
       </nav>
 
       <div className="Navbar-actions">
-        <div className="Navbar-search-wrapper" ref={searchWrapperRef}>
-          <form
-            className={`Navbar-search ${isSearchOpen ? "is-open" : ""}`}
-            aria-label="Recherche"
-            onSubmit={(event) => {
-              event.preventDefault();
-              goToSearchResults(search);
-            }}
-          >
-            <Search
-              className="Navbar-search-icon"
-              size={16}
-              aria-hidden="true"
-            />
-            <label htmlFor="main-search" className="sr-only">
-              Rechercher un article
-            </label>
-            <input
-              id="main-search"
-              className="Nav-Search-Inupt"
-              type="search"
-              aria-label="Rechercher un article"
-              placeholder="Rechercher un article..."
-              aria-expanded={showSuggestions}
-              value={search}
-              onChange={(event) => setSearch(event.target.value)}
-            />
-          </form>
-
-          {showSuggestions && (
-            <div className="Navbar-search-results">
-              {areSuggestionsLoading && suggestions.length === 0 && (
-                <p className="Navbar-search-status">Recherche...</p>
-              )}
-              {!areSuggestionsLoading && suggestions.length === 0 && (
-                <p className="Navbar-search-status">
-                  Aucun article ne correspond à "{search.trim()}".
-                </p>
-              )}
-              {suggestions.map((product) => (
-                <Link
-                  className="Navbar-search-result"
-                  to={`/product/${product.id_product}`}
-                  key={product.id_product}
-                  onClick={closeSearch}
-                >
-                  <span className="Navbar-search-result-image">
-                    {product.image && <img src={product.image} alt="" />}
-                  </span>
-                  <span className="Navbar-search-result-info">
-                    <span className="Navbar-search-result-name">
-                      {product.name}
-                    </span>
-                    <span className="Navbar-search-result-price">
-                      {money.format(Number(product.price))}
-                    </span>
-                  </span>
-                </Link>
-              ))}
-              {suggestions.length > 0 && (
-                <button
-                  className="Navbar-search-view-all"
-                  type="button"
-                  onClick={() => goToSearchResults(search)}
-                >
-                  Voir tous les résultats pour "{search.trim()}"
-                </button>
-              )}
-            </div>
-          )}
-        </div>
-
-        <button
-          className="Nav-Search-button"
-          type="button"
-          aria-label={
-            isSearchOpen ? "Fermer la recherche" : "Ouvrir la recherche"
-          }
-          aria-expanded={isSearchOpen}
-          aria-controls="main-search"
-          onClick={() => {
+        <NavbarSearch
+          searchWrapperRef={searchWrapperRef}
+          isSearchOpen={isSearchOpen}
+          search={search}
+          suggestions={suggestions}
+          areSuggestionsLoading={areSuggestionsLoading}
+          onSearchChange={setSearch}
+          onSubmit={goToSearchResults}
+          onToggle={() => {
             if (isSearchOpen) closeSearch();
             else setIsSearchOpen(true);
           }}
-        >
-          {isSearchOpen ? <X size={18} /> : <Search size={18} />}
-        </button>
+          onClose={closeSearch}
+        />
 
         <Link
           className="Nav-profile-button"
