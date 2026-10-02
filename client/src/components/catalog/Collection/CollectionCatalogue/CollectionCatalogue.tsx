@@ -31,95 +31,6 @@ type CollectionProduct = {
   stockQuantity?: number;
 };
 
-const demoProducts: CollectionProduct[] = [
-  {
-    name: "Essential Tee",
-    category: "T-shirt coupe droite",
-    price: "39 €",
-    badge: "NOUVEAU",
-    sale: false,
-    categoryFilter: "Femme",
-    image:
-      "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=900&h=1125&fit=crop&auto=format",
-    alt: "T-shirt blanc de la collection Korn",
-  },
-  {
-    name: "Motion Pant",
-    category: "Pantalon technique",
-    price: "76 €",
-    badge: "NOUVEAU",
-    sale: true,
-    categoryFilter: "Homme",
-    image:
-      "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=900&h=1125&fit=crop&auto=format",
-    alt: "Pantalon technique noir",
-  },
-  {
-    name: "Contour Legging",
-    category: "Legging sculptant",
-    price: "60 €",
-    badge: "SOLDE",
-    sale: true,
-    categoryFilter: "Femme",
-    image:
-      "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=900&h=1125&fit=crop&auto=format",
-    alt: "Legging noir de la collection Korn",
-  },
-  {
-    name: "Training Tank",
-    category: "Débardeur performance",
-    price: "36 €",
-    badge: "BESTSELLER",
-    sale: true,
-    categoryFilter: "Homme",
-    image:
-      "https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?w=900&h=1125&fit=crop&auto=format",
-    alt: "Débardeur noir de sport pour homme",
-  },
-  {
-    name: "Soft Crewneck",
-    category: "Sweat col rond doux",
-    price: "79 €",
-    sale: false,
-    categoryFilter: "Femme",
-    image:
-      "https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=900&h=1125&fit=crop&auto=format",
-    alt: "Sweat gris oversize",
-  },
-  {
-    name: "Core Short",
-    category: "Short d'entraînement",
-    price: "39 €",
-    badge: "SOLDE",
-    sale: true,
-    categoryFilter: "Homme",
-    image:
-      "https://images.unsplash.com/photo-1552674605-db6ffd4facb5?w=900&h=1125&fit=crop&auto=format",
-    alt: "Short noir d'entraînement",
-  },
-  {
-    name: "Motion Bra",
-    category: "Brassière maintien moyen",
-    price: "39 €",
-    badge: "BESTSELLER",
-    sale: true,
-    categoryFilter: "Femme",
-    image:
-      "https://images.unsplash.com/photo-1518611012118-696072aa579a?w=900&h=1125&fit=crop&auto=format",
-    alt: "Brassière noire de sport",
-  },
-  {
-    name: "Performance Tee",
-    category: "T-shirt technique",
-    price: "55 €",
-    sale: false,
-    categoryFilter: "Homme",
-    image:
-      "https://images.unsplash.com/photo-1562157873-818bc0726f68?w=900&h=1125&fit=crop&auto=format",
-    alt: "T-shirt technique noir",
-  },
-];
-
 function CollectionCatalogue() {
   const { filter } = useParams();
   const [searchParams] = useSearchParams();
@@ -130,23 +41,20 @@ function CollectionCatalogue() {
   const routeFilter = filter ? filterByRoute[filter.toLowerCase()] : undefined;
   const [activeFilter, setActiveFilter] = useState(routeFilter ?? "Tout");
   const [sort, setSort] = useState("newest");
-  const products: CollectionProduct[] =
-    apiProducts.length > 0 || search
-      ? apiProducts.map((product) => ({
-          name: product.name,
-          category: product.description ?? "Collection Korn",
-          price: `${product.price} €`,
-          categoryFilter: product.category_name ?? "Tout",
-          image: product.image ?? "",
-          alt: product.alt_text ?? product.name,
-          sale: false,
-          variantId: product.id_variant,
-          productId: product.id_product,
-          size: product.size,
-          color: product.color,
-          stockQuantity: product.stock_quantity,
-        }))
-      : demoProducts;
+  const products: CollectionProduct[] = apiProducts.map((product) => ({
+    name: product.name,
+    category: product.description ?? "Collection Korn",
+    price: `${product.price} €`,
+    categoryFilter: product.category_name ?? "Tout",
+    image: product.image ?? "",
+    alt: product.alt_text ?? product.name,
+    sale: false,
+    variantId: product.id_variant,
+    productId: product.id_product,
+    size: product.size,
+    color: product.color,
+    stockQuantity: product.stock_quantity,
+  }));
 
   useEffect(() => {
     setActiveFilter(routeFilter ?? "Tout");
