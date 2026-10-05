@@ -1,5 +1,5 @@
-import { useEffect } from "react";
-import { useNavigate } from "react-router";
+import { useEffect, useState } from "react";
+import { useNavigate, useSearchParams } from "react-router";
 import ProfileLogin from "../../components/profile/ProfileLogin/ProfileLogin";
 import { useCartContext } from "../../contexts/CartContext";
 import { useDocumentHead } from "../../hooks/useDocumentHead";
@@ -7,12 +7,18 @@ import { apiRequest } from "../../services/api";
 
 function Profile() {
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
   const { user, isAuthLoading, login, register } = useCartContext();
   useDocumentHead({
     title: "Connexion",
     description:
       "Connectez-vous ou créez votre compte Korn pour suivre vos commandes et vos factures.",
   });
+  const [googleError] = useState(() => searchParams.get("error") === "google");
+
+  useEffect(() => {
+    if (googleError) setSearchParams({}, { replace: true });
+  }, [googleError, setSearchParams]);
 
   useEffect(() => {
     if (!isAuthLoading && user) {
@@ -55,6 +61,11 @@ function Profile() {
 
   return (
     <main>
+      {googleError && (
+        <p className="profile-form-error" role="alert">
+          La connexion avec Google a échoué. Merci de réessayer.
+        </p>
+      )}
       <ProfileLogin
         onLogin={handleLogin}
         onRegister={handleRegister}
