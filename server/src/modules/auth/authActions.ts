@@ -4,6 +4,7 @@ import ActionError from "../ActionError";
 import { sendPasswordResetEmail } from "../email/emailService";
 import jwtUtil from "./Jwt";
 import authRepository from "./authRepository";
+import googleClient from "./googleClient";
 
 const PASSWORD_RESET_EXPIRY_MS = 60 * 60 * 1000;
 
@@ -119,6 +120,35 @@ const getProfile = async (
 
 const logout = () => undefined;
 
+const getGoogleAuthUrl = () => googleClient.getAuthUrl();
+
+const loginWithGoogleCode = async (code: string) => {
+  const profile = await googleClient.getProfileFromCode(code);
+
+  let user: Awaited<ReturnType<typeof authRepository.findById>> =
+    await authRepository.findByGoogleId(profile.googleId);
+  if (!user) {
+    user = await authRepository.findByEmail(profile.email);
+    if (user) {
+      await authRepository.linkGoogleId(user.id_user, profile.googleId);
+    } else {
+      user = await authRepository.create({
+        first_name: profile.firstName,
+        last_name: profile.lastName,
+        email: profile.email,
+        passwordHash: await argon2.hash(randomBytes(32).toString("hex")),
+        googleId: profile.googleId,
+      });
+    }
+  }
+  if (!user) throw new Error("La création du compte Google a échoué.");
+
+  return {
+    user: publicUser(user),
+    token: jwtUtil.signToken({ id_user: user.id_user }),
+  };
+};
+
 const requestPasswordReset = async (emailInput: unknown) => {
   if (
     typeof emailInput !== "string" ||
@@ -181,4 +211,6 @@ export default {
   logout,
   requestPasswordReset,
   confirmPasswordReset,
+  getGoogleAuthUrl,
+  loginWithGoogleCode,
 };

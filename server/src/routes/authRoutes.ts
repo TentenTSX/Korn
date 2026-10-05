@@ -8,6 +8,8 @@ import {
   runAction,
 } from "./routeHelpers";
 
+const resolveClientUrl = () => process.env.CLIENT_URL ?? "/";
+
 const router = express.Router();
 
 router.post(
@@ -37,6 +39,31 @@ router.post(
     res.clearCookie("auth_token", cookieOptions).sendStatus(204);
   }),
 );
+
+router.get(
+  "/api/auth/google",
+  runAction(async (_req, res) => {
+    res.redirect(authActions.getGoogleAuthUrl());
+  }),
+);
+
+// Google redirects the browser here directly, so on failure we redirect back
+// to the login page instead of returning the app's usual JSON error body.
+router.get("/api/auth/google/callback", async (req, res) => {
+  try {
+    const code = req.query.code;
+    if (typeof code !== "string") {
+      throw new Error("Code Google manquant.");
+    }
+    const result = await authActions.loginWithGoogleCode(code);
+    await mergeGuestCart(req, res, result.user.id_user);
+    res.cookie("auth_token", result.token, cookieOptions);
+    res.redirect(`${resolveClientUrl()}/profile/dashboard`);
+  } catch (err) {
+    console.error(err);
+    res.redirect(`${resolveClientUrl()}/profile?error=google`);
+  }
+});
 
 router.post(
   "/api/auth/password-reset/request",
