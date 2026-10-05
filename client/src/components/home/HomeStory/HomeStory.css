@@ -117,3 +117,13 @@
     left: var(--space-4);
   }
 }
+
+@media (max-width: 480px) {
+  .home-story-content {
+    min-height: auto;
+  }
+
+  .home-story-media {
+    display: none;
+  }
+}

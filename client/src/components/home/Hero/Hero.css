@@ -156,11 +156,13 @@
   }
 
   .hero-actions {
-    width: 100%;
+    flex-direction: column;
+    align-items: flex-start;
   }
 
   .hero-button {
-    flex: 1 1 10rem;
+    flex: initial;
+    font-size: 0.68rem;
   }
 
   .home-hero-grid {

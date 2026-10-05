@@ -32,7 +32,7 @@ function HomePerformance() {
         />
         <div className="home-performance-overlay" aria-hidden="true" />
         <h2 id="home-performance-title" className="home-performance-title">
-          PERFORMANCE IS AN
+          <span>PERFORMANCE IS AN</span>
           <span>AESTHETIC.</span>
         </h2>
       </div>
