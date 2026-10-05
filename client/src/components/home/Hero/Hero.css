@@ -69,12 +69,12 @@
 .home-hero-text {
   display: block;
   z-index: 1;
-  color: white;
+  color: rgb(255 255 255 / 65%);
   font-family: var(--font-third);
   font-size: clamp(0.8rem, 1.4vw, 1rem);
+  font-style: normal;
   font-weight: 500;
   letter-spacing: clamp(0.15rem, 0.8vw, 0.4rem);
-  opacity: 0.4;
   text-transform: uppercase;
 }
 
@@ -83,7 +83,7 @@
   z-index: 1;
   top: 50%;
   right: clamp(var(--space-4), 8vw, 8rem);
-  left: clamp(var(--space-4), 8vw, 8rem);
+  left: clamp(var(--space-4), 3.5vw, 3rem);
   display: flex;
   flex-direction: column;
   align-items: flex-start;
