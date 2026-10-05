@@ -1,4 +1,5 @@
 .Navbar {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -86,6 +87,10 @@
   }
 }
 
+.nav-link-auth {
+  display: none;
+}
+
 .Navbar-actions {
   display: flex;
   align-items: center;
@@ -94,7 +99,8 @@
 }
 
 .Navbar-search-wrapper {
-  position: relative;
+  display: flex;
+  align-items: center;
 }
 
 .Navbar-search {
@@ -115,6 +121,7 @@
 
 .Navbar-search.is-open {
   width: min(20rem, 32vw);
+  margin-right: var(--space-2);
   opacity: 1;
   visibility: visible;
   transform: translateX(0);
@@ -134,7 +141,8 @@
 
 .Nav-Search-button,
 .Nav-bag-button,
-.Nav-profile-button {
+.Nav-profile-button,
+.Nav-menu-toggle {
   display: grid;
   place-items: center;
   flex: 0 0 2rem;
@@ -155,6 +163,10 @@
   &:active {
     transform: scale(0.96);
   }
+}
+
+.Nav-menu-toggle {
+  display: none;
 }
 
 .Nav-profile-button {
@@ -322,18 +334,57 @@
     gap: var(--space-3);
   }
 
+  .Nav-menu-toggle {
+    display: grid;
+  }
+
+  .Navbar-nav {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    left: 0;
+    z-index: 15;
+    flex: initial;
+    border-bottom: 1px solid var(--color-line);
+    background: var(--color-surface);
+    box-shadow: 0 1rem 2rem rgba(25, 24, 23, 0.1);
+  }
+
+  .Navbar-nav.is-open {
+    display: block;
+  }
+
   .Nav-links {
-    justify-content: flex-end;
-    gap: var(--space-3);
-    overflow: hidden;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    padding: var(--space-3) 3rem;
   }
 
   .nav-link {
-    font-size: 0.62rem;
+    justify-content: space-between;
+    padding: var(--space-4) 0;
+    font-size: 0.72rem;
+    border-bottom: 1px solid var(--color-line);
+  }
 
-    &:nth-child(n + 3) {
-      display: none;
+  .nav-link:last-child {
+    border-bottom: 0;
+  }
+
+  .nav-link-auth {
+    display: flex;
+
+    a {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
     }
+  }
+
+  .Nav-profile-button {
+    display: none;
   }
 
   .Navbar-search.is-open {
@@ -346,11 +397,7 @@
     padding-inline: var(--space-3);
   }
 
-  .Navbar-nav {
-    display: none;
-  }
-
-  .Navbar-logo {
-    margin-right: auto;
+  .Nav-links {
+    padding-inline: var(--space-4);
   }
 }

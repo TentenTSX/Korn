@@ -49,3 +49,14 @@
   letter-spacing: -0.06em;
   line-height: 0.85;
 }
+
+@media (max-width: 480px) {
+  .girl-hero {
+    height: 24vh;
+    min-height: 9rem;
+  }
+
+  .girl-hero h1 {
+    font-size: clamp(2.5rem, 13vw, 3.5rem);
+  }
+}
