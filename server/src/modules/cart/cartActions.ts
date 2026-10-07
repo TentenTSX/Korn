@@ -72,11 +72,19 @@ const deleteCartItemAction = async (owner: CartOwner, itemIdValue: number) => {
     throw new ActionError("NOT_FOUND", "Article introuvable.");
 };
 
-const mergeGuestCartAction = async (guestTokenHash: string, userId: number) => {
+const mergeGuestCartAction = async (
+  guestTokenHash: string,
+  userId: number,
+  email: string,
+) => {
   validateOwner({ kind: "guest", guestTokenHash });
   parsePositiveInteger(userId, "Utilisateur");
   await cartRepository.mergeGuestCartIntoUser(guestTokenHash, userId);
-  await orderRepository.transferGuestOrdersToUser(guestTokenHash, userId);
+  await orderRepository.transferGuestOrdersToUser(
+    guestTokenHash,
+    userId,
+    email,
+  );
 };
 
 export default {

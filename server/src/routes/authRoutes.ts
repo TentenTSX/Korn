@@ -16,7 +16,7 @@ router.post(
   "/api/auth/register",
   runAction(async (req, res) => {
     const result = await authActions.register(req.body);
-    await mergeGuestCart(req, res, result.user.id_user);
+    await mergeGuestCart(req, res, result.user.id_user, result.user.email);
     res.cookie("auth_token", result.token, cookieOptions);
     res.status(201).json({ user: result.user });
   }),
@@ -26,7 +26,7 @@ router.post(
   "/api/auth/login",
   runAction(async (req, res) => {
     const result = await authActions.login(req.body);
-    await mergeGuestCart(req, res, result.user.id_user);
+    await mergeGuestCart(req, res, result.user.id_user, result.user.email);
     res.cookie("auth_token", result.token, cookieOptions);
     res.status(200).json({ user: result.user });
   }),
@@ -56,7 +56,7 @@ router.get("/api/auth/google/callback", async (req, res) => {
       throw new Error("Code Google manquant.");
     }
     const result = await authActions.loginWithGoogleCode(code);
-    await mergeGuestCart(req, res, result.user.id_user);
+    await mergeGuestCart(req, res, result.user.id_user, result.user.email);
     res.cookie("auth_token", result.token, cookieOptions);
     res.redirect(`${resolveClientUrl()}/profile/dashboard`);
   } catch (err) {

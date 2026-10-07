@@ -152,11 +152,11 @@ describe("cartActions.deleteCartItemAction", () => {
 describe("cartActions.mergeGuestCartAction", () => {
   test("rejects a malformed guest token", async () => {
     await expect(
-      cartActions.mergeGuestCartAction("nope", 1),
+      cartActions.mergeGuestCartAction("nope", 1, "user@example.com"),
     ).rejects.toMatchObject({ code: "UNAUTHORIZED" });
   });
 
-  test("merges the guest cart and transfers guest orders to the user", async () => {
+  test("merges the guest cart and transfers guest orders matching the account email", async () => {
     const mergeSpy = jest
       .spyOn(cartRepository, "mergeGuestCartIntoUser")
       .mockResolvedValue(undefined);
@@ -164,9 +164,17 @@ describe("cartActions.mergeGuestCartAction", () => {
       .spyOn(orderRepository, "transferGuestOrdersToUser")
       .mockResolvedValue(undefined as never);
 
-    await cartActions.mergeGuestCartAction(guestOwner.guestTokenHash, 1);
+    await cartActions.mergeGuestCartAction(
+      guestOwner.guestTokenHash,
+      1,
+      "user@example.com",
+    );
 
     expect(mergeSpy).toHaveBeenCalledWith(guestOwner.guestTokenHash, 1);
-    expect(transferSpy).toHaveBeenCalledWith(guestOwner.guestTokenHash, 1);
+    expect(transferSpy).toHaveBeenCalledWith(
+      guestOwner.guestTokenHash,
+      1,
+      "user@example.com",
+    );
   });
 });
