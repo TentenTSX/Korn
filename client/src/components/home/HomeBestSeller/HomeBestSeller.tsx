@@ -4,7 +4,7 @@ import AddToCartButton from "../../cart/AddToCartButton";
 import "./HomeBestSeller.css";
 
 function HomeBestSeller() {
-  const { products } = useProducts();
+  const { products } = useProducts("sort=bestsellers");
   const uniqueProducts = Array.from(
     new Map(products.map((product) => [product.id_product, product])).values(),
   ).slice(0, 3);

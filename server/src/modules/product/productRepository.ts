@@ -6,6 +6,7 @@ class ProductRepository {
     category?: string;
     gender?: string;
     search?: string;
+    sort?: string;
   }) {
     const conditions: string[] = [];
     const values: string[] = [];
@@ -27,6 +28,22 @@ class ProductRepository {
     }
     const where =
       conditions.length > 0 ? ` where ${conditions.join(" and ")}` : "";
+    // "Bestsellers" is a real sales ranking: only products with at least one
+    // paid order_item qualify, ordered by total units sold.
+    const isBestsellers = query.sort === "bestsellers";
+    const salesJoin = isBestsellers
+      ? `join (
+          select pv2.product_id, sum(oi.quantity) as units_sold
+          from order_items oi
+          join orders o on o.id_order = oi.order_id
+          join product_variants pv2 on pv2.id_variant = oi.variant_id
+          where o.status = 'paid'
+          group by pv2.product_id
+        ) sales on sales.product_id = p.id_product`
+      : "";
+    const orderBy = isBestsellers
+      ? "order by sales.units_sold desc, p.created_at desc"
+      : "order by p.created_at desc";
     // A product is tagged with both a gender category (Homme/Femme) and a
     // subcategory (T-shirts, Shorts, ...); pick each out separately so the
     // frontend can filter on gender and subcategory independently without
@@ -40,8 +57,9 @@ class ProductRepository {
         (select pi.url from product_images pi where pi.product_id = p.id_product and (pi.color = pv.color or pi.color is null) order by (pi.color = pv.color) desc, pi.position limit 1) as image,
         (select pi.alt_text from product_images pi where pi.product_id = p.id_product and (pi.color = pv.color or pi.color is null) order by (pi.color = pv.color) desc, pi.position limit 1) as alt_text
       from products p
+      ${salesJoin}
       left join product_variants pv on pv.product_id = p.id_product${where}
-      order by p.created_at desc`,
+      ${orderBy}`,
       values,
     );
     return rows;

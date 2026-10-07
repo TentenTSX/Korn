@@ -1,12 +1,18 @@
 import { Link } from "react-router";
 import { useProducts } from "../../../hooks/useProducts";
+import { isRecentlyAdded } from "../../../utils/productFreshness";
 import AddToCartButton from "../../cart/AddToCartButton";
 import "./HomeNews.css";
 
 function HomeNews() {
   const { products } = useProducts();
+  const recentProducts = products.filter((product) =>
+    isRecentlyAdded(product.created_at),
+  );
   const uniqueProducts = Array.from(
-    new Map(products.map((product) => [product.id_product, product])).values(),
+    new Map(
+      recentProducts.map((product) => [product.id_product, product]),
+    ).values(),
   ).slice(0, 4);
 
   return (
