@@ -33,7 +33,7 @@ function Hero() {
         </Link>
         <Link className="home-hero-card home-hero-card-man" to="/men">
           <img
-            src="/images/hero/man-black-tank.jpg"
+            src="/images/hero/man-white-tee.jpg"
             alt="Homme portant une tenue de mode"
           />
           <span className="grid-img-label">HOMME</span>

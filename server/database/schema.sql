@@ -198,7 +198,7 @@ INSERT INTO categories (name, slug) VALUES
     ('Brassières', 'brassieres'),
     ('Leggings', 'leggings');
 
-INSERT INTO products (name, description) VALUES ('Training Tank', 'Debardeur respirant pour l''entrainement.');
+INSERT INTO products (name, description) VALUES ('Debardeur Training', 'Debardeur respirant pour l''entrainement.');
 SET @product_id = LAST_INSERT_ID();
 INSERT INTO product_categories (product_id, category_id)
     VALUES
@@ -210,15 +210,13 @@ INSERT INTO product_variants (product_id, size, color, price, stock_quantity) VA
 INSERT INTO product_images (product_id, url, alt_text, position, color) VALUES
     (@product_id, '/images/products/training-tank/noir.jpg', 'Homme portant un debardeur noir de sport', 0, 'Noir');
 
-INSERT INTO products (name, description) VALUES ('Motion Pant', 'Pantalon technique polyvalent pour l''entrainement et le quotidien.');
+INSERT INTO products (name, description) VALUES ('Jogging Technique', 'Pantalon technique polyvalent pour l''entrainement et le quotidien.');
 SET @product_id = LAST_INSERT_ID();
 INSERT INTO product_categories (product_id, category_id)
     VALUES
         (@product_id, (SELECT id_category FROM categories WHERE slug = 'homme')),
         (@product_id, (SELECT id_category FROM categories WHERE slug = 'pantalons'));
 INSERT INTO product_variants (product_id, size, color, price, stock_quantity) VALUES
-    (@product_id, 'M', 'Noir', 95.00, 10),
-    (@product_id, 'L', 'Noir', 95.00, 10),
     (@product_id, 'M', 'Gris', 95.00, 10),
     (@product_id, 'L', 'Gris', 95.00, 10),
     (@product_id, 'M', 'Bleu Marine', 95.00, 10),
@@ -227,7 +225,7 @@ INSERT INTO product_images (product_id, url, alt_text, position, color) VALUES
     (@product_id, '/images/products/motion-pant/gris.jpg', 'Pantalon technique gris porte pendant un entrainement', 0, 'Gris'),
     (@product_id, '/images/products/motion-pant/bleu-marine.jpg', 'Pantalon ample bleu marine porte en tenue decontractee', 0, 'Bleu Marine');
 
-INSERT INTO products (name, description) VALUES ('Core Short', 'Short d''entrainement leger et resistant.');
+INSERT INTO products (name, description) VALUES ('Short Entrainement', 'Short d''entrainement leger et resistant.');
 SET @product_id = LAST_INSERT_ID();
 INSERT INTO product_categories (product_id, category_id)
     VALUES
@@ -238,7 +236,7 @@ INSERT INTO product_variants (product_id, size, color, price, stock_quantity) VA
 INSERT INTO product_images (product_id, url, alt_text, position, color) VALUES
     (@product_id, '/images/products/core-short/noir.jpg', 'Athlete portant un short noir', 0, 'Noir');
 
-INSERT INTO products (name, description) VALUES ('Compression Tee', 'T-shirt technique ajuste, pensee pour l''entrainement intensif.');
+INSERT INTO products (name, description) VALUES ('T-shirt Compression', 'T-shirt technique ajuste, pensee pour l''entrainement intensif.');
 SET @product_id = LAST_INSERT_ID();
 INSERT INTO product_categories (product_id, category_id)
     VALUES
@@ -251,7 +249,7 @@ INSERT INTO product_variants (product_id, size, color, price, stock_quantity) VA
 INSERT INTO product_images (product_id, url, alt_text, position, color) VALUES
     (@product_id, '/images/products/compression-tee/noir.jpg', 'Homme portant un t-shirt de compression noir', 0, 'Noir');
 
-INSERT INTO products (name, description) VALUES ('Essential Tee', 'T-shirt coupe droite en coton respirant.');
+INSERT INTO products (name, description) VALUES ('T-shirt Essentiel', 'T-shirt coupe droite en coton respirant.');
 SET @product_id = LAST_INSERT_ID();
 INSERT INTO product_categories (product_id, category_id)
     VALUES
@@ -280,7 +278,7 @@ INSERT INTO product_images (product_id, url, alt_text, position, color) VALUES
     (@product_id, '/images/products/essential-tee/bleu-marine-face.jpg', 'Homme portant un t-shirt bleu marine', 0, 'Bleu Marine'),
     (@product_id, '/images/products/essential-tee/bleu-marine-dos.jpg', 'Dos du t-shirt bleu marine', 1, 'Bleu Marine');
 
-INSERT INTO products (name, description) VALUES ('Motion Bra', 'Brassiere a maintien moyen pour un confort optimal.');
+INSERT INTO products (name, description) VALUES ('Brassiere Sport', 'Brassiere a maintien moyen pour un confort optimal.');
 SET @product_id = LAST_INSERT_ID();
 INSERT INTO product_categories (product_id, category_id)
     VALUES
@@ -321,7 +319,7 @@ INSERT INTO product_images (product_id, url, alt_text, position, color) VALUES
     (@product_id, '/images/products/motion-bra-detail/bleu-roi.jpg', 'Detail de la brassiere bleu roi', 1, 'Bleu Roi'),
     (@product_id, '/images/products/motion-bra-detail/vert.jpg', 'Femme portant une brassiere et un short verts', 1, 'Vert');
 
-INSERT INTO products (name, description) VALUES ('Contour Legging', 'Legging sculptant taille haute.');
+INSERT INTO products (name, description) VALUES ('Legging Sculptant', 'Legging sculptant taille haute.');
 SET @product_id = LAST_INSERT_ID();
 INSERT INTO product_categories (product_id, category_id)
     VALUES
@@ -375,7 +373,7 @@ INSERT INTO product_images (product_id, url, alt_text, position, color) VALUES
     (@product_id, '/images/products/legging-brassiere-ensemble/gris.jpg', 'Femme portant un legging gris', 0, 'Gris'),
     (@product_id, '/images/products/legging-lifestyle/gris.jpg', 'Femme portant un legging gris, photo lifestyle', 1, 'Gris');
 
-INSERT INTO products (name, description) VALUES ('Studio Short', 'Short d''entrainement feminin, coupe ajustee.');
+INSERT INTO products (name, description) VALUES ('Short Femme', 'Short d''entrainement feminin, coupe ajustee.');
 SET @product_id = LAST_INSERT_ID();
 INSERT INTO product_categories (product_id, category_id)
     VALUES
@@ -410,16 +408,6 @@ INSERT INTO product_images (product_id, url, alt_text, position, color) VALUES
     (@product_id, '/images/products/short-brassiere-ensemble2/vert.jpg', 'Femme portant un short de sport vert, photo alternative', 1, 'Vert'),
     (@product_id, '/images/products/short-brassiere-ensemble/rouge.jpg', 'Femme portant un short de sport rouge', 0, 'Rouge'),
     (@product_id, '/images/products/short-brassiere-ensemble2/rouge.jpg', 'Femme portant un short de sport rouge, photo alternative', 1, 'Rouge');
-
-INSERT INTO products (name, description) VALUES ('Soft Crewneck', 'Sweat col rond doux et chaud.');
-SET @product_id = LAST_INSERT_ID();
-INSERT INTO product_categories (product_id, category_id)
-    VALUES
-        (@product_id, (SELECT id_category FROM categories WHERE slug = 'femme')),
-        (@product_id, (SELECT id_category FROM categories WHERE slug = 'sweats'));
-INSERT INTO product_variants (product_id, size, color, price, stock_quantity) VALUES
-    (@product_id, 'S', 'Gris', 79.00, 10),
-    (@product_id, 'M', 'Gris', 79.00, 10);
 
 INSERT INTO sale_periods (name, slug, discount_percent, start_date, end_date) VALUES
     ('Soldes d''hiver', 'winter', 30, '2026-01-07', '2026-02-03'),
