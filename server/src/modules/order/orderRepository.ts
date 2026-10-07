@@ -250,10 +250,19 @@ class OrderRepository {
     );
   }
 
-  async transferGuestOrdersToUser(guestTokenHash: string, userId: number) {
+  async transferGuestOrdersToUser(
+    guestTokenHash: string,
+    userId: number,
+    email: string,
+  ) {
+    // Only claim guest orders placed under the same email: the guest cart
+    // cookie proves "same browser", not "same person", so without this
+    // check logging into any account on a browser that previously placed a
+    // guest order (e.g. a shared computer) would silently attach someone
+    // else's order and shipping details to that account.
     await databaseClient.query<Result>(
-      "update orders set user_id = ?, guest_cart_token_hash = null where guest_cart_token_hash = ? and status in ('pending', 'paid')",
-      [userId, guestTokenHash],
+      "update orders set user_id = ?, guest_cart_token_hash = null where guest_cart_token_hash = ? and lower(customer_email) = lower(?) and status in ('pending', 'paid')",
+      [userId, guestTokenHash, email],
     );
   }
 

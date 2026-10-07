@@ -50,10 +50,11 @@ export async function mergeGuestCart(
   req: Request,
   res: Response,
   userId: number,
+  email: string,
 ) {
   const guestTokenHash = getExistingGuestCartTokenHash(req);
   if (!guestTokenHash) return;
-  await cartActions.mergeGuestCartAction(guestTokenHash, userId);
+  await cartActions.mergeGuestCartAction(guestTokenHash, userId, email);
   clearGuestCartCookie(res);
 }
 
