@@ -17,6 +17,7 @@ router.get(
           typeof req.query.gender === "string" ? req.query.gender : undefined,
         search:
           typeof req.query.search === "string" ? req.query.search : undefined,
+        sort: typeof req.query.sort === "string" ? req.query.sort : undefined,
       }),
     );
   }),

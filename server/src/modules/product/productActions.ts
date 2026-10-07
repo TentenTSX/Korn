@@ -1,7 +1,12 @@
 import ActionError from "../ActionError";
 import productRepository from "./productRepository";
 
-type ProductFilters = { category?: string; gender?: string; search?: string };
+type ProductFilters = {
+  category?: string;
+  gender?: string;
+  search?: string;
+  sort?: string;
+};
 
 const getProductsAction = (filters: ProductFilters) =>
   productRepository.findAll(filters);

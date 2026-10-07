@@ -2,17 +2,10 @@ import { useEffect, useState } from "react";
 import { useParams, useSearchParams } from "react-router";
 import { useActiveSale } from "../../../../hooks/useActiveSale";
 import { useProducts } from "../../../../hooks/useProducts";
+import { isRecentlyAdded } from "../../../../utils/productFreshness";
 import CollectionFilters from "../CollectionFilters/CollectionFilters";
 import CollectionProductCard from "../CollectionProductCard/CollectionProductCard";
 import "./CollectionCatalogue.css";
-
-const NEW_PRODUCT_WINDOW_DAYS = 30;
-
-function isRecentlyAdded(createdAt: string) {
-  const ageInDays =
-    (Date.now() - new Date(createdAt).getTime()) / (1000 * 60 * 60 * 24);
-  return ageInDays <= NEW_PRODUCT_WINDOW_DAYS;
-}
 
 const filterByRoute: Record<string, string> = {
   bestsellers: "Bestsellers",
@@ -30,6 +23,7 @@ type CollectionProduct = {
   price: string;
   badge?: string;
   sale: boolean;
+  isBestseller: boolean;
   categoryFilter: string;
   image: string;
   alt: string;
@@ -48,10 +42,14 @@ function CollectionCatalogue() {
   const { products: apiProducts } = useProducts(
     search ? `search=${encodeURIComponent(search)}` : "",
   );
+  const { products: bestsellerProducts } = useProducts("sort=bestsellers");
   const routeFilter = filter ? filterByRoute[filter.toLowerCase()] : undefined;
   const [activeFilter, setActiveFilter] = useState(routeFilter ?? "Tout");
   const [sort, setSort] = useState("newest");
   const activeSale = useActiveSale();
+  const bestsellerIds = new Set(
+    bestsellerProducts.map((product) => product.id_product),
+  );
   const products: CollectionProduct[] = apiProducts.map((product) => ({
     name: product.name,
     category: product.description ?? "Collection Korn",
@@ -61,6 +59,7 @@ function CollectionCatalogue() {
     alt: product.alt_text ?? product.name,
     badge: isRecentlyAdded(product.created_at) ? "NOUVEAU" : undefined,
     sale: Boolean(activeSale),
+    isBestseller: bestsellerIds.has(product.id_product),
     variantId: product.id_variant,
     productId: product.id_product,
     size: product.size,
@@ -102,7 +101,7 @@ function CollectionCatalogue() {
             return product.badge === "NOUVEAU";
           }
           if (activeFilter === "Bestsellers") {
-            return product.badge === "BESTSELLER";
+            return product.isBestseller;
           }
           if (activeFilter === "Soldes") {
             return product.sale;

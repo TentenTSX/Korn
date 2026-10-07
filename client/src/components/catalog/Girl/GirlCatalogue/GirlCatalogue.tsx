@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useProducts } from "../../../../hooks/useProducts";
+import { isRecentlyAdded } from "../../../../utils/productFreshness";
 import GirlFilters from "../GirlFilters/GirlFilters";
 import GirlProductCard from "../GirlProductCard/GirlProductCard";
 import "./GirlCatalogue.css";
@@ -31,6 +32,7 @@ function GirlCatalogue() {
     categoryFilter: product.subcategory_name ?? "Tout",
     image: product.image ?? "",
     alt: product.alt_text ?? product.name,
+    badge: isRecentlyAdded(product.created_at) ? "NOUVEAU" : undefined,
     variantId: product.id_variant,
     productId: product.id_product,
     size: product.size,
