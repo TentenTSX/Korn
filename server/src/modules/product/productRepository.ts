@@ -44,6 +44,9 @@ class ProductRepository {
     const orderBy = isBestsellers
       ? "order by sales.units_sold desc, p.created_at desc"
       : "order by p.created_at desc";
+    // select distinct requires every order-by expression in the select
+    // list, so units_sold must be selected whenever it's used to sort.
+    const unitsSoldColumn = isBestsellers ? ", sales.units_sold" : "";
     // A product is tagged with both a gender category (Homme/Femme) and a
     // subcategory (T-shirts, Shorts, ...); pick each out separately so the
     // frontend can filter on gender and subcategory independently without
@@ -55,7 +58,7 @@ class ProductRepository {
         (select c.name from product_categories pc join categories c on c.id_category = pc.category_id where pc.product_id = p.id_product and c.name not in ('Homme', 'Femme') limit 1) as subcategory_name,
         pv.id_variant, pv.size, pv.color, pv.price, pv.stock_quantity,
         (select pi.url from product_images pi where pi.product_id = p.id_product and (pi.color = pv.color or pi.color is null) order by (pi.color = pv.color) desc, pi.position limit 1) as image,
-        (select pi.alt_text from product_images pi where pi.product_id = p.id_product and (pi.color = pv.color or pi.color is null) order by (pi.color = pv.color) desc, pi.position limit 1) as alt_text
+        (select pi.alt_text from product_images pi where pi.product_id = p.id_product and (pi.color = pv.color or pi.color is null) order by (pi.color = pv.color) desc, pi.position limit 1) as alt_text${unitsSoldColumn}
       from products p
       ${salesJoin}
       left join product_variants pv on pv.product_id = p.id_product${where}
