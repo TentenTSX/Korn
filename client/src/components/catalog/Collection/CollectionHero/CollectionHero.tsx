@@ -4,7 +4,7 @@ function CollectionHero() {
   return (
     <section className="collection-hero" aria-labelledby="collection-title">
       <img
-        src="https://images.unsplash.com/photo-1525507119028-ed4c629a60a3?w=1800&h=900&fit=crop&auto=format"
+        src="/images/hero/man-black-tee-white-pants.jpg"
         alt="Sélection de vêtements de la collection Korn"
       />
       <div className="collection-hero-content">

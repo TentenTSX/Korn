@@ -1,4 +1,5 @@
 import { Link } from "react-router";
+import { COLOR_SWATCHES } from "../../../../utils/colorSwatches";
 import AddToCartButton from "../../../cart/AddToCartButton";
 import "./GirlProductCard.css";
 
@@ -13,6 +14,7 @@ type GirlProductCardProps = {
   productId?: number | null;
   size?: string | null;
   color?: string | null;
+  colors?: string[];
   stockQuantity?: number;
 };
 
@@ -27,6 +29,7 @@ function GirlProductCard({
   productId,
   size,
   color,
+  colors,
   stockQuantity,
 }: GirlProductCardProps) {
   return (
@@ -44,6 +47,21 @@ function GirlProductCard({
           <p>{category}</p>
           {(size || color) && (
             <p>{[color, size].filter(Boolean).join(" · ")}</p>
+          )}
+          {colors && colors.length > 1 && (
+            <div
+              className="girl-product-card-colors"
+              aria-label={`Coloris disponibles : ${colors.join(", ")}`}
+            >
+              {colors.map((c) => (
+                <span
+                  key={c}
+                  className="girl-color-pin"
+                  style={{ backgroundColor: COLOR_SWATCHES[c] ?? "#ccc" }}
+                  title={c}
+                />
+              ))}
+            </div>
           )}
         </div>
         <strong>{price}</strong>
