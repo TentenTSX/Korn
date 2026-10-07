@@ -316,14 +316,31 @@ INSERT INTO product_images (product_id, url, alt_text, position, color) VALUES
     (@product_id, '/images/products/legging-brassiere-ensemble/lilas.jpg', 'Femme portant une brassiere lilas', 0, 'Lilas'),
     (@product_id, '/images/products/legging-brassiere-ensemble/moka.jpg', 'Femme portant une brassiere moka', 0, 'Moka'),
     (@product_id, '/images/products/legging-brassiere-ensemble/gris.jpg', 'Femme portant une brassiere grise', 0, 'Gris'),
-    (@product_id, '/images/products/motion-bra-detail/noir.jpg', 'Detail de la brassiere noire', 1, 'Noir'),
-    (@product_id, '/images/products/motion-bra-detail/noir-2.jpg', 'Detail du dos de la brassiere noire', 2, 'Noir'),
-    (@product_id, '/images/products/motion-bra-detail/bordeaux.jpg', 'Detail de la brassiere bordeaux', 1, 'Bordeaux'),
-    (@product_id, '/images/products/motion-bra-detail/rose.jpg', 'Detail de la brassiere rose', 1, 'Rose'),
-    (@product_id, '/images/products/motion-bra-detail/rose-2.jpg', 'Detail du dos de la brassiere rose', 2, 'Rose'),
-    (@product_id, '/images/products/motion-bra-detail/bleu-roi.jpg', 'Detail de la brassiere bleu roi', 1, 'Bleu Roi'),
-    (@product_id, '/images/products/motion-bra-detail/bleu-roi-2.jpg', 'Detail du dos de la brassiere bleu roi', 2, 'Bleu Roi'),
     (@product_id, '/images/products/motion-bra-detail/vert.jpg', 'Femme portant une brassiere et un short verts', 1, 'Vert');
+
+INSERT INTO products (name, description, material, model_height_cm, model_size_worn) VALUES ('Brassiere Dos Croise', 'Brassiere fine a bretelles fines et dos croise, coupe plongeante.', '80% polyamide, 20% elasthanne - maintien leger', 170, 'S');
+SET @product_id = LAST_INSERT_ID();
+INSERT INTO product_categories (product_id, category_id)
+    VALUES
+        (@product_id, (SELECT id_category FROM categories WHERE slug = 'femme')),
+        (@product_id, (SELECT id_category FROM categories WHERE slug = 'brassieres'));
+INSERT INTO product_variants (product_id, size, color, price, stock_quantity) VALUES
+    (@product_id, 'S', 'Noir', 45.00, 12),
+    (@product_id, 'M', 'Noir', 45.00, 12),
+    (@product_id, 'S', 'Bleu Roi', 45.00, 12),
+    (@product_id, 'M', 'Bleu Roi', 45.00, 12),
+    (@product_id, 'S', 'Bordeaux', 45.00, 12),
+    (@product_id, 'M', 'Bordeaux', 45.00, 12),
+    (@product_id, 'S', 'Rose', 45.00, 12),
+    (@product_id, 'M', 'Rose', 45.00, 12);
+INSERT INTO product_images (product_id, url, alt_text, position, color) VALUES
+    (@product_id, '/images/products/motion-bra-detail/noir.jpg', 'Brassiere noire, vue de face', 0, 'Noir'),
+    (@product_id, '/images/products/motion-bra-detail/noir-2.jpg', 'Brassiere noire, dos croise', 1, 'Noir'),
+    (@product_id, '/images/products/motion-bra-detail/bleu-roi.jpg', 'Brassiere bleu roi, vue de face', 0, 'Bleu Roi'),
+    (@product_id, '/images/products/motion-bra-detail/bleu-roi-2.jpg', 'Brassiere bleu roi, dos croise', 1, 'Bleu Roi'),
+    (@product_id, '/images/products/motion-bra-detail/bordeaux.jpg', 'Brassiere bordeaux, vue de face', 0, 'Bordeaux'),
+    (@product_id, '/images/products/motion-bra-detail/rose.jpg', 'Brassiere rose, vue de face', 0, 'Rose'),
+    (@product_id, '/images/products/motion-bra-detail/rose-2.jpg', 'Brassiere rose, dos croise', 1, 'Rose');
 
 INSERT INTO products (name, description, material, model_height_cm, model_size_worn) VALUES ('Legging Sculptant', 'Legging sculptant taille haute.', '75% polyamide, 25% elasthanne - effet sculptant', 170, 'S');
 SET @product_id = LAST_INSERT_ID();
