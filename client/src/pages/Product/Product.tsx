@@ -56,6 +56,20 @@ function Product() {
     if (!sizeStillAvailable) setSelectedSize(null);
   };
 
+  const gallery = useMemo(() => {
+    if (activeVariant?.gallery?.length) return activeVariant.gallery;
+    return activeVariant?.image ? [activeVariant.image] : [];
+  }, [activeVariant]);
+
+  const [activeImageIndex, setActiveImageIndex] = useState(0);
+  const [galleryColor, setGalleryColor] = useState(activeColor);
+  if (activeColor !== galleryColor) {
+    setGalleryColor(activeColor);
+    setActiveImageIndex(0);
+  }
+
+  const displayedImage = gallery[activeImageIndex] ?? activeVariant?.image;
+
   useDocumentHead({
     title: activeVariant?.name ?? "Produit",
     description: activeVariant?.description ?? "Découvrez ce produit Korn.",
@@ -83,11 +97,31 @@ function Product() {
   return (
     <main className="product-page">
       <div className="product-page-image">
-        {activeVariant.image && (
+        {displayedImage && (
           <img
-            src={activeVariant.image}
+            src={displayedImage}
             alt={activeVariant.alt_text ?? activeVariant.name}
           />
+        )}
+        {gallery.length > 1 && (
+          <div className="product-page-thumbnails">
+            {gallery.map((url, index) => (
+              <button
+                key={url}
+                type="button"
+                className={
+                  index === activeImageIndex
+                    ? "product-page-thumbnail product-page-thumbnail-active"
+                    : "product-page-thumbnail"
+                }
+                aria-label={`Voir la photo ${index + 1}`}
+                aria-pressed={index === activeImageIndex}
+                onClick={() => setActiveImageIndex(index)}
+              >
+                <img src={url} alt="" />
+              </button>
+            ))}
+          </div>
         )}
       </div>
       <div className="product-page-info">

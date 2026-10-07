@@ -52,7 +52,18 @@ class ProductRepository {
       "select p.*, pv.id_variant, pv.size, pv.color, pv.price, pv.stock_quantity, (select pi.url from product_images pi where pi.product_id = p.id_product and (pi.color = pv.color or pi.color is null) order by (pi.color = pv.color) desc, pi.position limit 1) as image, (select pi.alt_text from product_images pi where pi.product_id = p.id_product and (pi.color = pv.color or pi.color is null) order by (pi.color = pv.color) desc, pi.position limit 1) as alt_text from products p left join product_variants pv on pv.product_id = p.id_product where p.id_product = ?",
       [id],
     );
-    return rows;
+    if (rows.length === 0) return rows;
+
+    const [imageRows] = await databaseClient.query<Rows>(
+      "select url, color from product_images where product_id = ? order by position",
+      [id],
+    );
+    return rows.map((row) => ({
+      ...row,
+      gallery: imageRows
+        .filter((image) => image.color === row.color || image.color === null)
+        .map((image) => image.url as string),
+    }));
   }
 
   async findCategories() {

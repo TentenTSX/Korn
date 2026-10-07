@@ -15,5 +15,6 @@ export type Product = {
   stock_quantity: number;
   image: string | null;
   alt_text: string | null;
+  gallery?: string[];
   created_at: string;
 };
