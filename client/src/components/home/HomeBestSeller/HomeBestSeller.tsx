@@ -9,6 +9,8 @@ function HomeBestSeller() {
     new Map(products.map((product) => [product.id_product, product])).values(),
   ).slice(0, 3);
 
+  if (uniqueProducts.length === 0) return null;
+
   return (
     <section
       className="home-best-sellers"
