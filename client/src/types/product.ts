@@ -2,6 +2,9 @@ export type Product = {
   id_product: number;
   name: string;
   description: string | null;
+  material: string | null;
+  model_height_cm: number | null;
+  model_size_worn: string | null;
   category_name: string | null;
   category_slug: string | null;
   subcategory_name: string | null;

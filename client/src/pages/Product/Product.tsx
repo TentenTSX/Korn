@@ -7,6 +7,10 @@ import { COLOR_SWATCHES } from "../../utils/colorSwatches";
 import { currency as money } from "../../utils/currency";
 import "./Product.css";
 
+function formatHeight(heightCm: number) {
+  return `${Math.floor(heightCm / 100)}m${String(heightCm % 100).padStart(2, "0")}`;
+}
+
 function Product() {
   const { id } = useParams();
   const productId = id ? Number(id) : null;
@@ -148,6 +152,25 @@ function Product() {
           stockQuantity={activeVariant.stock_quantity}
           label={activeVariant.name}
         />
+
+        {(activeVariant.material || activeVariant.model_height_cm) && (
+          <div className="product-page-details">
+            {activeVariant.material && (
+              <p>
+                <strong>Matière :</strong> {activeVariant.material}
+              </p>
+            )}
+            {activeVariant.model_height_cm && (
+              <p>
+                Le mannequin mesure{" "}
+                {formatHeight(activeVariant.model_height_cm)}
+                {activeVariant.model_size_worn &&
+                  ` et porte une taille ${activeVariant.model_size_worn}`}
+                .
+              </p>
+            )}
+          </div>
+        )}
 
         <Link className="product-page-back" to="/collection">
           ← Retour au catalogue

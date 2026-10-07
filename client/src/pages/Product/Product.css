@@ -114,6 +114,28 @@
   color: var(--color-paper);
 }
 
+.product-page-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin-top: 1.5rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--color-line);
+  color: var(--color-muted);
+  font-family: var(--font-third);
+  font-size: 0.85rem;
+  line-height: 1.5;
+
+  strong {
+    color: var(--color-ink);
+    font-family: var(--font-body);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+}
+
 .product-page-back {
   margin-top: 1rem;
   color: var(--color-muted);
