@@ -57,7 +57,7 @@ class CartRepository {
   async findByOwner(owner: CartOwner) {
     const filter = ownerFilter(owner);
     const [rows] = await databaseClient.query<Rows>(
-      `select c.id_cart, ci.id_cart_item, ci.variant_id, ci.quantity, pv.price as price_unit, p.id_product, p.name, pv.size, pv.color, pv.stock_quantity, (select pi.url from product_images pi where pi.product_id = p.id_product order by pi.position limit 1) as image from carts c join cart_items ci on ci.cart_id = c.id_cart join product_variants pv on pv.id_variant = ci.variant_id join products p on p.id_product = pv.product_id where ${filter.clause}`,
+      `select c.id_cart, ci.id_cart_item, ci.variant_id, ci.quantity, pv.price as price_unit, p.id_product, p.name, pv.size, pv.color, pv.stock_quantity, (select pi.url from product_images pi where pi.product_id = p.id_product and (pi.color = pv.color or pi.color is null) order by (pi.color = pv.color) desc, pi.position limit 1) as image from carts c join cart_items ci on ci.cart_id = c.id_cart join product_variants pv on pv.id_variant = ci.variant_id join products p on p.id_product = pv.product_id where ${filter.clause}`,
       [filter.value],
     );
     return rows;

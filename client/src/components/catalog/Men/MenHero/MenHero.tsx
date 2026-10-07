@@ -4,7 +4,7 @@ function MenHero() {
   return (
     <section className="men-hero" aria-labelledby="men-title">
       <img
-        src="/images/hero/man-black-tank.jpg"
+        src="/images/hero/man-red-tee-running.jpg"
         alt="Homme en entraînement dans une salle de sport"
       />
       <div className="men-hero-content">

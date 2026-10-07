@@ -4,7 +4,7 @@ function GirlHero() {
   return (
     <section className="girl-hero" aria-labelledby="girl-title">
       <img
-        src="/images/hero/woman-green-set.jpg"
+        src="/images/hero/woman-bra-detail-bordeaux.jpg"
         alt="Femme en entraînement dans une salle de sport"
       />
       <div className="girl-hero-content">

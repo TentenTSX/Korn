@@ -68,7 +68,7 @@ class OrderRepository {
     if (!order) return undefined;
 
     const [itemRows] = await databaseClient.query<Rows>(
-      "select p.id_product, p.name, pv.size, pv.color, oi.quantity, oi.price_unit, (select pi.url from product_images pi where pi.product_id = p.id_product order by pi.position limit 1) as image from order_items oi join product_variants pv on pv.id_variant = oi.variant_id join products p on p.id_product = pv.product_id where oi.order_id = ? order by oi.id_order_item",
+      "select p.id_product, p.name, pv.size, pv.color, oi.quantity, oi.price_unit, (select pi.url from product_images pi where pi.product_id = p.id_product and (pi.color = pv.color or pi.color is null) order by (pi.color = pv.color) desc, pi.position limit 1) as image from order_items oi join product_variants pv on pv.id_variant = oi.variant_id join products p on p.id_product = pv.product_id where oi.order_id = ? order by oi.id_order_item",
       [orderId],
     );
     return { ...order, items: itemRows } as typeof order & { items: Rows };
