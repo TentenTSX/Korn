@@ -74,6 +74,7 @@ CREATE TABLE product_images (
     url VARCHAR(500) NOT NULL,
     alt_text VARCHAR(255),
     position INT DEFAULT 0,
+    color VARCHAR(50) NULL,
     CONSTRAINT fk_image_product
         FOREIGN KEY (product_id)
         REFERENCES products(id_product)
@@ -206,8 +207,8 @@ INSERT INTO product_categories (product_id, category_id)
 INSERT INTO product_variants (product_id, size, color, price, stock_quantity) VALUES
     (@product_id, 'M', 'Noir', 45.00, 20),
     (@product_id, 'L', 'Noir', 45.00, 15);
-INSERT INTO product_images (product_id, url, alt_text, position) VALUES
-    (@product_id, 'https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?w=900&h=1125&fit=crop&auto=format', 'Homme portant un debardeur noir de sport', 0);
+INSERT INTO product_images (product_id, url, alt_text, position, color) VALUES
+    (@product_id, '/images/products/training-tank/noir.jpg', 'Homme portant un debardeur noir de sport', 0, 'Noir');
 
 INSERT INTO products (name, description) VALUES ('Motion Pant', 'Pantalon technique polyvalent pour l''entrainement et le quotidien.');
 SET @product_id = LAST_INSERT_ID();
@@ -217,9 +218,11 @@ INSERT INTO product_categories (product_id, category_id)
         (@product_id, (SELECT id_category FROM categories WHERE slug = 'pantalons'));
 INSERT INTO product_variants (product_id, size, color, price, stock_quantity) VALUES
     (@product_id, 'M', 'Noir', 95.00, 10),
-    (@product_id, 'L', 'Noir', 95.00, 10);
-INSERT INTO product_images (product_id, url, alt_text, position) VALUES
-    (@product_id, 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=900&h=1125&fit=crop&auto=format', 'Pantalon technique noir porte pendant un entrainement', 0);
+    (@product_id, 'L', 'Noir', 95.00, 10),
+    (@product_id, 'M', 'Gris', 95.00, 10),
+    (@product_id, 'L', 'Gris', 95.00, 10);
+INSERT INTO product_images (product_id, url, alt_text, position, color) VALUES
+    (@product_id, '/images/products/motion-pant/gris.jpg', 'Pantalon technique gris porte pendant un entrainement', 0, 'Gris');
 
 INSERT INTO products (name, description) VALUES ('Core Short', 'Short d''entrainement leger et resistant.');
 SET @product_id = LAST_INSERT_ID();
@@ -229,8 +232,8 @@ INSERT INTO product_categories (product_id, category_id)
         (@product_id, (SELECT id_category FROM categories WHERE slug = 'shorts'));
 INSERT INTO product_variants (product_id, size, color, price, stock_quantity) VALUES
     (@product_id, 'M', 'Noir', 55.00, 15);
-INSERT INTO product_images (product_id, url, alt_text, position) VALUES
-    (@product_id, 'https://images.unsplash.com/photo-1552674605-db6ffd4facb5?w=900&h=1125&fit=crop&auto=format', 'Athlete portant un short noir', 0);
+INSERT INTO product_images (product_id, url, alt_text, position, color) VALUES
+    (@product_id, '/images/products/core-short/noir.jpg', 'Athlete portant un short noir', 0, 'Noir');
 
 INSERT INTO products (name, description) VALUES ('Essential Tee', 'T-shirt coupe droite en coton respirant.');
 SET @product_id = LAST_INSERT_ID();
@@ -241,9 +244,25 @@ INSERT INTO product_categories (product_id, category_id)
 INSERT INTO product_variants (product_id, size, color, price, stock_quantity) VALUES
     (@product_id, 'S', 'Blanc', 39.00, 12),
     (@product_id, 'M', 'Blanc', 39.00, 18),
-    (@product_id, 'L', 'Blanc', 39.00, 12);
-INSERT INTO product_images (product_id, url, alt_text, position) VALUES
-    (@product_id, 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=900&h=1125&fit=crop&auto=format', 'Homme portant un t-shirt blanc', 0);
+    (@product_id, 'L', 'Blanc', 39.00, 12),
+    (@product_id, 'S', 'Noir', 39.00, 12),
+    (@product_id, 'M', 'Noir', 39.00, 18),
+    (@product_id, 'L', 'Noir', 39.00, 12),
+    (@product_id, 'S', 'Gris', 39.00, 12),
+    (@product_id, 'M', 'Gris', 39.00, 18),
+    (@product_id, 'L', 'Gris', 39.00, 12),
+    (@product_id, 'S', 'Bleu Marine', 39.00, 12),
+    (@product_id, 'M', 'Bleu Marine', 39.00, 18),
+    (@product_id, 'L', 'Bleu Marine', 39.00, 12);
+INSERT INTO product_images (product_id, url, alt_text, position, color) VALUES
+    (@product_id, '/images/products/essential-tee/blanc-face.jpg', 'Homme portant un t-shirt blanc', 0, 'Blanc'),
+    (@product_id, '/images/products/essential-tee/blanc-dos.jpg', 'Dos du t-shirt blanc', 1, 'Blanc'),
+    (@product_id, '/images/products/essential-tee/noir-face.jpg', 'Homme portant un t-shirt noir', 0, 'Noir'),
+    (@product_id, '/images/products/essential-tee/noir-dos.jpg', 'Dos du t-shirt noir', 1, 'Noir'),
+    (@product_id, '/images/products/essential-tee/gris-face.jpg', 'Homme portant un t-shirt gris', 0, 'Gris'),
+    (@product_id, '/images/products/essential-tee/gris-dos.jpg', 'Dos du t-shirt gris', 1, 'Gris'),
+    (@product_id, '/images/products/essential-tee/bleu-marine-face.jpg', 'Homme portant un t-shirt bleu marine', 0, 'Bleu Marine'),
+    (@product_id, '/images/products/essential-tee/bleu-marine-dos.jpg', 'Dos du t-shirt bleu marine', 1, 'Bleu Marine');
 
 INSERT INTO products (name, description) VALUES ('Motion Bra', 'Brassiere a maintien moyen pour un confort optimal.');
 SET @product_id = LAST_INSERT_ID();
@@ -253,9 +272,38 @@ INSERT INTO product_categories (product_id, category_id)
         (@product_id, (SELECT id_category FROM categories WHERE slug = 'brassieres'));
 INSERT INTO product_variants (product_id, size, color, price, stock_quantity) VALUES
     (@product_id, 'S', 'Noir', 49.00, 15),
-    (@product_id, 'M', 'Noir', 49.00, 15);
-INSERT INTO product_images (product_id, url, alt_text, position) VALUES
-    (@product_id, 'https://images.unsplash.com/photo-1506629905607-d9c297d7e5b7?w=900&h=1125&fit=crop&auto=format', 'Femme portant une brassiere noire de sport', 0);
+    (@product_id, 'M', 'Noir', 49.00, 15),
+    (@product_id, 'S', 'Bleu Marine', 49.00, 15),
+    (@product_id, 'M', 'Bleu Marine', 49.00, 15),
+    (@product_id, 'S', 'Bleu Roi', 49.00, 15),
+    (@product_id, 'M', 'Bleu Roi', 49.00, 15),
+    (@product_id, 'S', 'Bordeaux', 49.00, 15),
+    (@product_id, 'M', 'Bordeaux', 49.00, 15),
+    (@product_id, 'S', 'Vert', 49.00, 15),
+    (@product_id, 'M', 'Vert', 49.00, 15),
+    (@product_id, 'S', 'Rose', 49.00, 15),
+    (@product_id, 'M', 'Rose', 49.00, 15),
+    (@product_id, 'S', 'Lilas', 49.00, 15),
+    (@product_id, 'M', 'Lilas', 49.00, 15),
+    (@product_id, 'S', 'Moka', 49.00, 15),
+    (@product_id, 'M', 'Moka', 49.00, 15),
+    (@product_id, 'S', 'Gris', 49.00, 15),
+    (@product_id, 'M', 'Gris', 49.00, 15);
+INSERT INTO product_images (product_id, url, alt_text, position, color) VALUES
+    (@product_id, '/images/products/legging-brassiere-ensemble/noir.jpg', 'Femme portant une brassiere noire de sport', 0, 'Noir'),
+    (@product_id, '/images/products/legging-brassiere-ensemble/bleu-marine.jpg', 'Femme portant une brassiere bleu marine', 0, 'Bleu Marine'),
+    (@product_id, '/images/products/legging-brassiere-ensemble/bleu-roi.jpg', 'Femme portant une brassiere bleu roi', 0, 'Bleu Roi'),
+    (@product_id, '/images/products/legging-brassiere-ensemble/bordeaux.jpg', 'Femme portant une brassiere bordeaux', 0, 'Bordeaux'),
+    (@product_id, '/images/products/legging-brassiere-ensemble/vert.jpg', 'Femme portant une brassiere verte', 0, 'Vert'),
+    (@product_id, '/images/products/legging-brassiere-ensemble/rose.jpg', 'Femme portant une brassiere rose', 0, 'Rose'),
+    (@product_id, '/images/products/legging-brassiere-ensemble/lilas.jpg', 'Femme portant une brassiere lilas', 0, 'Lilas'),
+    (@product_id, '/images/products/legging-brassiere-ensemble/moka.jpg', 'Femme portant une brassiere moka', 0, 'Moka'),
+    (@product_id, '/images/products/legging-brassiere-ensemble/gris.jpg', 'Femme portant une brassiere grise', 0, 'Gris'),
+    (@product_id, '/images/products/motion-bra-detail/noir.jpg', 'Detail de la brassiere noire', 1, 'Noir'),
+    (@product_id, '/images/products/motion-bra-detail/bordeaux.jpg', 'Detail de la brassiere bordeaux', 1, 'Bordeaux'),
+    (@product_id, '/images/products/motion-bra-detail/rose.jpg', 'Detail de la brassiere rose', 1, 'Rose'),
+    (@product_id, '/images/products/motion-bra-detail/bleu-roi.jpg', 'Detail de la brassiere bleu roi', 1, 'Bleu Roi'),
+    (@product_id, '/images/products/motion-bra-detail/vert.jpg', 'Femme portant une brassiere et un short verts', 1, 'Vert');
 
 INSERT INTO products (name, description) VALUES ('Contour Legging', 'Legging sculptant taille haute.');
 SET @product_id = LAST_INSERT_ID();
@@ -266,9 +314,50 @@ INSERT INTO product_categories (product_id, category_id)
 INSERT INTO product_variants (product_id, size, color, price, stock_quantity) VALUES
     (@product_id, 'S', 'Noir', 75.00, 10),
     (@product_id, 'M', 'Noir', 75.00, 10),
-    (@product_id, 'L', 'Noir', 75.00, 8);
-INSERT INTO product_images (product_id, url, alt_text, position) VALUES
-    (@product_id, 'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=900&h=1125&fit=crop&auto=format', 'Femme portant un legging noir', 0);
+    (@product_id, 'L', 'Noir', 75.00, 8),
+    (@product_id, 'S', 'Bleu Marine', 75.00, 10),
+    (@product_id, 'M', 'Bleu Marine', 75.00, 10),
+    (@product_id, 'L', 'Bleu Marine', 75.00, 8),
+    (@product_id, 'S', 'Bleu Roi', 75.00, 10),
+    (@product_id, 'M', 'Bleu Roi', 75.00, 10),
+    (@product_id, 'L', 'Bleu Roi', 75.00, 8),
+    (@product_id, 'S', 'Bordeaux', 75.00, 10),
+    (@product_id, 'M', 'Bordeaux', 75.00, 10),
+    (@product_id, 'L', 'Bordeaux', 75.00, 8),
+    (@product_id, 'S', 'Vert', 75.00, 10),
+    (@product_id, 'M', 'Vert', 75.00, 10),
+    (@product_id, 'L', 'Vert', 75.00, 8),
+    (@product_id, 'S', 'Rose', 75.00, 10),
+    (@product_id, 'M', 'Rose', 75.00, 10),
+    (@product_id, 'L', 'Rose', 75.00, 8),
+    (@product_id, 'S', 'Lilas', 75.00, 10),
+    (@product_id, 'M', 'Lilas', 75.00, 10),
+    (@product_id, 'L', 'Lilas', 75.00, 8),
+    (@product_id, 'S', 'Moka', 75.00, 10),
+    (@product_id, 'M', 'Moka', 75.00, 10),
+    (@product_id, 'L', 'Moka', 75.00, 8),
+    (@product_id, 'S', 'Gris', 75.00, 10),
+    (@product_id, 'M', 'Gris', 75.00, 10),
+    (@product_id, 'L', 'Gris', 75.00, 8);
+INSERT INTO product_images (product_id, url, alt_text, position, color) VALUES
+    (@product_id, '/images/products/legging-brassiere-ensemble/noir.jpg', 'Femme portant un legging noir', 0, 'Noir'),
+    (@product_id, '/images/products/legging-lifestyle/noir.jpg', 'Femme portant un legging noir, photo lifestyle', 1, 'Noir'),
+    (@product_id, '/images/products/legging-brassiere-ensemble/bleu-marine.jpg', 'Femme portant un legging bleu marine', 0, 'Bleu Marine'),
+    (@product_id, '/images/products/legging-lifestyle/bleu-marine.jpg', 'Femme portant un legging bleu marine, photo lifestyle', 1, 'Bleu Marine'),
+    (@product_id, '/images/products/legging-brassiere-ensemble/bleu-roi.jpg', 'Femme portant un legging bleu roi', 0, 'Bleu Roi'),
+    (@product_id, '/images/products/legging-lifestyle/bleu-roi.jpg', 'Femme portant un legging bleu roi, photo lifestyle', 1, 'Bleu Roi'),
+    (@product_id, '/images/products/legging-brassiere-ensemble/bordeaux.jpg', 'Femme portant un legging bordeaux', 0, 'Bordeaux'),
+    (@product_id, '/images/products/legging-lifestyle/bordeaux.jpg', 'Femme portant un legging bordeaux, photo lifestyle', 1, 'Bordeaux'),
+    (@product_id, '/images/products/legging-brassiere-ensemble/vert.jpg', 'Femme portant un legging vert', 0, 'Vert'),
+    (@product_id, '/images/products/legging-lifestyle/vert.jpg', 'Femme portant un legging vert, photo lifestyle', 1, 'Vert'),
+    (@product_id, '/images/products/legging-brassiere-ensemble/rose.jpg', 'Femme portant un legging rose', 0, 'Rose'),
+    (@product_id, '/images/products/legging-lifestyle/rose.jpg', 'Femme portant un legging rose, photo lifestyle', 1, 'Rose'),
+    (@product_id, '/images/products/legging-brassiere-ensemble/lilas.jpg', 'Femme portant un legging lilas', 0, 'Lilas'),
+    (@product_id, '/images/products/legging-lifestyle/lilas.jpg', 'Femme portant un legging lilas, photo lifestyle', 1, 'Lilas'),
+    (@product_id, '/images/products/legging-brassiere-ensemble/moka.jpg', 'Femme portant un legging moka', 0, 'Moka'),
+    (@product_id, '/images/products/legging-lifestyle/moka.jpg', 'Femme portant un legging moka, photo lifestyle', 1, 'Moka'),
+    (@product_id, '/images/products/legging-brassiere-ensemble/gris.jpg', 'Femme portant un legging gris', 0, 'Gris'),
+    (@product_id, '/images/products/legging-lifestyle/gris.jpg', 'Femme portant un legging gris, photo lifestyle', 1, 'Gris');
 
 INSERT INTO products (name, description) VALUES ('Studio Short', 'Short d''entrainement feminin, coupe ajustee.');
 SET @product_id = LAST_INSERT_ID();
@@ -277,9 +366,34 @@ INSERT INTO product_categories (product_id, category_id)
         (@product_id, (SELECT id_category FROM categories WHERE slug = 'femme')),
         (@product_id, (SELECT id_category FROM categories WHERE slug = 'shorts'));
 INSERT INTO product_variants (product_id, size, color, price, stock_quantity) VALUES
-    (@product_id, 'S', 'Noir', 49.00, 12);
-INSERT INTO product_images (product_id, url, alt_text, position) VALUES
-    (@product_id, 'https://images.unsplash.com/photo-1518611012118-696072aa579a?w=900&h=1125&fit=crop&auto=format', 'Femme portant un short de sport noir', 0);
+    (@product_id, 'S', 'Noir', 49.00, 12),
+    (@product_id, 'S', 'Bleu Roi', 49.00, 12),
+    (@product_id, 'S', 'Bordeaux', 49.00, 12),
+    (@product_id, 'S', 'Bleu Marine', 49.00, 12),
+    (@product_id, 'S', 'Lilas', 49.00, 12),
+    (@product_id, 'S', 'Moka', 49.00, 12),
+    (@product_id, 'S', 'Rose', 49.00, 12),
+    (@product_id, 'S', 'Vert', 49.00, 12),
+    (@product_id, 'S', 'Rouge', 49.00, 12);
+INSERT INTO product_images (product_id, url, alt_text, position, color) VALUES
+    (@product_id, '/images/products/short-brassiere-ensemble/noir.jpg', 'Femme portant un short de sport noir', 0, 'Noir'),
+    (@product_id, '/images/products/short-brassiere-ensemble2/noir.jpg', 'Femme portant un short de sport noir, photo alternative', 1, 'Noir'),
+    (@product_id, '/images/products/short-brassiere-ensemble/bleu-roi.jpg', 'Femme portant un short de sport bleu roi', 0, 'Bleu Roi'),
+    (@product_id, '/images/products/short-brassiere-ensemble2/bleu-roi.jpg', 'Femme portant un short de sport bleu roi, photo alternative', 1, 'Bleu Roi'),
+    (@product_id, '/images/products/short-brassiere-ensemble/bordeaux.jpg', 'Femme portant un short de sport bordeaux', 0, 'Bordeaux'),
+    (@product_id, '/images/products/short-brassiere-ensemble2/bordeaux.jpg', 'Femme portant un short de sport bordeaux, photo alternative', 1, 'Bordeaux'),
+    (@product_id, '/images/products/short-brassiere-ensemble/bleu-marine.jpg', 'Femme portant un short de sport bleu marine', 0, 'Bleu Marine'),
+    (@product_id, '/images/products/short-brassiere-ensemble2/bleu-marine.jpg', 'Femme portant un short de sport bleu marine, photo alternative', 1, 'Bleu Marine'),
+    (@product_id, '/images/products/short-brassiere-ensemble/lilas.jpg', 'Femme portant un short de sport lilas', 0, 'Lilas'),
+    (@product_id, '/images/products/short-brassiere-ensemble2/lilas.jpg', 'Femme portant un short de sport lilas, photo alternative', 1, 'Lilas'),
+    (@product_id, '/images/products/short-brassiere-ensemble/moka.jpg', 'Femme portant un short de sport moka', 0, 'Moka'),
+    (@product_id, '/images/products/short-brassiere-ensemble2/moka.jpg', 'Femme portant un short de sport moka, photo alternative', 1, 'Moka'),
+    (@product_id, '/images/products/short-brassiere-ensemble/rose.jpg', 'Femme portant un short de sport rose', 0, 'Rose'),
+    (@product_id, '/images/products/short-brassiere-ensemble2/rose.jpg', 'Femme portant un short de sport rose, photo alternative', 1, 'Rose'),
+    (@product_id, '/images/products/short-brassiere-ensemble/vert.jpg', 'Femme portant un short de sport vert', 0, 'Vert'),
+    (@product_id, '/images/products/short-brassiere-ensemble2/vert.jpg', 'Femme portant un short de sport vert, photo alternative', 1, 'Vert'),
+    (@product_id, '/images/products/short-brassiere-ensemble/rouge.jpg', 'Femme portant un short de sport rouge', 0, 'Rouge'),
+    (@product_id, '/images/products/short-brassiere-ensemble2/rouge.jpg', 'Femme portant un short de sport rouge, photo alternative', 1, 'Rouge');
 
 INSERT INTO products (name, description) VALUES ('Soft Crewneck', 'Sweat col rond doux et chaud.');
 SET @product_id = LAST_INSERT_ID();
@@ -290,8 +404,6 @@ INSERT INTO product_categories (product_id, category_id)
 INSERT INTO product_variants (product_id, size, color, price, stock_quantity) VALUES
     (@product_id, 'S', 'Gris', 79.00, 10),
     (@product_id, 'M', 'Gris', 79.00, 10);
-INSERT INTO product_images (product_id, url, alt_text, position) VALUES
-    (@product_id, 'https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=900&h=1125&fit=crop&auto=format', 'Sweat gris oversize', 0);
 
 INSERT INTO sale_periods (name, slug, discount_percent, start_date, end_date) VALUES
     ('Soldes d''hiver', 'winter', 30, '2026-01-07', '2026-02-03'),

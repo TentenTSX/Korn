@@ -6,22 +6,64 @@ import { useProduct } from "../../hooks/useProduct";
 import { currency as money } from "../../utils/currency";
 import "./Product.css";
 
+const COLOR_SWATCHES: Record<string, string> = {
+  Noir: "#191817",
+  Blanc: "#f7f5f1",
+  Gris: "#9a9a9a",
+  "Bleu Marine": "#1b2a4a",
+  "Bleu Roi": "#2a4bd7",
+  Bordeaux: "#6d1f2a",
+  Vert: "#2f6b4f",
+  Rose: "#e8a0b4",
+  Lilas: "#b9a6d9",
+  Moka: "#8a6a52",
+  Rouge: "#c62828",
+};
+
 function Product() {
   const { id } = useParams();
   const productId = id ? Number(id) : null;
   const { variants, isLoading, error } = useProduct(
     productId && Number.isInteger(productId) ? productId : null,
   );
-  const [selectedVariantId, setSelectedVariantId] = useState<number | null>(
-    null,
+  const [selectedColor, setSelectedColor] = useState<string | null>(null);
+  const [selectedSize, setSelectedSize] = useState<string | null>(null);
+
+  const colors = useMemo(() => {
+    const seen = new Set<string>();
+    return variants
+      .map((variant) => variant.color)
+      .filter((color): color is string => {
+        if (!color || seen.has(color)) return false;
+        seen.add(color);
+        return true;
+      });
+  }, [variants]);
+
+  const activeColor =
+    selectedColor && colors.includes(selectedColor)
+      ? selectedColor
+      : (colors[0] ?? null);
+
+  const sizesForColor = useMemo(
+    () => variants.filter((variant) => variant.color === activeColor),
+    [variants, activeColor],
   );
 
   const activeVariant = useMemo(() => {
-    const selected = variants.find(
-      (variant) => variant.id_variant === selectedVariantId,
+    const bySize = sizesForColor.find(
+      (variant) => variant.size === selectedSize,
     );
-    return selected ?? variants[0];
-  }, [variants, selectedVariantId]);
+    return bySize ?? sizesForColor[0] ?? variants[0];
+  }, [sizesForColor, selectedSize, variants]);
+
+  const handleSelectColor = (color: string) => {
+    setSelectedColor(color);
+    const sizeStillAvailable = variants.some(
+      (variant) => variant.color === color && variant.size === selectedSize,
+    );
+    if (!sizeStillAvailable) setSelectedSize(null);
+  };
 
   useDocumentHead({
     title: activeVariant?.name ?? "Produit",
@@ -67,25 +109,50 @@ function Product() {
           {money.format(activeVariant.price)}
         </strong>
 
-        {variants.length > 1 && (
-          <fieldset className="product-page-variants">
-            <legend>Choisir une variante</legend>
-            {variants.map((variant) => (
-              <button
-                key={variant.id_variant ?? undefined}
-                type="button"
-                className={
-                  variant.id_variant === activeVariant.id_variant
-                    ? "product-page-variant product-page-variant-active"
-                    : "product-page-variant"
-                }
-                disabled={!variant.id_variant || variant.stock_quantity <= 0}
-                onClick={() => setSelectedVariantId(variant.id_variant)}
-              >
-                {[variant.color, variant.size].filter(Boolean).join(" · ") ||
-                  "Standard"}
-              </button>
-            ))}
+        {colors.length > 1 && (
+          <fieldset className="product-page-colors">
+            <legend>Couleur · {activeColor}</legend>
+            <div className="product-page-color-pins">
+              {colors.map((color) => (
+                <button
+                  key={color}
+                  type="button"
+                  className={
+                    color === activeColor
+                      ? "product-color-pin product-color-pin-active"
+                      : "product-color-pin"
+                  }
+                  style={{ backgroundColor: COLOR_SWATCHES[color] ?? "#ccc" }}
+                  aria-label={color}
+                  aria-pressed={color === activeColor}
+                  title={color}
+                  onClick={() => handleSelectColor(color)}
+                />
+              ))}
+            </div>
+          </fieldset>
+        )}
+
+        {sizesForColor.length > 1 && (
+          <fieldset className="product-page-sizes">
+            <legend>Taille</legend>
+            <div className="product-page-size-options">
+              {sizesForColor.map((variant) => (
+                <button
+                  key={variant.id_variant ?? undefined}
+                  type="button"
+                  className={
+                    variant.id_variant === activeVariant.id_variant
+                      ? "product-size-button product-size-button-active"
+                      : "product-size-button"
+                  }
+                  disabled={!variant.id_variant || variant.stock_quantity <= 0}
+                  onClick={() => variant.size && setSelectedSize(variant.size)}
+                >
+                  {variant.size ?? "Unique"}
+                </button>
+              ))}
+            </div>
           </fieldset>
         )}
 

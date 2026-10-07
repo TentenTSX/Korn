@@ -37,8 +37,8 @@ class ProductRepository {
         (select c.slug from product_categories pc join categories c on c.id_category = pc.category_id where pc.product_id = p.id_product and c.name in ('Homme', 'Femme') limit 1) as category_slug,
         (select c.name from product_categories pc join categories c on c.id_category = pc.category_id where pc.product_id = p.id_product and c.name not in ('Homme', 'Femme') limit 1) as subcategory_name,
         pv.id_variant, pv.size, pv.color, pv.price, pv.stock_quantity,
-        (select pi.url from product_images pi where pi.product_id = p.id_product order by pi.position limit 1) as image,
-        (select pi.alt_text from product_images pi where pi.product_id = p.id_product order by pi.position limit 1) as alt_text
+        (select pi.url from product_images pi where pi.product_id = p.id_product and (pi.color = pv.color or pi.color is null) order by (pi.color = pv.color) desc, pi.position limit 1) as image,
+        (select pi.alt_text from product_images pi where pi.product_id = p.id_product and (pi.color = pv.color or pi.color is null) order by (pi.color = pv.color) desc, pi.position limit 1) as alt_text
       from products p
       left join product_variants pv on pv.product_id = p.id_product${where}
       order by p.created_at desc`,
@@ -49,7 +49,7 @@ class ProductRepository {
 
   async findById(id: number) {
     const [rows] = await databaseClient.query<Rows>(
-      "select p.*, pv.id_variant, pv.size, pv.color, pv.price, pv.stock_quantity, (select pi.url from product_images pi where pi.product_id = p.id_product order by pi.position limit 1) as image, (select pi.alt_text from product_images pi where pi.product_id = p.id_product order by pi.position limit 1) as alt_text from products p left join product_variants pv on pv.product_id = p.id_product where p.id_product = ?",
+      "select p.*, pv.id_variant, pv.size, pv.color, pv.price, pv.stock_quantity, (select pi.url from product_images pi where pi.product_id = p.id_product and (pi.color = pv.color or pi.color is null) order by (pi.color = pv.color) desc, pi.position limit 1) as image, (select pi.alt_text from product_images pi where pi.product_id = p.id_product and (pi.color = pv.color or pi.color is null) order by (pi.color = pv.color) desc, pi.position limit 1) as alt_text from products p left join product_variants pv on pv.product_id = p.id_product where p.id_product = ?",
       [id],
     );
     return rows;

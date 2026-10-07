@@ -5,10 +5,7 @@ function Hero() {
   return (
     <section className="home-hero" aria-label="Collection Korn">
       <div className="home-hero-main">
-        <img
-          src="https://images.unsplash.com/photo-1618453292507-4959ece6429e?w=1800&h=1200&fit=crop&auto=format"
-          alt=""
-        />
+        <img src="/images/hero/man-red-tee-running.jpg" alt="" />
         <div className="hero-text-div">
           <i className="home-hero-text">Collection été 2027</i>
           <h1 className="home-hero-label">DEFINE YOUR FORM.</h1>
@@ -29,14 +26,14 @@ function Hero() {
       <div className="home-hero-grid">
         <Link className="home-hero-card home-hero-card-woman" to="/girl">
           <img
-            src="https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?w=900&h=700&fit=crop&auto=format"
+            src="/images/hero/woman-green-set.jpg"
             alt="Femme portant une tenue de mode"
           />
           <span className="grid-img-label">FEMME</span>
         </Link>
         <Link className="home-hero-card home-hero-card-man" to="/men">
           <img
-            src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=900&h=700&fit=crop&auto=format"
+            src="/images/hero/man-black-tank.jpg"
             alt="Homme portant une tenue de mode"
           />
           <span className="grid-img-label">HOMME</span>
@@ -46,7 +43,7 @@ function Hero() {
           to="/collection/news"
         >
           <img
-            src="https://images.unsplash.com/photo-1525507119028-ed4c629a60a3?w=900&h=700&fit=crop&auto=format"
+            src="/images/hero/man-grey-tee.jpg"
             alt="Nouveautés de la collection Korn"
           />
           <span className="grid-img-label">NOUVEAUTES</span>
@@ -56,7 +53,7 @@ function Hero() {
           to="/collection/sales"
         >
           <img
-            src="https://images.unsplash.com/photo-1445205170230-053b83016050?w=900&h=700&fit=crop&auto=format"
+            src="/images/hero/man-black-tee-white-pants.jpg"
             alt="Vêtements en promotion pendant les soldes"
           />
           <span className="grid-img-label">SOLDES</span>

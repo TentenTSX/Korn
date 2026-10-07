@@ -27,7 +27,7 @@ function HomePerformance() {
         aria-label="Performance et esthétique"
       >
         <img
-          src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=1800&q=80"
+          src="/images/hero/man-white-tee.jpg"
           alt="Athlète en tenue technique"
         />
         <div className="home-performance-overlay" aria-hidden="true" />

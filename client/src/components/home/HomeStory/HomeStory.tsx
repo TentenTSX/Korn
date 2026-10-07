@@ -24,7 +24,7 @@ function HomeStory() {
 
       <div className="home-story-media">
         <img
-          src="https://images.unsplash.com/photo-1538805060514-97d9cc17730c?w=1200&h=1600&fit=crop&auto=format"
+          src="/images/hero/woman-black-set-side.jpg"
           alt="Femme portant une tenue de sport dans un stade"
         />
       </div>
