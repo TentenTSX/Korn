@@ -16,6 +16,7 @@ type CatalogProduct = {
   productId?: number | null;
   size?: string | null;
   color?: string | null;
+  colors?: string[];
   stockQuantity?: number;
 };
 
@@ -38,13 +39,26 @@ function MenCatalogue() {
   }));
   // Each product can have many color/size variants; the grid shows one card
   // per product (its first variant), color and size selection happens on
-  // the product page instead of duplicating a card per variant.
+  // the product page instead of duplicating a card per variant. Each card
+  // still lists the product's distinct colors as small pins.
   const seenProductIds = new Set<number | null | undefined>();
-  const uniqueProducts = products.filter((product) => {
-    if (seenProductIds.has(product.productId)) return false;
-    seenProductIds.add(product.productId);
-    return true;
-  });
+  const uniqueProducts = products
+    .filter((product) => {
+      if (seenProductIds.has(product.productId)) return false;
+      seenProductIds.add(product.productId);
+      return true;
+    })
+    .map((product) => ({
+      ...product,
+      colors: Array.from(
+        new Set(
+          products
+            .filter((variant) => variant.productId === product.productId)
+            .map((variant) => variant.color)
+            .filter((color): color is string => Boolean(color)),
+        ),
+      ),
+    }));
   const visibleProducts =
     activeFilter === "Tout"
       ? uniqueProducts

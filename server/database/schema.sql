@@ -220,9 +220,12 @@ INSERT INTO product_variants (product_id, size, color, price, stock_quantity) VA
     (@product_id, 'M', 'Noir', 95.00, 10),
     (@product_id, 'L', 'Noir', 95.00, 10),
     (@product_id, 'M', 'Gris', 95.00, 10),
-    (@product_id, 'L', 'Gris', 95.00, 10);
+    (@product_id, 'L', 'Gris', 95.00, 10),
+    (@product_id, 'M', 'Bleu Marine', 95.00, 10),
+    (@product_id, 'L', 'Bleu Marine', 95.00, 10);
 INSERT INTO product_images (product_id, url, alt_text, position, color) VALUES
-    (@product_id, '/images/products/motion-pant/gris.jpg', 'Pantalon technique gris porte pendant un entrainement', 0, 'Gris');
+    (@product_id, '/images/products/motion-pant/gris.jpg', 'Pantalon technique gris porte pendant un entrainement', 0, 'Gris'),
+    (@product_id, '/images/products/motion-pant/bleu-marine.jpg', 'Pantalon ample bleu marine porte en tenue decontractee', 0, 'Bleu Marine');
 
 INSERT INTO products (name, description) VALUES ('Core Short', 'Short d''entrainement leger et resistant.');
 SET @product_id = LAST_INSERT_ID();
@@ -234,6 +237,19 @@ INSERT INTO product_variants (product_id, size, color, price, stock_quantity) VA
     (@product_id, 'M', 'Noir', 55.00, 15);
 INSERT INTO product_images (product_id, url, alt_text, position, color) VALUES
     (@product_id, '/images/products/core-short/noir.jpg', 'Athlete portant un short noir', 0, 'Noir');
+
+INSERT INTO products (name, description) VALUES ('Compression Tee', 'T-shirt technique ajuste, pensee pour l''entrainement intensif.');
+SET @product_id = LAST_INSERT_ID();
+INSERT INTO product_categories (product_id, category_id)
+    VALUES
+        (@product_id, (SELECT id_category FROM categories WHERE slug = 'homme')),
+        (@product_id, (SELECT id_category FROM categories WHERE slug = 't-shirts'));
+INSERT INTO product_variants (product_id, size, color, price, stock_quantity) VALUES
+    (@product_id, 'S', 'Noir', 42.00, 12),
+    (@product_id, 'M', 'Noir', 42.00, 15),
+    (@product_id, 'L', 'Noir', 42.00, 12);
+INSERT INTO product_images (product_id, url, alt_text, position, color) VALUES
+    (@product_id, '/images/products/compression-tee/noir.jpg', 'Homme portant un t-shirt de compression noir', 0, 'Noir');
 
 INSERT INTO products (name, description) VALUES ('Essential Tee', 'T-shirt coupe droite en coton respirant.');
 SET @product_id = LAST_INSERT_ID();
