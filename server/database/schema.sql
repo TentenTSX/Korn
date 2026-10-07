@@ -78,6 +78,7 @@ CREATE TABLE product_images (
     alt_text VARCHAR(255),
     position INT DEFAULT 0,
     color VARCHAR(50) NULL,
+    focal_point VARCHAR(10) NULL,
     CONSTRAINT fk_image_product
         FOREIGN KEY (product_id)
         REFERENCES products(id_product)
@@ -376,25 +377,25 @@ INSERT INTO product_variants (product_id, size, color, price, stock_quantity) VA
     (@product_id, 'S', 'Gris', 75.00, 10),
     (@product_id, 'M', 'Gris', 75.00, 10),
     (@product_id, 'L', 'Gris', 75.00, 8);
-INSERT INTO product_images (product_id, url, alt_text, position, color) VALUES
-    (@product_id, '/images/products/legging-brassiere-ensemble/noir.jpg', 'Femme portant un legging noir', 0, 'Noir'),
-    (@product_id, '/images/products/legging-lifestyle/noir.jpg', 'Femme portant un legging noir, photo lifestyle', 1, 'Noir'),
-    (@product_id, '/images/products/legging-brassiere-ensemble/bleu-marine.jpg', 'Femme portant un legging bleu marine', 0, 'Bleu Marine'),
-    (@product_id, '/images/products/legging-lifestyle/bleu-marine.jpg', 'Femme portant un legging bleu marine, photo lifestyle', 1, 'Bleu Marine'),
-    (@product_id, '/images/products/legging-brassiere-ensemble/bleu-roi.jpg', 'Femme portant un legging bleu roi', 0, 'Bleu Roi'),
-    (@product_id, '/images/products/legging-lifestyle/bleu-roi.jpg', 'Femme portant un legging bleu roi, photo lifestyle', 1, 'Bleu Roi'),
-    (@product_id, '/images/products/legging-brassiere-ensemble/bordeaux.jpg', 'Femme portant un legging bordeaux', 0, 'Bordeaux'),
-    (@product_id, '/images/products/legging-lifestyle/bordeaux.jpg', 'Femme portant un legging bordeaux, photo lifestyle', 1, 'Bordeaux'),
-    (@product_id, '/images/products/legging-brassiere-ensemble/vert.jpg', 'Femme portant un legging vert', 0, 'Vert'),
-    (@product_id, '/images/products/legging-lifestyle/vert.jpg', 'Femme portant un legging vert, photo lifestyle', 1, 'Vert'),
-    (@product_id, '/images/products/legging-brassiere-ensemble/rose.jpg', 'Femme portant un legging rose', 0, 'Rose'),
-    (@product_id, '/images/products/legging-lifestyle/rose.jpg', 'Femme portant un legging rose, photo lifestyle', 1, 'Rose'),
-    (@product_id, '/images/products/legging-brassiere-ensemble/lilas.jpg', 'Femme portant un legging lilas', 0, 'Lilas'),
-    (@product_id, '/images/products/legging-lifestyle/lilas.jpg', 'Femme portant un legging lilas, photo lifestyle', 1, 'Lilas'),
-    (@product_id, '/images/products/legging-brassiere-ensemble/moka.jpg', 'Femme portant un legging moka', 0, 'Moka'),
-    (@product_id, '/images/products/legging-lifestyle/moka.jpg', 'Femme portant un legging moka, photo lifestyle', 1, 'Moka'),
-    (@product_id, '/images/products/legging-brassiere-ensemble/gris.jpg', 'Femme portant un legging gris', 0, 'Gris'),
-    (@product_id, '/images/products/legging-lifestyle/gris.jpg', 'Femme portant un legging gris, photo lifestyle', 1, 'Gris');
+INSERT INTO product_images (product_id, url, alt_text, position, color, focal_point) VALUES
+    (@product_id, '/images/products/legging-brassiere-ensemble/noir.jpg', 'Femme portant un legging noir', 0, 'Noir', '85%'),
+    (@product_id, '/images/products/legging-lifestyle/noir.jpg', 'Femme portant un legging noir, photo lifestyle', 1, 'Noir', NULL),
+    (@product_id, '/images/products/legging-brassiere-ensemble/bleu-marine.jpg', 'Femme portant un legging bleu marine', 0, 'Bleu Marine', '85%'),
+    (@product_id, '/images/products/legging-lifestyle/bleu-marine.jpg', 'Femme portant un legging bleu marine, photo lifestyle', 1, 'Bleu Marine', NULL),
+    (@product_id, '/images/products/legging-brassiere-ensemble/bleu-roi.jpg', 'Femme portant un legging bleu roi', 0, 'Bleu Roi', '85%'),
+    (@product_id, '/images/products/legging-lifestyle/bleu-roi.jpg', 'Femme portant un legging bleu roi, photo lifestyle', 1, 'Bleu Roi', NULL),
+    (@product_id, '/images/products/legging-brassiere-ensemble/bordeaux.jpg', 'Femme portant un legging bordeaux', 0, 'Bordeaux', '85%'),
+    (@product_id, '/images/products/legging-lifestyle/bordeaux.jpg', 'Femme portant un legging bordeaux, photo lifestyle', 1, 'Bordeaux', NULL),
+    (@product_id, '/images/products/legging-brassiere-ensemble/vert.jpg', 'Femme portant un legging vert', 0, 'Vert', '85%'),
+    (@product_id, '/images/products/legging-lifestyle/vert.jpg', 'Femme portant un legging vert, photo lifestyle', 1, 'Vert', NULL),
+    (@product_id, '/images/products/legging-brassiere-ensemble/rose.jpg', 'Femme portant un legging rose', 0, 'Rose', '85%'),
+    (@product_id, '/images/products/legging-lifestyle/rose.jpg', 'Femme portant un legging rose, photo lifestyle', 1, 'Rose', NULL),
+    (@product_id, '/images/products/legging-brassiere-ensemble/lilas.jpg', 'Femme portant un legging lilas', 0, 'Lilas', '85%'),
+    (@product_id, '/images/products/legging-lifestyle/lilas.jpg', 'Femme portant un legging lilas, photo lifestyle', 1, 'Lilas', NULL),
+    (@product_id, '/images/products/legging-brassiere-ensemble/moka.jpg', 'Femme portant un legging moka', 0, 'Moka', '85%'),
+    (@product_id, '/images/products/legging-lifestyle/moka.jpg', 'Femme portant un legging moka, photo lifestyle', 1, 'Moka', NULL),
+    (@product_id, '/images/products/legging-brassiere-ensemble/gris.jpg', 'Femme portant un legging gris', 0, 'Gris', '85%'),
+    (@product_id, '/images/products/legging-lifestyle/gris.jpg', 'Femme portant un legging gris, photo lifestyle', 1, 'Gris', NULL);
 
 INSERT INTO products (name, description, material, model_height_cm, model_size_worn) VALUES ('Short Femme', 'Short d''entrainement feminin, coupe ajustee.', '87% polyester, 13% elasthanne', 168, 'S');
 SET @product_id = LAST_INSERT_ID();

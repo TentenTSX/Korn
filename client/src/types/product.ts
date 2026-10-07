@@ -15,6 +15,10 @@ export type Product = {
   stock_quantity: number;
   image: string | null;
   alt_text: string | null;
-  gallery?: string[];
+  // The CSS object-position vertical anchor for `image`, e.g. "85%". Lets a
+  // photo shared between two products (a combo shot showing both garments)
+  // be cropped to emphasize whichever garment that product actually sells.
+  focal_point: string | null;
+  gallery?: Array<{ url: string; focal_point: string | null }>;
   created_at: string;
 };

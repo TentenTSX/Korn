@@ -25,6 +25,7 @@ type CollectionProduct = {
   categoryFilter: string;
   image: string;
   alt: string;
+  focalPoint?: string | null;
   variantId?: number | null;
   productId?: number | null;
   size?: string | null;
@@ -54,6 +55,7 @@ function CollectionCatalogue() {
     categoryFilter: product.category_name ?? "Tout",
     image: product.image ?? "",
     alt: product.alt_text ?? product.name,
+    focalPoint: product.focal_point,
     badge: isRecentlyAdded(product.created_at) ? "NOUVEAU" : undefined,
     isBestseller: bestsellerIds.has(product.id_product),
     variantId: product.id_variant,
