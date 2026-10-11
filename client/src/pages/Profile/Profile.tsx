@@ -3,12 +3,12 @@ import { useNavigate, useSearchParams } from "react-router";
 import ProfileLogin from "../../components/profile/ProfileLogin/ProfileLogin";
 import { useCartContext } from "../../contexts/CartContext";
 import { useDocumentHead } from "../../hooks/useDocumentHead";
-import { apiRequest } from "../../services/api";
 
 function Profile() {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
-  const { user, isAuthLoading, login, register } = useCartContext();
+  const { user, isAuthLoading, login, register, requestPasswordReset } =
+    useCartContext();
   useDocumentHead({
     title: "Connexion",
     description:
@@ -19,12 +19,6 @@ function Profile() {
   useEffect(() => {
     if (googleError) setSearchParams({}, { replace: true });
   }, [googleError, setSearchParams]);
-
-  useEffect(() => {
-    if (!isAuthLoading && user) {
-      navigate("/profile/dashboard", { replace: true });
-    }
-  }, [isAuthLoading, navigate, user]);
 
   useEffect(() => {
     if (!isAuthLoading && user) {
@@ -53,10 +47,7 @@ function Profile() {
   };
 
   const handleRequestPasswordReset = async (email: string) => {
-    await apiRequest<void>("/api/auth/password-reset/request", {
-      method: "POST",
-      body: JSON.stringify({ email }),
-    });
+    await requestPasswordReset(email);
   };
 
   return (

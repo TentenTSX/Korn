@@ -3,11 +3,12 @@ import { useState } from "react";
 import type { FormEvent } from "react";
 import { Link, useSearchParams } from "react-router";
 import "../../components/profile/ProfileLogin/ProfileLogin.css";
+import { useCartContext } from "../../contexts/CartContext";
 import { useDocumentHead } from "../../hooks/useDocumentHead";
-import { apiRequest } from "../../services/api";
 import "./ResetPassword.css";
 
 function ResetPassword() {
+  const { confirmPasswordReset } = useCartContext();
   const [searchParams] = useSearchParams();
   const token = searchParams.get("token") ?? "";
   useDocumentHead({
@@ -40,10 +41,7 @@ function ResetPassword() {
     setError("");
     setIsSubmitting(true);
     try {
-      await apiRequest<void>("/api/auth/password-reset/confirm", {
-        method: "POST",
-        body: JSON.stringify({ token, password }),
-      });
+      await confirmPasswordReset(token, password);
       setIsDone(true);
     } catch (requestError) {
       setError(
