@@ -37,7 +37,7 @@ type CatalogueProps = {
 type CatalogueProduct = {
   name: string;
   category: string;
-  price: string;
+  price: number;
   badge?: string;
   isBestseller: boolean;
   categoryFilter: string;
@@ -81,7 +81,7 @@ function Catalogue({ gender }: CatalogueProps) {
     category:
       product.description ??
       (gender ? `Collection ${gender}` : "Collection Korn"),
-    price: `${product.price} €`,
+    price: Number(product.price),
     categoryFilter:
       (gender ? product.subcategory_name : product.category_name) ?? "Tout",
     image: product.image ?? "",
@@ -121,16 +121,10 @@ function Catalogue({ gender }: CatalogueProps) {
   const sortedProducts = [...visibleProducts].sort(
     (firstProduct, secondProduct) => {
       if (sort === "price-low") {
-        return (
-          Number.parseInt(firstProduct.price, 10) -
-          Number.parseInt(secondProduct.price, 10)
-        );
+        return firstProduct.price - secondProduct.price;
       }
       if (sort === "price-high") {
-        return (
-          Number.parseInt(secondProduct.price, 10) -
-          Number.parseInt(firstProduct.price, 10)
-        );
+        return secondProduct.price - firstProduct.price;
       }
       return 0;
     },
