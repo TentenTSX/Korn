@@ -1,5 +1,6 @@
 import { X } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useAuthContext } from "../../../contexts/AuthContext";
 import { useCartContext } from "../../../contexts/CartContext";
 import { currency } from "../../../utils/currency";
 import CartLineItem from "./CartLineItem";
@@ -12,15 +13,8 @@ type CartViewProps = {
 };
 
 function CartView({ onClose, onCheckout, asPage = false }: CartViewProps) {
-  const {
-    user,
-    isAuthLoading,
-    items,
-    isLoading,
-    error,
-    updateItem,
-    removeItem,
-  } = useCartContext();
+  const { user, isLoading: isAuthLoading } = useAuthContext();
+  const { items, isLoading, error, updateItem, removeItem } = useCartContext();
   const [busyItemId, setBusyItemId] = useState<number | null>(null);
   const [actionError, setActionError] = useState<string | null>(null);
   const total = items.reduce(

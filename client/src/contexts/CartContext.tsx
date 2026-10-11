@@ -7,23 +7,20 @@ import {
   useState,
 } from "react";
 import type { ReactNode } from "react";
-import { useAuth } from "../hooks/useAuth";
 import { useCart } from "../hooks/useCart";
+import { useAuthContext } from "./AuthContext";
 
-type CartContextValue = ReturnType<typeof useCart> &
-  ReturnType<typeof useAuth> & {
-    isAuthLoading: boolean;
-    itemCount: number;
-    isOpen: boolean;
-    openCart: () => void;
-    closeCart: () => void;
-  };
+type CartContextValue = ReturnType<typeof useCart> & {
+  itemCount: number;
+  isOpen: boolean;
+  openCart: () => void;
+  closeCart: () => void;
+};
 
 const CartContext = createContext<CartContextValue | null>(null);
 
 export function CartProvider({ children }: { children: ReactNode }) {
-  const auth = useAuth();
-  const { user, isLoading: isAuthLoading } = auth;
+  const { user, isLoading: isAuthLoading } = useAuthContext();
   const cart = useCart();
   const [isOpen, setIsOpen] = useState(false);
   const itemCount = cart.items.reduce(
@@ -45,15 +42,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   return (
     <CartContext.Provider
-      value={{
-        ...cart,
-        ...auth,
-        isAuthLoading,
-        itemCount,
-        isOpen,
-        openCart,
-        closeCart,
-      }}
+      value={{ ...cart, itemCount, isOpen, openCart, closeCart }}
     >
       {children}
     </CartContext.Provider>

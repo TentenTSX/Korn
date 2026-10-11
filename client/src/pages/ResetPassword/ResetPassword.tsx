@@ -3,12 +3,12 @@ import { useState } from "react";
 import type { FormEvent } from "react";
 import { Link, useSearchParams } from "react-router";
 import "../../components/profile/ProfileLogin/ProfileLogin.css";
-import { useCartContext } from "../../contexts/CartContext";
+import { useAuthContext } from "../../contexts/AuthContext";
 import { useDocumentHead } from "../../hooks/useDocumentHead";
 import "./ResetPassword.css";
 
 function ResetPassword() {
-  const { confirmPasswordReset } = useCartContext();
+  const { confirmPasswordReset } = useAuthContext();
   const [searchParams] = useSearchParams();
   const token = searchParams.get("token") ?? "";
   useDocumentHead({

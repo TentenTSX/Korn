@@ -1,14 +1,19 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router";
 import ProfileLogin from "../../components/profile/ProfileLogin/ProfileLogin";
-import { useCartContext } from "../../contexts/CartContext";
+import { useAuthContext } from "../../contexts/AuthContext";
 import { useDocumentHead } from "../../hooks/useDocumentHead";
 
 function Profile() {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
-  const { user, isAuthLoading, login, register, requestPasswordReset } =
-    useCartContext();
+  const {
+    user,
+    isLoading: isAuthLoading,
+    login,
+    register,
+    requestPasswordReset,
+  } = useAuthContext();
   useDocumentHead({
     title: "Connexion",
     description:

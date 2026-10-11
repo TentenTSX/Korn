@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { Link, useNavigate, useParams } from "react-router";
-import { useCartContext } from "../../contexts/CartContext";
+import { useAuthContext } from "../../contexts/AuthContext";
 import { useDocumentHead } from "../../hooks/useDocumentHead";
 import { useOrder } from "../../hooks/useOrder";
 import { currency as money } from "../../utils/currency";
@@ -19,7 +19,7 @@ const orderStatusLabels: Record<string, string> = {
 function OrderDetail() {
   const navigate = useNavigate();
   const { orderId } = useParams();
-  const { user, isAuthLoading } = useCartContext();
+  const { user, isLoading: isAuthLoading } = useAuthContext();
   const { order, isLoading, error } = useOrder(
     user?.id_user ?? null,
     orderId ? Number(orderId) : null,
