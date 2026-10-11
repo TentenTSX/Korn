@@ -20,7 +20,6 @@ const getInvoiceAction = async (userId: number, orderIdValue: number) => {
     );
   }
 
-  await orderRepository.ensureInvoiceNumber(orderId);
   const invoice = await orderRepository.findInvoiceByOrderId(orderId);
   if (!invoice) throw new ActionError("NOT_FOUND", "Facture introuvable.");
   return {

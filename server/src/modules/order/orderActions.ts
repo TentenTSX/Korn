@@ -31,18 +31,7 @@ function parseId(value: number, label: string) {
 
 const getOrdersAction = async (userId: number, authenticatedUserId: number) => {
   assertOwner(userId, authenticatedUserId);
-  const orders = await orderRepository.findAllByUser(userId);
-  const paidOrdersMissingInvoice = orders.filter(
-    (order) => order.status === "paid" && !order.invoice_number,
-  );
-  await Promise.all(
-    paidOrdersMissingInvoice.map((order) =>
-      orderRepository.ensureInvoiceNumber(Number(order.id_order)),
-    ),
-  );
-  return paidOrdersMissingInvoice.length > 0
-    ? orderRepository.findAllByUser(userId)
-    : orders;
+  return orderRepository.findAllByUser(userId);
 };
 
 const getOrderAction = async (
