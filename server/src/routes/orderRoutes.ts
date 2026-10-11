@@ -3,8 +3,7 @@ import authenticate from "../middleware/authenticate";
 import ActionError from "../modules/ActionError";
 import invoiceActions from "../modules/invoice/invoiceActions";
 import orderActions from "../modules/order/orderActions";
-import stripeActions from "../modules/payment/stripeActions";
-import { currentUserCartOwner, currentUserId, runAction } from "./routeHelpers";
+import { currentUserId, runAction } from "./routeHelpers";
 
 const router = express.Router();
 
@@ -54,33 +53,6 @@ router.get(
         `attachment; filename="${invoice.invoiceNumber}.pdf"`,
       )
       .send(invoice.pdf);
-  }),
-);
-
-router.post(
-  "/api/users/:userId/orders",
-  authenticate,
-  runAction(async (req, res) => {
-    const owner = currentUserCartOwner(req, req.params.userId);
-    const checkout = await stripeActions.createCheckoutSessionAction(
-      owner,
-      req.body,
-    );
-    res.status(201).json(checkout);
-  }),
-);
-
-router.patch(
-  "/api/users/:userId/orders/:orderId/status",
-  authenticate,
-  runAction(async (req, res) => {
-    await orderActions.updateOrderStatusAction(
-      Number(req.params.userId),
-      currentUserId(req),
-      Number(req.params.orderId),
-      req.body?.status,
-    );
-    res.sendStatus(204);
   }),
 );
 

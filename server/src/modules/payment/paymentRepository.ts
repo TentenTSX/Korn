@@ -10,14 +10,6 @@ class PaymentRepository {
     return rows;
   }
 
-  async create(orderId: number, amount: number, paymentMethod: string) {
-    const [result] = await databaseClient.query<Result>(
-      "insert into payments (order_id, amount, payment_method) values (?, ?, ?)",
-      [orderId, amount, paymentMethod],
-    );
-    return result.insertId;
-  }
-
   async recordStripePayment(
     orderId: number,
     amount: number,

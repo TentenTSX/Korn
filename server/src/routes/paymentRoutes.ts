@@ -57,17 +57,4 @@ router.get(
   }),
 );
 
-router.post(
-  "/api/orders/:orderId/payments",
-  authenticate,
-  runAction(async (req, res) => {
-    const paymentId = await paymentActions.createPaymentAction(
-      currentUserId(req),
-      Number(req.params.orderId),
-      req.body,
-    );
-    res.status(201).json({ paymentId });
-  }),
-);
-
 export default router;

@@ -172,29 +172,3 @@ describe("orderActions.createOrderAction", () => {
     );
   });
 });
-
-describe("orderActions.updateOrderStatusAction", () => {
-  test("rejects an invalid status", async () => {
-    await expect(
-      orderActions.updateOrderStatusAction(1, 1, 1, ""),
-    ).rejects.toMatchObject({ code: "BAD_REQUEST" });
-  });
-
-  test("rejects when the order does not belong to the user", async () => {
-    jest.spyOn(orderRepository, "updateStatus").mockResolvedValue(0);
-
-    await expect(
-      orderActions.updateOrderStatusAction(1, 1, 1, "shipped"),
-    ).rejects.toMatchObject({ code: "NOT_FOUND" });
-  });
-
-  test("updates the status when the order belongs to the user", async () => {
-    const updateSpy = jest
-      .spyOn(orderRepository, "updateStatus")
-      .mockResolvedValue(1);
-
-    await orderActions.updateOrderStatusAction(1, 1, 1, "shipped");
-
-    expect(updateSpy).toHaveBeenCalledWith(1, 1, "shipped");
-  });
-});

@@ -266,12 +266,25 @@ class OrderRepository {
     );
   }
 
-  async updateStatus(userId: number, orderId: number, status: string) {
-    const [result] = await databaseClient.query<Result>(
-      "update orders set status = ? where user_id = ? and id_order = ?",
-      [status, userId, orderId],
-    );
-    return result.affectedRows;
+  async decrementVariantStock(
+    items: Array<{ variant_id: number; quantity: number }>,
+  ) {
+    const connection = await databaseClient.getConnection();
+    try {
+      await connection.beginTransaction();
+      for (const item of items) {
+        await connection.query<Result>(
+          "update product_variants set stock_quantity = greatest(stock_quantity - ?, 0) where id_variant = ?",
+          [item.quantity, item.variant_id],
+        );
+      }
+      await connection.commit();
+    } catch (error) {
+      await connection.rollback();
+      throw error;
+    } finally {
+      connection.release();
+    }
   }
 }
 

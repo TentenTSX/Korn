@@ -105,13 +105,6 @@ async function completePaidSession(session: Stripe.Checkout.Session) {
   ) {
     throw new Error("Stripe payment does not match the order total.");
   }
-  if (
-    session.currency !== "eur" ||
-    (session.amount_total !== null &&
-      Math.round(Number(order.total_price) * 100) !== session.amount_total)
-  ) {
-    throw new Error("Stripe payment amount does not match the order.");
-  }
 
   const changedRows = await orderRepository.markPaid(session.id);
   const paymentIntentId =
@@ -126,24 +119,22 @@ async function completePaidSession(session: Stripe.Checkout.Session) {
   );
 
   await orderRepository.ensureInvoiceNumber(Number(order.id_order));
-  if (!order.payment_email_sent_at) {
-    const invoice = await orderRepository.findInvoiceByOrderId(
-      Number(order.id_order),
-    );
-    if (!invoice) throw new Error("Paid order invoice could not be loaded.");
-    const pdf = await createInvoicePdf(invoice);
-    await sendPaymentConfirmationEmail(invoice, pdf);
-    await orderRepository.markPaymentEmailSent(Number(order.id_order));
-  }
 
   if (changedRows > 0) {
+    const items = await orderRepository.findItemsByStripeSession(session.id);
+    await orderRepository.decrementVariantStock(
+      items.map((item) => ({
+        variant_id: item.variant_id,
+        quantity: Number(item.quantity),
+      })),
+    );
+
     const owner: CartOwner | null = order.user_id
       ? { kind: "user", userId: order.user_id }
       : order.guest_cart_token_hash
         ? { kind: "guest", guestTokenHash: order.guest_cart_token_hash }
         : null;
     if (owner) {
-      const items = await orderRepository.findItemsByStripeSession(session.id);
       await cartRepository.removePurchasedItems(
         owner,
         items.map((item) => ({
@@ -154,7 +145,6 @@ async function completePaidSession(session: Stripe.Checkout.Session) {
     }
   }
 
-  await orderRepository.ensureInvoiceNumber(Number(order.id_order));
   if (!order.payment_email_sent_at) {
     const claimed = await orderRepository.claimPaymentEmail(
       Number(order.id_order),

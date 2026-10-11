@@ -19,22 +19,4 @@ const getPaymentsAction = async (userId: number, orderId: number) => {
   return paymentRepository.findByOrder(orderId);
 };
 
-const createPaymentAction = async (
-  userId: number,
-  orderId: number,
-  input: { amount: number; payment_method: string },
-) => {
-  await assertOrderOwner(userId, orderId);
-  const amount = Number(input?.amount);
-  if (
-    !Number.isFinite(amount) ||
-    amount <= 0 ||
-    typeof input?.payment_method !== "string" ||
-    !input.payment_method.trim()
-  ) {
-    throw new ActionError("BAD_REQUEST", "Informations de paiement invalides.");
-  }
-  return paymentRepository.create(orderId, amount, input.payment_method.trim());
-};
-
-export default { getPaymentsAction, createPaymentAction };
+export default { getPaymentsAction };
