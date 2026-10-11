@@ -5,6 +5,7 @@ import { useDocumentHead } from "../../hooks/useDocumentHead";
 import { useProduct } from "../../hooks/useProduct";
 import { COLOR_SWATCHES } from "../../utils/colorSwatches";
 import { currency as money } from "../../utils/currency";
+import { focalPointStyle } from "../../utils/focalPoint";
 import "./Product.css";
 
 function formatHeight(heightCm: number) {
@@ -58,7 +59,9 @@ function Product() {
 
   const gallery = useMemo(() => {
     if (activeVariant?.gallery?.length) return activeVariant.gallery;
-    return activeVariant?.image ? [activeVariant.image] : [];
+    return activeVariant?.image
+      ? [{ url: activeVariant.image, focal_point: activeVariant.focal_point }]
+      : [];
   }, [activeVariant]);
 
   const [activeImageIndex, setActiveImageIndex] = useState(0);
@@ -68,7 +71,10 @@ function Product() {
     setActiveImageIndex(0);
   }
 
-  const displayedImage = gallery[activeImageIndex] ?? activeVariant?.image;
+  const displayedEntry = gallery[activeImageIndex] ?? {
+    url: activeVariant?.image ?? null,
+    focal_point: activeVariant?.focal_point ?? null,
+  };
 
   useDocumentHead({
     title: activeVariant?.name ?? "Produit",
@@ -97,17 +103,18 @@ function Product() {
   return (
     <main className="product-page">
       <div className="product-page-image">
-        {displayedImage && (
+        {displayedEntry.url && (
           <img
-            src={displayedImage}
+            src={displayedEntry.url}
             alt={activeVariant.alt_text ?? activeVariant.name}
+            style={focalPointStyle(displayedEntry.focal_point)}
           />
         )}
         {gallery.length > 1 && (
           <div className="product-page-thumbnails">
-            {gallery.map((url, index) => (
+            {gallery.map((image, index) => (
               <button
-                key={url}
+                key={image.url}
                 type="button"
                 className={
                   index === activeImageIndex
@@ -118,7 +125,11 @@ function Product() {
                 aria-pressed={index === activeImageIndex}
                 onClick={() => setActiveImageIndex(index)}
               >
-                <img src={url} alt="" />
+                <img
+                  src={image.url}
+                  alt=""
+                  style={focalPointStyle(image.focal_point)}
+                />
               </button>
             ))}
           </div>

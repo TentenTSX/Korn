@@ -13,6 +13,7 @@ type CatalogProduct = {
   categoryFilter: string;
   image: string;
   alt: string;
+  focalPoint?: string | null;
   variantId?: number | null;
   productId?: number | null;
   size?: string | null;
@@ -32,6 +33,7 @@ function MenCatalogue() {
     categoryFilter: product.subcategory_name ?? "Tout",
     image: product.image ?? "",
     alt: product.alt_text ?? product.name,
+    focalPoint: product.focal_point,
     badge: isRecentlyAdded(product.created_at) ? "NOUVEAU" : undefined,
     variantId: product.id_variant,
     productId: product.id_product,

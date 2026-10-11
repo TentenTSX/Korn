@@ -1,5 +1,6 @@
 import { Link } from "react-router";
 import { useProducts } from "../../../hooks/useProducts";
+import { focalPointStyle } from "../../../utils/focalPoint";
 import { isRecentlyAdded } from "../../../utils/productFreshness";
 import AddToCartButton from "../../cart/AddToCartButton";
 import "./HomeNews.css";
@@ -36,6 +37,7 @@ function HomeNews() {
                   <img
                     src={product.image}
                     alt={product.alt_text ?? product.name}
+                    style={focalPointStyle(product.focal_point)}
                   />
                 )}
                 <span className="home-news-badge">NOUVEAU</span>

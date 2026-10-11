@@ -1,5 +1,6 @@
 import { Link } from "react-router";
 import { COLOR_SWATCHES } from "../../../../utils/colorSwatches";
+import { focalPointStyle } from "../../../../utils/focalPoint";
 import AddToCartButton from "../../../cart/AddToCartButton";
 import "./GirlProductCard.css";
 
@@ -10,6 +11,7 @@ type GirlProductCardProps = {
   badge?: string;
   image: string;
   alt: string;
+  focalPoint?: string | null;
   variantId?: number | null;
   productId?: number | null;
   size?: string | null;
@@ -25,6 +27,7 @@ function GirlProductCard({
   badge,
   image,
   alt,
+  focalPoint,
   variantId,
   productId,
   size,
@@ -38,7 +41,9 @@ function GirlProductCard({
         className="girl-product-card-image"
         to={productId ? `/product/${productId}` : "/collection"}
       >
-        {image && <img src={image} alt={alt} />}
+        {image && (
+          <img src={image} alt={alt} style={focalPointStyle(focalPoint)} />
+        )}
         {badge && <span className="girl-product-card-badge">{badge}</span>}
       </Link>
       <div className="girl-product-card-info">
