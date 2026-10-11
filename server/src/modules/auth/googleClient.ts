@@ -12,11 +12,12 @@ function getClient() {
   return new OAuth2Client(clientId, clientSecret, redirectUri);
 }
 
-const getAuthUrl = () =>
+const getAuthUrl = (state: string) =>
   getClient().generateAuthUrl({
     access_type: "online",
     scope: ["openid", "email", "profile"],
     prompt: "select_account",
+    state,
   });
 
 type GoogleProfile = {
