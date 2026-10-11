@@ -2,6 +2,7 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { RouterProvider, createBrowserRouter } from "react-router";
 import App from "./App";
+import { AuthProvider } from "./contexts/AuthContext";
 import { CartProvider } from "./contexts/CartContext";
 import Cart from "./pages/Cart/Cart";
 import Checkout from "./pages/Checkout/Checkout";
@@ -88,8 +89,10 @@ if (rootElement == null) {
 
 createRoot(rootElement).render(
   <StrictMode>
-    <CartProvider>
-      <RouterProvider router={router} />
-    </CartProvider>
+    <AuthProvider>
+      <CartProvider>
+        <RouterProvider router={router} />
+      </CartProvider>
+    </AuthProvider>
   </StrictMode>,
 );

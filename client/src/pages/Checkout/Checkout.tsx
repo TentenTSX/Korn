@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import type { ChangeEvent, FormEvent } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router";
+import { useAuthContext } from "../../contexts/AuthContext";
 import { useCartContext } from "../../contexts/CartContext";
 import { useDocumentHead } from "../../hooks/useDocumentHead";
 import { usePaymentSession } from "../../hooks/usePaymentSession";
@@ -17,14 +18,8 @@ function Checkout() {
     title: "Commande",
     description: "Finalisez votre commande Korn en toute sécurité avec Stripe.",
   });
-  const {
-    user,
-    isAuthLoading,
-    items,
-    isLoading,
-    error: cartError,
-    checkout,
-  } = useCartContext();
+  const { user, isLoading: isAuthLoading } = useAuthContext();
+  const { items, isLoading, error: cartError, checkout } = useCartContext();
   const stripeSessionId = searchParams.get("session_id");
   const isPaymentCancelled = searchParams.get("cancelled") === "1";
   const [shipping, setShipping] = useState<ShippingInput>({
