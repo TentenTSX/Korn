@@ -1,5 +1,6 @@
 import { Link } from "react-router";
 import { COLOR_SWATCHES } from "../../../utils/colorSwatches";
+import { currency as money } from "../../../utils/currency";
 import { focalPointStyle } from "../../../utils/focalPoint";
 import AddToCartButton from "../../cart/AddToCartButton";
 import "./CatalogueProductCard.css";
@@ -7,7 +8,7 @@ import "./CatalogueProductCard.css";
 type CatalogueProductCardProps = {
   name: string;
   category: string;
-  price: string;
+  price: number;
   badge?: string;
   image: string;
   alt: string;
@@ -76,7 +77,7 @@ function CatalogueProductCard({
             </div>
           )}
         </div>
-        <strong>{price}</strong>
+        <strong>{money.format(price)}</strong>
       </div>
       <AddToCartButton
         variantId={variantId ?? undefined}

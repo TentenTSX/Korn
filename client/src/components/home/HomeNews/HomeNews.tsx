@@ -1,6 +1,7 @@
 import { Link } from "react-router";
 import { useProducts } from "../../../hooks/useProducts";
 import { COLOR_SWATCHES } from "../../../utils/colorSwatches";
+import { currency as money } from "../../../utils/currency";
 import { focalPointStyle } from "../../../utils/focalPoint";
 import { isRecentlyAdded } from "../../../utils/productFreshness";
 import AddToCartButton from "../../cart/AddToCartButton";
@@ -54,7 +55,9 @@ function HomeNews() {
               to={`/product/${product.id_product}`}
             >
               <h3>{product.name}</h3>
-              <span className="home-news-price">{product.price} €</span>
+              <span className="home-news-price">
+                {money.format(Number(product.price))}
+              </span>
               <p>{product.description ?? product.category_name}</p>
               {product.colors && product.colors.length > 1 && (
                 <div

@@ -1,6 +1,7 @@
 import { Link } from "react-router";
 import { useProducts } from "../../../hooks/useProducts";
 import { COLOR_SWATCHES } from "../../../utils/colorSwatches";
+import { currency as money } from "../../../utils/currency";
 import { focalPointStyle } from "../../../utils/focalPoint";
 import AddToCartButton from "../../cart/AddToCartButton";
 import "./HomeBestSeller.css";
@@ -58,7 +59,9 @@ function HomeBestSeller() {
               to={`/product/${product.id_product}`}
             >
               <h3>{product.name}</h3>
-              <span className="home-best-sellers-price">{product.price} €</span>
+              <span className="home-best-sellers-price">
+                {money.format(Number(product.price))}
+              </span>
               <p>{product.description ?? product.category_name}</p>
               {product.colors && product.colors.length > 1 && (
                 <div
