@@ -1,6 +1,16 @@
 import databaseClient from "../../../database/client";
 import type { Result, Rows } from "../../../database/client";
+import { ACTIVE_DISCOUNT_PERCENT_SQL } from "../salePeriod/activeDiscountSql";
 import type CartOwner from "./CartOwner";
+
+// The effective unit price: the active sale's discount applied to the
+// variant's base price, or the base price unchanged when no sale is
+// running. This is what the customer actually pays, so it's what cart
+// display and checkout totals use.
+const EFFECTIVE_PRICE_SQL = `case when ${ACTIVE_DISCOUNT_PERCENT_SQL} is not null
+  then round(pv.price * (1 - ${ACTIVE_DISCOUNT_PERCENT_SQL} / 100), 2)
+  else pv.price
+end`;
 
 function ownerFilter(owner: CartOwner, alias = "c") {
   return owner.kind === "user"
@@ -40,7 +50,7 @@ class CartRepository {
   async findCheckoutItems(owner: CartOwner) {
     const filter = ownerFilter(owner);
     const [rows] = await databaseClient.query<Rows>(
-      `select ci.variant_id, ci.quantity, pv.price as price_unit, pv.stock_quantity, p.name, pv.size, pv.color from carts c join cart_items ci on ci.cart_id = c.id_cart join product_variants pv on pv.id_variant = ci.variant_id join products p on p.id_product = pv.product_id where ${filter.clause}`,
+      `select ci.variant_id, ci.quantity, ${EFFECTIVE_PRICE_SQL} as price_unit, pv.stock_quantity, p.name, pv.size, pv.color from carts c join cart_items ci on ci.cart_id = c.id_cart join product_variants pv on pv.id_variant = ci.variant_id join products p on p.id_product = pv.product_id where ${filter.clause}`,
       [filter.value],
     );
     return rows as Array<{
@@ -57,7 +67,7 @@ class CartRepository {
   async findByOwner(owner: CartOwner) {
     const filter = ownerFilter(owner);
     const [rows] = await databaseClient.query<Rows>(
-      `select c.id_cart, ci.id_cart_item, ci.variant_id, ci.quantity, pv.price as price_unit, p.id_product, p.name, pv.size, pv.color, pv.stock_quantity, (select pi.url from product_images pi where pi.product_id = p.id_product and (pi.color = pv.color or pi.color is null) order by (pi.color = pv.color) desc, pi.position limit 1) as image from carts c join cart_items ci on ci.cart_id = c.id_cart join product_variants pv on pv.id_variant = ci.variant_id join products p on p.id_product = pv.product_id where ${filter.clause}`,
+      `select c.id_cart, ci.id_cart_item, ci.variant_id, ci.quantity, ${EFFECTIVE_PRICE_SQL} as price_unit, p.id_product, p.name, pv.size, pv.color, pv.stock_quantity, (select pi.url from product_images pi where pi.product_id = p.id_product and (pi.color = pv.color or pi.color is null) order by (pi.color = pv.color) desc, pi.position limit 1) as image from carts c join cart_items ci on ci.cart_id = c.id_cart join product_variants pv on pv.id_variant = ci.variant_id join products p on p.id_product = pv.product_id where ${filter.clause}`,
       [filter.value],
     );
     return rows;

@@ -38,6 +38,7 @@ type CatalogueProduct = {
   name: string;
   category: string;
   price: number;
+  salePrice: number | null;
   badge?: string;
   isBestseller: boolean;
   categoryFilter: string;
@@ -82,6 +83,7 @@ function Catalogue({ gender }: CatalogueProps) {
       product.description ??
       (gender ? `Collection ${gender}` : "Collection Korn"),
     price: Number(product.price),
+    salePrice: product.sale_price != null ? Number(product.sale_price) : null,
     categoryFilter:
       (gender ? product.subcategory_name : product.category_name) ?? "Tout",
     image: product.image ?? "",
@@ -101,30 +103,30 @@ function Catalogue({ gender }: CatalogueProps) {
     if (!gender) setActiveFilter(routeFilter ?? "Tout");
   }, [routeFilter, gender]);
 
-  // No product carries a real discounted price yet, so there is nothing
-  // genuine to show under "Soldes" regardless of whether a sale period is
-  // currently running; the catalogue shows an explanatory message instead.
   const visibleProducts =
-    !gender && activeFilter === "Soldes"
-      ? []
-      : activeFilter === "Tout"
-        ? uniqueProducts
-        : uniqueProducts.filter((product) => {
-            if (!gender && activeFilter === "Nouveautés") {
-              return product.badge === "NOUVEAU";
-            }
-            if (!gender && activeFilter === "Bestsellers") {
-              return product.isBestseller;
-            }
-            return product.categoryFilter === activeFilter;
-          });
+    activeFilter === "Tout"
+      ? uniqueProducts
+      : uniqueProducts.filter((product) => {
+          if (!gender && activeFilter === "Nouveautés") {
+            return product.badge === "NOUVEAU";
+          }
+          if (!gender && activeFilter === "Bestsellers") {
+            return product.isBestseller;
+          }
+          if (!gender && activeFilter === "Soldes") {
+            return product.salePrice != null;
+          }
+          return product.categoryFilter === activeFilter;
+        });
   const sortedProducts = [...visibleProducts].sort(
     (firstProduct, secondProduct) => {
+      const firstPrice = firstProduct.salePrice ?? firstProduct.price;
+      const secondPrice = secondProduct.salePrice ?? secondProduct.price;
       if (sort === "price-low") {
-        return firstProduct.price - secondProduct.price;
+        return firstPrice - secondPrice;
       }
       if (sort === "price-high") {
-        return secondProduct.price - firstProduct.price;
+        return secondPrice - firstPrice;
       }
       return 0;
     },

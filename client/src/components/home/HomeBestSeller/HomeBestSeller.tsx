@@ -59,9 +59,18 @@ function HomeBestSeller() {
               to={`/product/${product.id_product}`}
             >
               <h3>{product.name}</h3>
-              <span className="home-best-sellers-price">
-                {money.format(Number(product.price))}
-              </span>
+              {product.sale_price != null ? (
+                <span className="home-best-sellers-price home-best-sellers-price-sale">
+                  <span className="home-best-sellers-price-original">
+                    {money.format(Number(product.price))}
+                  </span>
+                  {money.format(Number(product.sale_price))}
+                </span>
+              ) : (
+                <span className="home-best-sellers-price">
+                  {money.format(Number(product.price))}
+                </span>
+              )}
               <p>{product.description ?? product.category_name}</p>
               {product.colors && product.colors.length > 1 && (
                 <div

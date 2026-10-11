@@ -163,6 +163,20 @@
   font-weight: 900;
 }
 
+.home-best-sellers-price-sale {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  color: var(--color-sale);
+}
+
+.home-best-sellers-price-original {
+  color: var(--color-muted);
+  font-size: 0.75rem;
+  font-weight: 400;
+  text-decoration: line-through;
+}
+
 .home-best-sellers-colors {
   display: flex;
   flex-wrap: wrap;

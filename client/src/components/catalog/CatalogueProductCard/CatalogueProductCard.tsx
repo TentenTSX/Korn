@@ -9,6 +9,7 @@ type CatalogueProductCardProps = {
   name: string;
   category: string;
   price: number;
+  salePrice?: number | null;
   badge?: string;
   image: string;
   alt: string;
@@ -25,6 +26,7 @@ function CatalogueProductCard({
   name,
   category,
   price,
+  salePrice,
   badge,
   image,
   alt,
@@ -77,7 +79,16 @@ function CatalogueProductCard({
             </div>
           )}
         </div>
-        <strong>{money.format(price)}</strong>
+        {salePrice != null ? (
+          <strong className="catalogue-product-card-price-sale">
+            <span className="catalogue-product-card-price-original">
+              {money.format(price)}
+            </span>
+            {money.format(salePrice)}
+          </strong>
+        ) : (
+          <strong>{money.format(price)}</strong>
+        )}
       </div>
       <AddToCartButton
         variantId={variantId ?? undefined}
