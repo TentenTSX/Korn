@@ -76,7 +76,13 @@ function OrderDetail() {
               key={`${item.id_product}-${item.size}-${item.color}`}
             >
               {item.image ? (
-                <img src={item.image} alt={item.name} />
+                <img
+                  src={item.image}
+                  alt={item.name}
+                  width={805}
+                  height={1200}
+                  loading="lazy"
+                />
               ) : (
                 <div className="order-detail-image-placeholder" />
               )}

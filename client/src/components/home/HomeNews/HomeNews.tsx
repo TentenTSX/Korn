@@ -38,6 +38,9 @@ function HomeNews() {
                     src={product.image}
                     alt={product.alt_text ?? product.name}
                     style={focalPointStyle(product.focal_point)}
+                    width={805}
+                    height={1200}
+                    loading="lazy"
                   />
                 )}
                 <span className="home-news-badge">NOUVEAU</span>

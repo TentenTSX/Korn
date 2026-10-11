@@ -20,7 +20,13 @@ function CartLineItem({
   return (
     <article className="cart-view-item">
       {item.image ? (
-        <img src={item.image} alt={item.name} />
+        <img
+          src={item.image}
+          alt={item.name}
+          width={805}
+          height={1200}
+          loading="lazy"
+        />
       ) : (
         <div className="cart-item-image-placeholder" />
       )}

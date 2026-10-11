@@ -13,6 +13,9 @@ function NotFound() {
       <img
         src="https://images.unsplash.com/photo-1483721310020-03333e577078?w=1800&h=1400&fit=crop&auto=format"
         alt=""
+        width={1800}
+        height={1400}
+        loading="lazy"
       />
       <div className="not-found-content">
         <i className="not-found-eyebrow">Erreur 404</i>

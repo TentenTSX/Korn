@@ -73,7 +73,15 @@ function NavbarSearch({
               onClick={onClose}
             >
               <span className="Navbar-search-result-image">
-                {product.image && <img src={product.image} alt="" />}
+                {product.image && (
+                  <img
+                    src={product.image}
+                    alt=""
+                    width={805}
+                    height={1200}
+                    loading="lazy"
+                  />
+                )}
               </span>
               <span className="Navbar-search-result-info">
                 <span className="Navbar-search-result-name">

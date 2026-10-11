@@ -42,7 +42,14 @@ function CatalogueProductCard({
         to={productId ? `/product/${productId}` : "/collection"}
       >
         {image && (
-          <img src={image} alt={alt} style={focalPointStyle(focalPoint)} />
+          <img
+            src={image}
+            alt={alt}
+            style={focalPointStyle(focalPoint)}
+            width={805}
+            height={1200}
+            loading="lazy"
+          />
         )}
         {badge && <span className="catalogue-product-card-badge">{badge}</span>}
       </Link>

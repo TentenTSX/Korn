@@ -24,8 +24,11 @@ function HomeStory() {
 
       <div className="home-story-media">
         <img
-          src="/images/hero/woman-black-set-side.jpg"
+          src="/images/hero/woman-black-set-side.webp"
           alt="Femme portant une tenue de sport dans un stade"
+          width={805}
+          height={1200}
+          loading="lazy"
         />
       </div>
     </section>

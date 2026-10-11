@@ -16,7 +16,13 @@ function CheckoutSummary({ items, total }: CheckoutSummaryProps) {
         {items.map((item) => (
           <article className="checkout-summary-item" key={item.id_cart_item}>
             {item.image ? (
-              <img src={item.image} alt={item.name} />
+              <img
+                src={item.image}
+                alt={item.name}
+                width={805}
+                height={1200}
+                loading="lazy"
+              />
             ) : (
               <div className="checkout-image-placeholder" />
             )}
