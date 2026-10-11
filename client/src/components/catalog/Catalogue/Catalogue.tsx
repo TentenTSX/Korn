@@ -74,7 +74,9 @@ function Catalogue({ gender }: CatalogueProps) {
   const bestsellerIds = new Set(
     bestsellerProducts.map((product) => product.id_product),
   );
-  const products: CatalogueProduct[] = apiProducts.map((product) => ({
+  // The API already returns one row per product (with its full colors
+  // list), so no dedup pass is needed here.
+  const uniqueProducts: CatalogueProduct[] = apiProducts.map((product) => ({
     name: product.name,
     category:
       product.description ??
@@ -91,30 +93,9 @@ function Catalogue({ gender }: CatalogueProps) {
     productId: product.id_product,
     size: product.size,
     color: product.color,
+    colors: product.colors ?? [],
     stockQuantity: product.stock_quantity,
   }));
-  // Each product can have many color/size variants; the grid shows one card
-  // per product (its first variant), color and size selection happens on
-  // the product page instead of duplicating a card per variant. Each card
-  // still lists the product's distinct colors as small pins.
-  const seenProductIds = new Set<number | null | undefined>();
-  const uniqueProducts = products
-    .filter((product) => {
-      if (seenProductIds.has(product.productId)) return false;
-      seenProductIds.add(product.productId);
-      return true;
-    })
-    .map((product) => ({
-      ...product,
-      colors: Array.from(
-        new Set(
-          products
-            .filter((variant) => variant.productId === product.productId)
-            .map((variant) => variant.color)
-            .filter((color): color is string => Boolean(color)),
-        ),
-      ),
-    }));
 
   useEffect(() => {
     if (!gender) setActiveFilter(routeFilter ?? "Tout");

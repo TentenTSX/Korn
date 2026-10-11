@@ -26,12 +26,7 @@ export function useSearchSuggestions(query: string) {
       )
         .then((results) => {
           if (isCancelled) return;
-          const uniqueProducts = Array.from(
-            new Map(
-              results.map((product) => [product.id_product, product]),
-            ).values(),
-          ).slice(0, MAX_SUGGESTIONS);
-          setSuggestions(uniqueProducts);
+          setSuggestions(results.slice(0, MAX_SUGGESTIONS));
         })
         .catch(() => {
           if (!isCancelled) setSuggestions([]);

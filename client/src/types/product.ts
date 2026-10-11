@@ -20,5 +20,9 @@ export type Product = {
   // be cropped to emphasize whichever garment that product actually sells.
   focal_point: string | null;
   gallery?: Array<{ url: string; focal_point: string | null }>;
+  // Every distinct color the product comes in. Only present on results from
+  // GET /api/products (one row per product); findById returns one row per
+  // variant instead, so `color` alone already identifies each row there.
+  colors?: string[];
   created_at: string;
 };

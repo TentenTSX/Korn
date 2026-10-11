@@ -6,9 +6,7 @@ import "./HomeBestSeller.css";
 
 function HomeBestSeller() {
   const { products } = useProducts("sort=bestsellers");
-  const uniqueProducts = Array.from(
-    new Map(products.map((product) => [product.id_product, product])).values(),
-  ).slice(0, 3);
+  const uniqueProducts = products.slice(0, 3);
 
   if (uniqueProducts.length === 0) return null;
 

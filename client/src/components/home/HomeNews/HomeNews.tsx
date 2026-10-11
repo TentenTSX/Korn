@@ -7,14 +7,9 @@ import "./HomeNews.css";
 
 function HomeNews() {
   const { products } = useProducts();
-  const recentProducts = products.filter((product) =>
-    isRecentlyAdded(product.created_at),
-  );
-  const uniqueProducts = Array.from(
-    new Map(
-      recentProducts.map((product) => [product.id_product, product]),
-    ).values(),
-  ).slice(0, 4);
+  const uniqueProducts = products
+    .filter((product) => isRecentlyAdded(product.created_at))
+    .slice(0, 4);
 
   return (
     <section className="home-news" aria-labelledby="home-news-title">
