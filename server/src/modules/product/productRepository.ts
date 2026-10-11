@@ -80,7 +80,11 @@ class ProductRepository {
 
   async findById(id: number) {
     const [rows] = await databaseClient.query<Rows>(
-      "select p.*, pv.id_variant, pv.size, pv.color, pv.price, pv.stock_quantity, (select pi.url from product_images pi where pi.product_id = p.id_product and (pi.color = pv.color or pi.color is null) order by (pi.color = pv.color) desc, pi.position limit 1) as image, (select pi.alt_text from product_images pi where pi.product_id = p.id_product and (pi.color = pv.color or pi.color is null) order by (pi.color = pv.color) desc, pi.position limit 1) as alt_text, (select pi.focal_point from product_images pi where pi.product_id = p.id_product and (pi.color = pv.color or pi.color is null) order by (pi.color = pv.color) desc, pi.position limit 1) as focal_point from products p left join product_variants pv on pv.product_id = p.id_product where p.id_product = ?",
+      `select p.*, pv.id_variant, pv.size, pv.color, pv.price, pv.stock_quantity,
+        (select pi.url from product_images pi where pi.product_id = p.id_product and (pi.color = pv.color or pi.color is null) order by (pi.color = pv.color) desc, pi.position limit 1) as image,
+        (select pi.alt_text from product_images pi where pi.product_id = p.id_product and (pi.color = pv.color or pi.color is null) order by (pi.color = pv.color) desc, pi.position limit 1) as alt_text,
+        (select pi.focal_point from product_images pi where pi.product_id = p.id_product and (pi.color = pv.color or pi.color is null) order by (pi.color = pv.color) desc, pi.position limit 1) as focal_point
+      from products p left join product_variants pv on pv.product_id = p.id_product where p.id_product = ?`,
       [id],
     );
     if (rows.length === 0) return rows;

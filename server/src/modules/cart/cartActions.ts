@@ -1,5 +1,6 @@
 import ActionError from "../ActionError";
 import orderRepository from "../order/orderRepository";
+import salePeriodRepository from "../salePeriod/salePeriodRepository";
 import type CartOwner from "./CartOwner";
 import cartRepository from "./cartRepository";
 
@@ -72,6 +73,37 @@ const deleteCartItemAction = async (owner: CartOwner, itemIdValue: number) => {
     throw new ActionError("NOT_FOUND", "Article introuvable.");
 };
 
+const getPromoCodeStatusAction = async (owner: CartOwner) => {
+  validateOwner(owner);
+  const status = await cartRepository.findPromoCodeStatus(owner);
+  return {
+    code: status?.discount_percent != null ? (status.code ?? null) : null,
+    discountPercent: status?.discount_percent ?? null,
+  };
+};
+
+const applyPromoCodeAction = async (owner: CartOwner, codeInput: unknown) => {
+  validateOwner(owner);
+  if (typeof codeInput !== "string" || !codeInput.trim()) {
+    throw new ActionError("BAD_REQUEST", "Code promo invalide.");
+  }
+  const code = codeInput.trim().toUpperCase();
+  const salePeriod = await salePeriodRepository.findActiveByCode(code);
+  if (!salePeriod) {
+    throw new ActionError(
+      "NOT_FOUND",
+      "Ce code promo n'est pas valide ou a expiré.",
+    );
+  }
+  await cartRepository.setPromoCode(owner, code);
+  return { discountPercent: salePeriod.discount_percent };
+};
+
+const removePromoCodeAction = async (owner: CartOwner) => {
+  validateOwner(owner);
+  await cartRepository.clearPromoCode(owner);
+};
+
 const mergeGuestCartAction = async (
   guestTokenHash: string,
   userId: number,
@@ -92,5 +124,8 @@ export default {
   addCartItemAction,
   updateCartItemAction,
   deleteCartItemAction,
+  getPromoCodeStatusAction,
+  applyPromoCodeAction,
+  removePromoCodeAction,
   mergeGuestCartAction,
 };

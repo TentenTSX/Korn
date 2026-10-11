@@ -1,0 +1,28 @@
+.sale-banner {
+  padding: var(--space-2) var(--space-4);
+  background: var(--color-ink);
+  color: var(--color-surface);
+  text-align: center;
+}
+
+.sale-banner p {
+  margin: 0;
+  font-family: var(--font-third);
+  font-size: 0.8rem;
+  letter-spacing: 0.03em;
+}
+
+.sale-banner-code {
+  padding: 0.1em 0.5em;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: 2px;
+  font-family: var(--font-body);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+@media (max-width: 520px) {
+  .sale-banner p {
+    font-size: 0.72rem;
+  }
+}

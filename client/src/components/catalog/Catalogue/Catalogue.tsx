@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, useSearchParams } from "react-router";
+import { useActiveSale } from "../../../hooks/useActiveSale";
 import { useProducts } from "../../../hooks/useProducts";
 import { isRecentlyAdded } from "../../../utils/productFreshness";
 import CatalogueFilters from "../CatalogueFilters/CatalogueFilters";
@@ -53,6 +54,7 @@ type CatalogueProduct = {
 };
 
 function Catalogue({ gender }: CatalogueProps) {
+  const activeSale = useActiveSale();
   const { filter } = useParams();
   const [searchParams] = useSearchParams();
   const search = gender ? "" : (searchParams.get("search")?.trim() ?? "");
@@ -101,9 +103,9 @@ function Catalogue({ gender }: CatalogueProps) {
     if (!gender) setActiveFilter(routeFilter ?? "Tout");
   }, [routeFilter, gender]);
 
-  // No product carries a real discounted price yet, so there is nothing
-  // genuine to show under "Soldes" regardless of whether a sale period is
-  // currently running; the catalogue shows an explanatory message instead.
+  // The sale discount is applied via a promo code entered in the cart, not
+  // per product, so there is nothing to list under "Soldes" — the catalogue
+  // points shoppers at the code instead.
   const visibleProducts =
     !gender && activeFilter === "Soldes"
       ? []
@@ -149,7 +151,9 @@ function Catalogue({ gender }: CatalogueProps) {
         {visibleProducts.length === 0 ? (
           <p className="catalogue-empty-state">
             {!gender && activeFilter === "Soldes"
-              ? "Nous ne sommes pas en période de solde, veuillez revenir plus tard."
+              ? activeSale
+                ? `Utilisez le code ${activeSale.code} dans votre panier pour profiter de -${activeSale.discount_percent}% sur votre commande.`
+                : "Nous ne sommes pas en période de solde, veuillez revenir plus tard."
               : search
                 ? `Aucun résultat pour "${search}".`
                 : "Aucun produit ne correspond à ce filtre."}

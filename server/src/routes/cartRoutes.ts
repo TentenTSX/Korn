@@ -29,6 +29,40 @@ router.post(
   }),
 );
 
+router.get(
+  "/api/cart/promo-code",
+  authenticateOptional,
+  runAction(async (req, res) => {
+    res.json(
+      await cartActions.getPromoCodeStatusAction(
+        currentCartOwner(req, res, false),
+      ),
+    );
+  }),
+);
+
+router.post(
+  "/api/cart/promo-code",
+  authenticateOptional,
+  runAction(async (req, res) => {
+    res.json(
+      await cartActions.applyPromoCodeAction(
+        currentCartOwner(req, res, true),
+        req.body?.code,
+      ),
+    );
+  }),
+);
+
+router.delete(
+  "/api/cart/promo-code",
+  authenticateOptional,
+  runAction(async (req, res) => {
+    await cartActions.removePromoCodeAction(currentCartOwner(req, res, false));
+    res.sendStatus(204);
+  }),
+);
+
 router.patch(
   "/api/cart/items/:itemId",
   authenticateOptional,
