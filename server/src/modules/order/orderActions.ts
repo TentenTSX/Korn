@@ -137,30 +137,8 @@ const createOrderAction = async (owner: CartOwner, input: CheckoutInput) => {
   return { orderId, totalPrice, items: orderItems };
 };
 
-const updateOrderStatusAction = async (
-  userId: number,
-  authenticatedUserId: number,
-  orderIdValue: number,
-  status: unknown,
-) => {
-  assertOwner(userId, authenticatedUserId);
-  const orderId = parseId(orderIdValue, "Commande");
-  if (typeof status !== "string" || !status.trim()) {
-    throw new ActionError("BAD_REQUEST", "Statut invalide.");
-  }
-  const affectedRows = await orderRepository.updateStatus(
-    userId,
-    orderId,
-    status.trim(),
-  );
-  if (affectedRows === 0) {
-    throw new ActionError("NOT_FOUND", "Commande introuvable.");
-  }
-};
-
 export default {
   getOrdersAction,
   getOrderAction,
   createOrderAction,
-  updateOrderStatusAction,
 };
