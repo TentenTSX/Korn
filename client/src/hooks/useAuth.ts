@@ -41,5 +41,26 @@ export function useAuth() {
     setUser(null);
   };
 
-  return { user, isLoading, login, register, logout, refreshUser };
+  const requestPasswordReset = (email: string) =>
+    apiRequest<void>("/api/auth/password-reset/request", {
+      method: "POST",
+      body: JSON.stringify({ email }),
+    });
+
+  const confirmPasswordReset = (token: string, password: string) =>
+    apiRequest<void>("/api/auth/password-reset/confirm", {
+      method: "POST",
+      body: JSON.stringify({ token, password }),
+    });
+
+  return {
+    user,
+    isLoading,
+    login,
+    register,
+    logout,
+    refreshUser,
+    requestPasswordReset,
+    confirmPasswordReset,
+  };
 }

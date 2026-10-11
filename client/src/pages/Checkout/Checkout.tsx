@@ -3,8 +3,8 @@ import type { ChangeEvent, FormEvent } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router";
 import { useCartContext } from "../../contexts/CartContext";
 import { useDocumentHead } from "../../hooks/useDocumentHead";
-import { apiRequest } from "../../services/api";
-import type { ShippingInput, StripeCheckoutStatus } from "../../types/cart";
+import { usePaymentSession } from "../../hooks/usePaymentSession";
+import type { ShippingInput } from "../../types/cart";
 import CheckoutConfirmation from "./CheckoutConfirmation";
 import CheckoutForm from "./CheckoutForm";
 import CheckoutSummary from "./CheckoutSummary";
@@ -37,10 +37,12 @@ function Checkout() {
     shipping_country: "France",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isCheckingPayment, setIsCheckingPayment] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [paymentResult, setPaymentResult] =
-    useState<StripeCheckoutStatus | null>(null);
+  const {
+    paymentResult,
+    isLoading: isCheckingPayment,
+    error: paymentError,
+  } = usePaymentSession(stripeSessionId);
   const total = items.reduce(
     (sum, item) => sum + Number(item.price_unit) * item.quantity,
     0,
@@ -55,34 +57,6 @@ function Checkout() {
       shipping_last_name: current.shipping_last_name || user.last_name,
     }));
   }, [user]);
-
-  useEffect(() => {
-    if (!stripeSessionId) return;
-    let isCurrent = true;
-    setIsCheckingPayment(true);
-    setError(null);
-    apiRequest<StripeCheckoutStatus>(
-      `/api/payments/stripe/session?session_id=${encodeURIComponent(stripeSessionId)}`,
-    )
-      .then((result) => {
-        if (isCurrent) setPaymentResult(result);
-      })
-      .catch((requestError: unknown) => {
-        if (isCurrent) {
-          setError(
-            requestError instanceof Error
-              ? requestError.message
-              : "Impossible de vérifier le paiement.",
-          );
-        }
-      })
-      .finally(() => {
-        if (isCurrent) setIsCheckingPayment(false);
-      });
-    return () => {
-      isCurrent = false;
-    };
-  }, [stripeSessionId]);
 
   const handleChange =
     (field: keyof ShippingInput) => (event: ChangeEvent<HTMLInputElement>) => {
@@ -115,7 +89,7 @@ function Checkout() {
     );
   }
 
-  if (stripeSessionId && !paymentResult && !error) {
+  if (stripeSessionId && !paymentResult && !paymentError) {
     return (
       <main className="checkout-page">
         <p>Vérification du paiement Stripe...</p>
@@ -145,11 +119,11 @@ function Checkout() {
     );
   }
 
-  if (error && stripeSessionId) {
+  if (paymentError && stripeSessionId) {
     return (
       <main className="checkout-page">
         <p className="checkout-error" role="alert">
-          {error}
+          {paymentError}
         </p>
         <Link className="checkout-secondary-link" to="/collection">
           Continuer mes achats

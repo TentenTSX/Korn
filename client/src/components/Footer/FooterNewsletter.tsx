@@ -1,33 +1,15 @@
 import { useState } from "react";
 import type { FormEvent } from "react";
-import { apiRequest } from "../../services/api";
+import { useNewsletterSubscribe } from "../../hooks/useNewsletterSubscribe";
 
 function FooterNewsletter() {
   const [email, setEmail] = useState("");
-  const [status, setStatus] = useState<"idle" | "loading" | "done" | "error">(
-    "idle",
-  );
-  const [error, setError] = useState<string | null>(null);
+  const { status, error, subscribe } = useNewsletterSubscribe();
 
   const handleSubscribe = async (event: FormEvent) => {
     event.preventDefault();
-    setStatus("loading");
-    setError(null);
-    try {
-      await apiRequest<void>("/api/newsletter/subscribe", {
-        method: "POST",
-        body: JSON.stringify({ email }),
-      });
-      setStatus("done");
-      setEmail("");
-    } catch (requestError) {
-      setStatus("error");
-      setError(
-        requestError instanceof Error
-          ? requestError.message
-          : "L'inscription a échoué.",
-      );
-    }
+    const success = await subscribe(email);
+    if (success) setEmail("");
   };
 
   return (
