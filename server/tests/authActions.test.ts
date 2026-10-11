@@ -171,6 +171,149 @@ describe("authActions.getProfile", () => {
   });
 });
 
+describe("authActions.updateProfileAction", () => {
+  test("rejects when the authenticated user does not match", async () => {
+    await expect(
+      authActions.updateProfileAction(1, 2, {
+        first_name: "Ada",
+        last_name: "Lovelace",
+        email: "ada@example.com",
+      }),
+    ).rejects.toMatchObject({ code: "FORBIDDEN" });
+  });
+
+  test("rejects missing fields", async () => {
+    await expect(
+      authActions.updateProfileAction(1, 1, {
+        first_name: "",
+        last_name: "Lovelace",
+        email: "ada@example.com",
+      }),
+    ).rejects.toMatchObject({ code: "BAD_REQUEST" });
+  });
+
+  test("rejects an invalid email address", async () => {
+    await expect(
+      authActions.updateProfileAction(1, 1, {
+        first_name: "Ada",
+        last_name: "Lovelace",
+        email: "not-an-email",
+      }),
+    ).rejects.toMatchObject({ code: "BAD_REQUEST" });
+  });
+
+  test("rejects when another account already uses the requested email", async () => {
+    jest
+      .spyOn(authRepository, "findByEmail")
+      .mockResolvedValue(buildUser({ id_user: 2 }));
+
+    await expect(
+      authActions.updateProfileAction(1, 1, {
+        first_name: "Ada",
+        last_name: "Lovelace",
+        email: "taken@example.com",
+      }),
+    ).rejects.toMatchObject({ code: "CONFLICT" });
+  });
+
+  test("updates the profile and returns the refreshed user", async () => {
+    jest.spyOn(authRepository, "findByEmail").mockResolvedValue(undefined);
+    const updateSpy = jest
+      .spyOn(authRepository, "updateProfile")
+      .mockResolvedValue(undefined);
+    jest
+      .spyOn(authRepository, "findById")
+      .mockResolvedValue(
+        buildUser({ first_name: "Grace", email: "grace@example.com" }),
+      );
+
+    const result = await authActions.updateProfileAction(1, 1, {
+      first_name: "Grace",
+      last_name: "Hopper",
+      email: "GRACE@Example.com",
+    });
+
+    expect(updateSpy).toHaveBeenCalledWith(1, {
+      first_name: "Grace",
+      last_name: "Hopper",
+      email: "grace@example.com",
+    });
+    expect(result.first_name).toBe("Grace");
+  });
+});
+
+describe("authActions.changePasswordAction", () => {
+  test("rejects when the authenticated user does not match", async () => {
+    await expect(
+      authActions.changePasswordAction(1, 2, "old-password", "new-password1"),
+    ).rejects.toMatchObject({ code: "FORBIDDEN" });
+  });
+
+  test("rejects a missing current password or a short new password", async () => {
+    await expect(
+      authActions.changePasswordAction(1, 1, "", "new-password1"),
+    ).rejects.toMatchObject({ code: "BAD_REQUEST" });
+
+    await expect(
+      authActions.changePasswordAction(1, 1, "old-password", "short"),
+    ).rejects.toMatchObject({ code: "BAD_REQUEST" });
+  });
+
+  test("rejects an incorrect current password", async () => {
+    const passwordHash = await argon2.hash("correct-password");
+    jest
+      .spyOn(authRepository, "findCredentialsById")
+      .mockResolvedValue({ password_hash: passwordHash });
+
+    await expect(
+      authActions.changePasswordAction(1, 1, "wrong-password", "new-password1"),
+    ).rejects.toMatchObject({ code: "UNAUTHORIZED" });
+  });
+
+  test("updates the password when the current password is correct", async () => {
+    const passwordHash = await argon2.hash("correct-password");
+    jest
+      .spyOn(authRepository, "findCredentialsById")
+      .mockResolvedValue({ password_hash: passwordHash });
+    const updateSpy = jest
+      .spyOn(authRepository, "updatePassword")
+      .mockResolvedValue(undefined);
+
+    await authActions.changePasswordAction(
+      1,
+      1,
+      "correct-password",
+      "new-password1",
+    );
+
+    expect(updateSpy).toHaveBeenCalledWith(1, expect.any(String));
+  });
+});
+
+describe("authActions.deleteAccountAction", () => {
+  test("rejects when the authenticated user does not match", async () => {
+    await expect(
+      authActions.deleteAccountAction(1, 2, "SUPPRIMER"),
+    ).rejects.toMatchObject({ code: "FORBIDDEN" });
+  });
+
+  test("rejects an incorrect confirmation phrase", async () => {
+    await expect(
+      authActions.deleteAccountAction(1, 1, "supprimer"),
+    ).rejects.toMatchObject({ code: "BAD_REQUEST" });
+  });
+
+  test("deletes the account when the confirmation phrase matches", async () => {
+    const deleteSpy = jest
+      .spyOn(authRepository, "deleteUser")
+      .mockResolvedValue(undefined);
+
+    await authActions.deleteAccountAction(1, 1, "SUPPRIMER");
+
+    expect(deleteSpy).toHaveBeenCalledWith(1);
+  });
+});
+
 describe("authActions.requestPasswordReset", () => {
   test("rejects an invalid email", async () => {
     await expect(

@@ -5,6 +5,7 @@ import {
   verifyOAuthState,
 } from "../middleware/googleOAuthState";
 import {
+  accountRateLimiter,
   loginRateLimiter,
   passwordResetRateLimiter,
 } from "../middleware/rateLimit";
@@ -110,6 +111,48 @@ router.get(
     res.json(
       await authActions.getProfile(currentUserId(req), Number(req.params.id)),
     );
+  }),
+);
+
+router.patch(
+  "/api/users/:id",
+  authenticate,
+  runAction(async (req, res) => {
+    res.json(
+      await authActions.updateProfileAction(
+        currentUserId(req),
+        Number(req.params.id),
+        req.body,
+      ),
+    );
+  }),
+);
+
+router.patch(
+  "/api/users/:id/password",
+  authenticate,
+  accountRateLimiter,
+  runAction(async (req, res) => {
+    await authActions.changePasswordAction(
+      currentUserId(req),
+      Number(req.params.id),
+      req.body?.current_password,
+      req.body?.new_password,
+    );
+    res.sendStatus(204);
+  }),
+);
+
+router.delete(
+  "/api/users/:id",
+  authenticate,
+  runAction(async (req, res) => {
+    await authActions.deleteAccountAction(
+      currentUserId(req),
+      Number(req.params.id),
+      req.body?.confirmation,
+    );
+    res.clearCookie("auth_token", cookieOptions).sendStatus(204);
   }),
 );
 

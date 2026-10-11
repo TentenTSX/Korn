@@ -41,6 +41,40 @@ export function useAuth() {
     setUser(null);
   };
 
+  const updateProfile = async (
+    input: Pick<User, "first_name" | "last_name" | "email">,
+  ) => {
+    if (!user) throw new Error("Authentification requise.");
+    const result = await apiRequest<User>(`/api/users/${user.id_user}`, {
+      method: "PATCH",
+      body: JSON.stringify(input),
+    });
+    setUser(result);
+  };
+
+  const changePassword = async (
+    currentPassword: string,
+    newPassword: string,
+  ) => {
+    if (!user) throw new Error("Authentification requise.");
+    await apiRequest<void>(`/api/users/${user.id_user}/password`, {
+      method: "PATCH",
+      body: JSON.stringify({
+        current_password: currentPassword,
+        new_password: newPassword,
+      }),
+    });
+  };
+
+  const deleteAccount = async (confirmation: string) => {
+    if (!user) throw new Error("Authentification requise.");
+    await apiRequest<void>(`/api/users/${user.id_user}`, {
+      method: "DELETE",
+      body: JSON.stringify({ confirmation }),
+    });
+    setUser(null);
+  };
+
   const requestPasswordReset = (email: string) =>
     apiRequest<void>("/api/auth/password-reset/request", {
       method: "POST",
@@ -62,5 +96,8 @@ export function useAuth() {
     refreshUser,
     requestPasswordReset,
     confirmPasswordReset,
+    updateProfile,
+    changePassword,
+    deleteAccount,
   };
 }
