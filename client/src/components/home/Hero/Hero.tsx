@@ -5,7 +5,12 @@ function Hero() {
   return (
     <section className="home-hero" aria-label="Collection Korn">
       <div className="home-hero-main">
-        <img src="/images/hero/man-red-tee-running.jpg" alt="" />
+        <img
+          src="/images/hero/man-red-tee-running.webp"
+          alt=""
+          width={1920}
+          height={2862}
+        />
         <div className="hero-text-div">
           <i className="home-hero-text">Collection été 2027</i>
           <h1 className="home-hero-label">DEFINE YOUR FORM.</h1>
@@ -26,15 +31,21 @@ function Hero() {
       <div className="home-hero-grid">
         <Link className="home-hero-card home-hero-card-woman" to="/girl">
           <img
-            src="/images/hero/woman-green-set.jpg"
+            src="/images/hero/woman-green-set.webp"
             alt="Femme portant une tenue de mode"
+            width={1920}
+            height={2862}
+            loading="lazy"
           />
           <span className="grid-img-label">FEMME</span>
         </Link>
         <Link className="home-hero-card home-hero-card-man" to="/men">
           <img
-            src="/images/hero/man-white-tee.jpg"
+            src="/images/hero/man-white-tee.webp"
             alt="Homme portant une tenue de mode"
+            width={1920}
+            height={2862}
+            loading="lazy"
           />
           <span className="grid-img-label">HOMME</span>
         </Link>
@@ -43,8 +54,11 @@ function Hero() {
           to="/collection/news"
         >
           <img
-            src="/images/hero/man-grey-tee.jpg"
+            src="/images/hero/man-grey-tee.webp"
             alt="Nouveautés de la collection Korn"
+            width={1920}
+            height={2862}
+            loading="lazy"
           />
           <span className="grid-img-label">NOUVEAUTES</span>
         </Link>
@@ -53,8 +67,11 @@ function Hero() {
           to="/collection/sales"
         >
           <img
-            src="/images/hero/man-black-tee-white-pants.jpg"
+            src="/images/hero/man-black-tee-white-pants.webp"
             alt="Vêtements en promotion pendant les soldes"
+            width={1920}
+            height={2862}
+            loading="lazy"
           />
           <span className="grid-img-label">SOLDES</span>
         </Link>

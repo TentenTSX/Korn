@@ -27,8 +27,11 @@ function HomePerformance() {
         aria-label="Performance et esthétique"
       >
         <img
-          src="/images/hero/man-white-tee.jpg"
+          src="/images/hero/man-white-tee.webp"
           alt="Athlète en tenue technique"
+          width={1920}
+          height={2862}
+          loading="lazy"
         />
         <div className="home-performance-overlay" aria-hidden="true" />
         <h2 id="home-performance-title" className="home-performance-title">

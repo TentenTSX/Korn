@@ -4,8 +4,10 @@ function CollectionHero() {
   return (
     <section className="collection-hero" aria-labelledby="collection-title">
       <img
-        src="/images/hero/man-black-tee-white-pants.jpg"
+        src="/images/hero/man-black-tee-white-pants.webp"
         alt="Sélection de vêtements de la collection Korn"
+        width={1920}
+        height={2862}
       />
       <div className="collection-hero-content">
         <span className="collection-hero-eyebrow">La sélection Korn</span>
