@@ -10,7 +10,8 @@
     "db:seed": "tsx ./bin/seed",
     "build": "tsx ./bin/migrate",
     "start": "tsx ./src/main",
-    "test": "jest --verbose"
+    "test": "jest --verbose",
+    "test:ci": "jest --verbose --testPathIgnorePatterns=install.test.ts"
   },
   "dependencies": {
     "argon2": "^0.45.1",
