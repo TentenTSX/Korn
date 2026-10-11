@@ -23,36 +23,18 @@ describe("orderActions.getOrdersAction", () => {
     });
   });
 
-  test("returns orders unchanged when none are missing an invoice", async () => {
-    const orders = [{ id_order: 1, status: "pending", invoice_number: null }];
-    jest
+  test("returns the owner's orders without writing anything", async () => {
+    const orders = [{ id_order: 1, status: "paid", invoice_number: null }];
+    const findSpy = jest
       .spyOn(orderRepository, "findAllByUser")
       .mockResolvedValue(orders as never);
+    const ensureSpy = jest.spyOn(orderRepository, "ensureInvoiceNumber");
 
     const result = await orderActions.getOrdersAction(1, 1);
 
     expect(result).toBe(orders);
-  });
-
-  test("backfills the invoice number for paid orders missing one", async () => {
-    const initialOrders = [
-      { id_order: 1, status: "paid", invoice_number: null },
-    ];
-    const refreshedOrders = [
-      { id_order: 1, status: "paid", invoice_number: "INV-0001" },
-    ];
-    jest
-      .spyOn(orderRepository, "findAllByUser")
-      .mockResolvedValueOnce(initialOrders as never)
-      .mockResolvedValueOnce(refreshedOrders as never);
-    const ensureSpy = jest
-      .spyOn(orderRepository, "ensureInvoiceNumber")
-      .mockResolvedValue(undefined as never);
-
-    const result = await orderActions.getOrdersAction(1, 1);
-
-    expect(ensureSpy).toHaveBeenCalledWith(1);
-    expect(result).toBe(refreshedOrders);
+    expect(findSpy).toHaveBeenCalledTimes(1);
+    expect(ensureSpy).not.toHaveBeenCalled();
   });
 });
 
