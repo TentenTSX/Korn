@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { apiRequest } from "../services/api";
 import type { Product } from "../types/product";
 
-export function useProducts(searchParams = "") {
+export function useProducts(searchParams = "", enabled = true) {
   const [products, setProducts] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -24,7 +24,8 @@ export function useProducts(searchParams = "") {
     }
   }, [searchParams]);
   useEffect(() => {
+    if (!enabled) return;
     void refresh();
-  }, [refresh]);
+  }, [refresh, enabled]);
   return { products, isLoading, error, refresh };
 }

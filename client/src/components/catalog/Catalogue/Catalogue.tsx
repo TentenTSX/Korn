@@ -1,10 +1,24 @@
 import { useEffect, useState } from "react";
 import { useParams, useSearchParams } from "react-router";
-import { useProducts } from "../../../../hooks/useProducts";
-import { isRecentlyAdded } from "../../../../utils/productFreshness";
-import CollectionFilters from "../CollectionFilters/CollectionFilters";
-import CollectionProductCard from "../CollectionProductCard/CollectionProductCard";
-import "./CollectionCatalogue.css";
+import { useProducts } from "../../../hooks/useProducts";
+import { isRecentlyAdded } from "../../../utils/productFreshness";
+import CatalogueFilters from "../CatalogueFilters/CatalogueFilters";
+import CatalogueProductCard from "../CatalogueProductCard/CatalogueProductCard";
+import "./Catalogue.css";
+
+const SUBCATEGORY_FILTERS: Record<"Homme" | "Femme", string[]> = {
+  Homme: ["Tout", "Débardeurs", "Pantalons", "Shorts", "Sweats", "T-shirts"],
+  Femme: ["Tout", "Brassières", "Leggings", "Shorts", "Sweats", "T-shirts"],
+};
+
+const COLLECTION_FILTERS = [
+  "Tout",
+  "Homme",
+  "Femme",
+  "Nouveautés",
+  "Soldes",
+  "Bestsellers",
+];
 
 const filterByRoute: Record<string, string> = {
   bestsellers: "Bestsellers",
@@ -16,7 +30,11 @@ const filterByRoute: Record<string, string> = {
   soldes: "Soldes",
 };
 
-type CollectionProduct = {
+type CatalogueProps = {
+  gender?: "Homme" | "Femme";
+};
+
+type CatalogueProduct = {
   name: string;
   category: string;
   price: string;
@@ -34,25 +52,36 @@ type CollectionProduct = {
   stockQuantity?: number;
 };
 
-function CollectionCatalogue() {
+function Catalogue({ gender }: CatalogueProps) {
   const { filter } = useParams();
   const [searchParams] = useSearchParams();
-  const search = searchParams.get("search")?.trim() ?? "";
+  const search = gender ? "" : (searchParams.get("search")?.trim() ?? "");
   const { products: apiProducts } = useProducts(
-    search ? `search=${encodeURIComponent(search)}` : "",
+    gender
+      ? `gender=${gender}`
+      : search
+        ? `search=${encodeURIComponent(search)}`
+        : "",
   );
-  const { products: bestsellerProducts } = useProducts("sort=bestsellers");
-  const routeFilter = filter ? filterByRoute[filter.toLowerCase()] : undefined;
+  const { products: bestsellerProducts } = useProducts(
+    "sort=bestsellers",
+    !gender,
+  );
+  const routeFilter =
+    !gender && filter ? filterByRoute[filter.toLowerCase()] : undefined;
   const [activeFilter, setActiveFilter] = useState(routeFilter ?? "Tout");
   const [sort, setSort] = useState("newest");
   const bestsellerIds = new Set(
     bestsellerProducts.map((product) => product.id_product),
   );
-  const products: CollectionProduct[] = apiProducts.map((product) => ({
+  const products: CatalogueProduct[] = apiProducts.map((product) => ({
     name: product.name,
-    category: product.description ?? "Collection Korn",
+    category:
+      product.description ??
+      (gender ? `Collection ${gender}` : "Collection Korn"),
     price: `${product.price} €`,
-    categoryFilter: product.category_name ?? "Tout",
+    categoryFilter:
+      (gender ? product.subcategory_name : product.category_name) ?? "Tout",
     image: product.image ?? "",
     alt: product.alt_text ?? product.name,
     focalPoint: product.focal_point,
@@ -88,22 +117,22 @@ function CollectionCatalogue() {
     }));
 
   useEffect(() => {
-    setActiveFilter(routeFilter ?? "Tout");
-  }, [routeFilter]);
+    if (!gender) setActiveFilter(routeFilter ?? "Tout");
+  }, [routeFilter, gender]);
 
   // No product carries a real discounted price yet, so there is nothing
   // genuine to show under "Soldes" regardless of whether a sale period is
   // currently running; the catalogue shows an explanatory message instead.
   const visibleProducts =
-    activeFilter === "Soldes"
+    !gender && activeFilter === "Soldes"
       ? []
       : activeFilter === "Tout"
         ? uniqueProducts
         : uniqueProducts.filter((product) => {
-            if (activeFilter === "Nouveautés") {
+            if (!gender && activeFilter === "Nouveautés") {
               return product.badge === "NOUVEAU";
             }
-            if (activeFilter === "Bestsellers") {
+            if (!gender && activeFilter === "Bestsellers") {
               return product.isBestseller;
             }
             return product.categoryFilter === activeFilter;
@@ -126,32 +155,34 @@ function CollectionCatalogue() {
     },
   );
 
+  const filters = gender ? SUBCATEGORY_FILTERS[gender] : COLLECTION_FILTERS;
+  const breadcrumbLabel = gender ?? "Collection";
+
   return (
     <>
-      <CollectionFilters
+      <CatalogueFilters
+        filters={filters}
+        breadcrumbLabel={breadcrumbLabel}
         initialFilter={routeFilter ?? "Tout"}
         onFilterChange={setActiveFilter}
         onSortChange={setSort}
       />
-      <section
-        className="collection-catalogue"
-        aria-labelledby="collection-products-title"
-      >
-        <h2 id="collection-products-title" className="collection-product-count">
+      <section className="catalogue" aria-labelledby="catalogue-products-title">
+        <h2 id="catalogue-products-title" className="catalogue-product-count">
           {visibleProducts.length} produits
         </h2>
         {visibleProducts.length === 0 ? (
-          <p className="collection-empty-state">
-            {activeFilter === "Soldes"
+          <p className="catalogue-empty-state">
+            {!gender && activeFilter === "Soldes"
               ? "Nous ne sommes pas en période de solde, veuillez revenir plus tard."
               : search
                 ? `Aucun résultat pour "${search}".`
                 : "Aucun produit ne correspond à ce filtre."}
           </p>
         ) : (
-          <div className="collection-product-grid">
+          <div className="catalogue-product-grid">
             {sortedProducts.map((product) => (
-              <CollectionProductCard
+              <CatalogueProductCard
                 key={`${product.name}-${product.variantId ?? "demo"}`}
                 {...product}
               />
@@ -163,4 +194,4 @@ function CollectionCatalogue() {
   );
 }
 
-export default CollectionCatalogue;
+export default Catalogue;

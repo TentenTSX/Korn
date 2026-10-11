@@ -1,8 +1,8 @@
-.collection-toolbar {
+.catalogue-toolbar {
   border-bottom: 1px solid var(--color-ink);
 }
 
-.collection-breadcrumb {
+.catalogue-breadcrumb {
   max-width: var(--content-width);
   margin: 0 auto;
   padding: var(--space-4) var(--space-4) var(--space-3);
@@ -12,12 +12,12 @@
   letter-spacing: 0.12em;
 }
 
-.collection-breadcrumb span {
+.catalogue-breadcrumb span {
   margin-inline: var(--space-2);
   color: #cdd1d8;
 }
 
-.collection-filters {
+.catalogue-filters {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -27,15 +27,15 @@
   padding: var(--space-3) var(--space-4) var(--space-5);
 }
 
-.collection-filter-list {
+.catalogue-filter-list {
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-2);
   list-style: none;
 }
 
-.collection-filter-button,
-.collection-sort-select {
+.catalogue-filter-button,
+.catalogue-sort-select {
   min-height: 2.25rem;
   padding: 0.65rem 1rem;
   border: 1px solid var(--color-line);
@@ -49,43 +49,43 @@
   text-transform: uppercase;
 }
 
-.collection-filter-button {
+.catalogue-filter-button {
   cursor: pointer;
   transition: background 180ms ease, color 180ms ease, border-color 180ms ease;
 }
 
-.collection-filter-button:hover,
-.collection-filter-button:focus-visible,
-.collection-filter-button.is-active {
+.catalogue-filter-button:hover,
+.catalogue-filter-button:focus-visible,
+.catalogue-filter-button.is-active {
   border-color: var(--color-ink);
   background: var(--color-ink);
   color: var(--color-surface);
   outline: none;
 }
 
-.collection-sort-select {
+.catalogue-sort-select {
   min-width: 13rem;
   color: var(--color-ink);
   cursor: pointer;
 }
 
 @media (max-width: 640px) {
-  .collection-filters {
+  .catalogue-filters {
     align-items: stretch;
     flex-direction: column;
   }
 
-  .collection-filter-list {
+  .catalogue-filter-list {
     flex-wrap: nowrap;
     overflow-x: auto;
     padding-bottom: 0.25rem;
   }
 
-  .collection-filter-button {
+  .catalogue-filter-button {
     flex: 0 0 auto;
   }
 
-  .collection-sort-select {
+  .catalogue-sort-select {
     width: 100%;
   }
 }

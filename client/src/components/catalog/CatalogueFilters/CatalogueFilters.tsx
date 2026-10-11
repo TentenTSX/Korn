@@ -1,22 +1,26 @@
-import { useState } from "react";
-import "./GirlFilters.css";
+import { useEffect, useState } from "react";
+import "./CatalogueFilters.css";
 
-const filters = [
-  "Tout",
-  "Brassières",
-  "Leggings",
-  "Shorts",
-  "Sweats",
-  "T-shirts",
-];
-
-type GirlFiltersProps = {
+type CatalogueFiltersProps = {
+  filters: string[];
+  breadcrumbLabel: string;
+  initialFilter: string;
   onFilterChange: (filter: string) => void;
   onSortChange: (sort: string) => void;
 };
 
-function GirlFilters({ onFilterChange, onSortChange }: GirlFiltersProps) {
-  const [activeFilter, setActiveFilter] = useState("Tout");
+function CatalogueFilters({
+  filters,
+  breadcrumbLabel,
+  initialFilter,
+  onFilterChange,
+  onSortChange,
+}: CatalogueFiltersProps) {
+  const [activeFilter, setActiveFilter] = useState(initialFilter);
+
+  useEffect(() => {
+    setActiveFilter(initialFilter);
+  }, [initialFilter]);
 
   const handleFilterChange = (filter: string) => {
     setActiveFilter(filter);
@@ -24,16 +28,16 @@ function GirlFilters({ onFilterChange, onSortChange }: GirlFiltersProps) {
   };
 
   return (
-    <div className="girl-toolbar">
-      <p className="girl-breadcrumb">
-        Accueil <span aria-hidden="true">›</span> Femme
+    <div className="catalogue-toolbar">
+      <p className="catalogue-breadcrumb">
+        Accueil <span aria-hidden="true">›</span> {breadcrumbLabel}
       </p>
-      <div className="girl-filters">
-        <ul className="girl-filter-list" aria-label="Filtrer les produits">
+      <div className="catalogue-filters">
+        <ul className="catalogue-filter-list" aria-label="Filtrer les produits">
           {filters.map((filter) => (
             <li key={filter}>
               <button
-                className={`girl-filter-button ${activeFilter === filter ? "is-active" : ""}`}
+                className={`catalogue-filter-button ${activeFilter === filter ? "is-active" : ""}`}
                 type="button"
                 aria-pressed={activeFilter === filter}
                 onClick={() => handleFilterChange(filter)}
@@ -46,7 +50,7 @@ function GirlFilters({ onFilterChange, onSortChange }: GirlFiltersProps) {
         <label>
           <span className="sr-only">Trier les produits</span>
           <select
-            className="girl-sort-select"
+            className="catalogue-sort-select"
             defaultValue="newest"
             onChange={(event) => onSortChange(event.target.value)}
           >
@@ -60,4 +64,4 @@ function GirlFilters({ onFilterChange, onSortChange }: GirlFiltersProps) {
   );
 }
 
-export default GirlFilters;
+export default CatalogueFilters;

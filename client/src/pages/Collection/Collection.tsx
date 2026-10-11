@@ -1,4 +1,4 @@
-import CollectionCatalogue from "../../components/catalog/Collection/CollectionCatalogue/CollectionCatalogue";
+import Catalogue from "../../components/catalog/Catalogue/Catalogue";
 import CollectionHero from "../../components/catalog/Collection/CollectionHero/CollectionHero";
 import { useDocumentHead } from "../../hooks/useDocumentHead";
 
@@ -10,9 +10,9 @@ function Collection() {
   });
 
   return (
-    <main className="collection-page">
+    <main className="catalogue-page">
       <CollectionHero />
-      <CollectionCatalogue />
+      <Catalogue />
     </main>
   );
 }
