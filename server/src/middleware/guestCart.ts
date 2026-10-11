@@ -1,5 +1,6 @@
 import { createHash, randomBytes } from "node:crypto";
 import type { Request, Response } from "express";
+import { readCookie } from "./cookies";
 
 const cookieName = "guest_cart_token";
 const guestCookieOptions = {
@@ -9,19 +10,6 @@ const guestCookieOptions = {
   path: "/",
   maxAge: 30 * 24 * 60 * 60 * 1000,
 };
-
-function readCookie(req: Request, name: string) {
-  const entry = req.headers.cookie
-    ?.split(";")
-    .map((part) => part.trim())
-    .find((part) => part.startsWith(`${name}=`));
-  if (!entry) return null;
-  try {
-    return decodeURIComponent(entry.slice(name.length + 1));
-  } catch {
-    return null;
-  }
-}
 
 export function hashGuestCartToken(token: string) {
   return createHash("sha256").update(token).digest("hex");

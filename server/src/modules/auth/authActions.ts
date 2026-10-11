@@ -120,7 +120,7 @@ const getProfile = async (
 
 const logout = () => undefined;
 
-const getGoogleAuthUrl = () => googleClient.getAuthUrl();
+const getGoogleAuthUrl = (state: string) => googleClient.getAuthUrl(state);
 
 const loginWithGoogleCode = async (code: string) => {
   const profile = await googleClient.getProfileFromCode(code);
