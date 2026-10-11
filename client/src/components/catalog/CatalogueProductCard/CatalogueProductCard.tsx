@@ -1,10 +1,10 @@
 import { Link } from "react-router";
-import { COLOR_SWATCHES } from "../../../../utils/colorSwatches";
-import { focalPointStyle } from "../../../../utils/focalPoint";
-import AddToCartButton from "../../../cart/AddToCartButton";
-import "./GirlProductCard.css";
+import { COLOR_SWATCHES } from "../../../utils/colorSwatches";
+import { focalPointStyle } from "../../../utils/focalPoint";
+import AddToCartButton from "../../cart/AddToCartButton";
+import "./CatalogueProductCard.css";
 
-type GirlProductCardProps = {
+type CatalogueProductCardProps = {
   name: string;
   category: string;
   price: string;
@@ -20,7 +20,7 @@ type GirlProductCardProps = {
   stockQuantity?: number;
 };
 
-function GirlProductCard({
+function CatalogueProductCard({
   name,
   category,
   price,
@@ -34,19 +34,19 @@ function GirlProductCard({
   color,
   colors,
   stockQuantity,
-}: GirlProductCardProps) {
+}: CatalogueProductCardProps) {
   return (
-    <article className="girl-product-card">
+    <article className="catalogue-product-card">
       <Link
-        className="girl-product-card-image"
+        className="catalogue-product-card-image"
         to={productId ? `/product/${productId}` : "/collection"}
       >
         {image && (
           <img src={image} alt={alt} style={focalPointStyle(focalPoint)} />
         )}
-        {badge && <span className="girl-product-card-badge">{badge}</span>}
+        {badge && <span className="catalogue-product-card-badge">{badge}</span>}
       </Link>
-      <div className="girl-product-card-info">
+      <div className="catalogue-product-card-info">
         <div>
           <h2>{name}</h2>
           <p>{category}</p>
@@ -55,13 +55,13 @@ function GirlProductCard({
           )}
           {colors && colors.length > 1 && (
             <div
-              className="girl-product-card-colors"
+              className="catalogue-product-card-colors"
               aria-label={`Coloris disponibles : ${colors.join(", ")}`}
             >
               {colors.map((c) => (
                 <span
                   key={c}
-                  className="girl-color-pin"
+                  className="catalogue-color-pin"
                   style={{ backgroundColor: COLOR_SWATCHES[c] ?? "#ccc" }}
                   title={c}
                 />
@@ -80,4 +80,4 @@ function GirlProductCard({
   );
 }
 
-export default GirlProductCard;
+export default CatalogueProductCard;

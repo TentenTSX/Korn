@@ -1,4 +1,4 @@
-import GirlCatalogue from "../../components/catalog/Girl/GirlCatalogue/GirlCatalogue";
+import Catalogue from "../../components/catalog/Catalogue/Catalogue";
 import GirlHero from "../../components/catalog/Girl/GirlHero/GirlHero";
 import { useDocumentHead } from "../../hooks/useDocumentHead";
 
@@ -10,9 +10,9 @@ function Girl() {
   });
 
   return (
-    <main className="girl-page">
+    <main className="catalogue-page">
       <GirlHero />
-      <GirlCatalogue />
+      <Catalogue gender="Femme" />
     </main>
   );
 }
