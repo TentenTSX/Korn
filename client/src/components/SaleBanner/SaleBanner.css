@@ -1,6 +1,6 @@
 .sale-banner {
   padding: var(--space-2) var(--space-4);
-  background: var(--color-sale);
+  background: var(--color-ink);
   color: var(--color-surface);
   text-align: center;
 }
