@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { useParams, useSearchParams } from "react-router";
-import { useActiveSale } from "../../../../hooks/useActiveSale";
 import { useProducts } from "../../../../hooks/useProducts";
 import { isRecentlyAdded } from "../../../../utils/productFreshness";
 import CollectionFilters from "../CollectionFilters/CollectionFilters";
@@ -22,7 +21,6 @@ type CollectionProduct = {
   category: string;
   price: string;
   badge?: string;
-  sale: boolean;
   isBestseller: boolean;
   categoryFilter: string;
   image: string;
@@ -46,7 +44,6 @@ function CollectionCatalogue() {
   const routeFilter = filter ? filterByRoute[filter.toLowerCase()] : undefined;
   const [activeFilter, setActiveFilter] = useState(routeFilter ?? "Tout");
   const [sort, setSort] = useState("newest");
-  const activeSale = useActiveSale();
   const bestsellerIds = new Set(
     bestsellerProducts.map((product) => product.id_product),
   );
@@ -58,7 +55,6 @@ function CollectionCatalogue() {
     image: product.image ?? "",
     alt: product.alt_text ?? product.name,
     badge: isRecentlyAdded(product.created_at) ? "NOUVEAU" : undefined,
-    sale: Boolean(activeSale),
     isBestseller: bestsellerIds.has(product.id_product),
     variantId: product.id_variant,
     productId: product.id_product,
@@ -93,21 +89,23 @@ function CollectionCatalogue() {
     setActiveFilter(routeFilter ?? "Tout");
   }, [routeFilter]);
 
+  // No product carries a real discounted price yet, so there is nothing
+  // genuine to show under "Soldes" regardless of whether a sale period is
+  // currently running; the catalogue shows an explanatory message instead.
   const visibleProducts =
-    activeFilter === "Tout"
-      ? uniqueProducts
-      : uniqueProducts.filter((product) => {
-          if (activeFilter === "Nouveautés") {
-            return product.badge === "NOUVEAU";
-          }
-          if (activeFilter === "Bestsellers") {
-            return product.isBestseller;
-          }
-          if (activeFilter === "Soldes") {
-            return product.sale;
-          }
-          return product.categoryFilter === activeFilter;
-        });
+    activeFilter === "Soldes"
+      ? []
+      : activeFilter === "Tout"
+        ? uniqueProducts
+        : uniqueProducts.filter((product) => {
+            if (activeFilter === "Nouveautés") {
+              return product.badge === "NOUVEAU";
+            }
+            if (activeFilter === "Bestsellers") {
+              return product.isBestseller;
+            }
+            return product.categoryFilter === activeFilter;
+          });
   const sortedProducts = [...visibleProducts].sort(
     (firstProduct, secondProduct) => {
       if (sort === "price-low") {
@@ -142,9 +140,11 @@ function CollectionCatalogue() {
         </h2>
         {visibleProducts.length === 0 ? (
           <p className="collection-empty-state">
-            {search
-              ? `Aucun résultat pour "${search}".`
-              : "Aucun produit ne correspond à ce filtre."}
+            {activeFilter === "Soldes"
+              ? "Nous ne sommes pas en période de solde, veuillez revenir plus tard."
+              : search
+                ? `Aucun résultat pour "${search}".`
+                : "Aucun produit ne correspond à ce filtre."}
           </p>
         ) : (
           <div className="collection-product-grid">
