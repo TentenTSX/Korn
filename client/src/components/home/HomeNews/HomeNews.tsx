@@ -1,5 +1,6 @@
 import { Link } from "react-router";
 import { useProducts } from "../../../hooks/useProducts";
+import { COLOR_SWATCHES } from "../../../utils/colorSwatches";
 import { focalPointStyle } from "../../../utils/focalPoint";
 import { isRecentlyAdded } from "../../../utils/productFreshness";
 import AddToCartButton from "../../cart/AddToCartButton";
@@ -7,14 +8,9 @@ import "./HomeNews.css";
 
 function HomeNews() {
   const { products } = useProducts();
-  const recentProducts = products.filter((product) =>
-    isRecentlyAdded(product.created_at),
-  );
-  const uniqueProducts = Array.from(
-    new Map(
-      recentProducts.map((product) => [product.id_product, product]),
-    ).values(),
-  ).slice(0, 4);
+  const uniqueProducts = products
+    .filter((product) => isRecentlyAdded(product.created_at))
+    .slice(0, 4);
 
   return (
     <section className="home-news" aria-labelledby="home-news-title">
@@ -60,6 +56,21 @@ function HomeNews() {
               <h3>{product.name}</h3>
               <span className="home-news-price">{product.price} €</span>
               <p>{product.description ?? product.category_name}</p>
+              {product.colors && product.colors.length > 1 && (
+                <div
+                  className="home-news-colors"
+                  aria-label={`Coloris disponibles : ${product.colors.join(", ")}`}
+                >
+                  {product.colors.map((c) => (
+                    <span
+                      key={c}
+                      className="home-news-color-pin"
+                      style={{ backgroundColor: COLOR_SWATCHES[c] ?? "#ccc" }}
+                      title={c}
+                    />
+                  ))}
+                </div>
+              )}
             </Link>
           </article>
         ))}

@@ -1,14 +1,13 @@
 import { Link } from "react-router";
 import { useProducts } from "../../../hooks/useProducts";
+import { COLOR_SWATCHES } from "../../../utils/colorSwatches";
 import { focalPointStyle } from "../../../utils/focalPoint";
 import AddToCartButton from "../../cart/AddToCartButton";
 import "./HomeBestSeller.css";
 
 function HomeBestSeller() {
   const { products } = useProducts("sort=bestsellers");
-  const uniqueProducts = Array.from(
-    new Map(products.map((product) => [product.id_product, product])).values(),
-  ).slice(0, 3);
+  const uniqueProducts = products.slice(0, 3);
 
   if (uniqueProducts.length === 0) return null;
 
@@ -61,6 +60,21 @@ function HomeBestSeller() {
               <h3>{product.name}</h3>
               <span className="home-best-sellers-price">{product.price} €</span>
               <p>{product.description ?? product.category_name}</p>
+              {product.colors && product.colors.length > 1 && (
+                <div
+                  className="home-best-sellers-colors"
+                  aria-label={`Coloris disponibles : ${product.colors.join(", ")}`}
+                >
+                  {product.colors.map((c) => (
+                    <span
+                      key={c}
+                      className="home-best-sellers-color-pin"
+                      style={{ backgroundColor: COLOR_SWATCHES[c] ?? "#ccc" }}
+                      title={c}
+                    />
+                  ))}
+                </div>
+              )}
             </Link>
           </article>
         ))}

@@ -44,29 +44,38 @@ class ProductRepository {
     const orderBy = isBestsellers
       ? "order by sales.units_sold desc, p.created_at desc"
       : "order by p.created_at desc";
-    // select distinct requires every order-by expression in the select
-    // list, so units_sold must be selected whenever it's used to sort.
-    const unitsSoldColumn = isBestsellers ? ", sales.units_sold" : "";
     // A product is tagged with both a gender category (Homme/Femme) and a
     // subcategory (T-shirts, Shorts, ...); pick each out separately so the
     // frontend can filter on gender and subcategory independently without
     // the product_categories join duplicating rows per category.
+    //
+    // One row per product: rv picks each product's first-created variant as
+    // the representative shown on the card (price, image, add-to-cart), and
+    // the colors subquery lists every distinct color it comes in, so the
+    // frontend no longer has to dedupe a row-per-variant result itself.
     const [rows] = await databaseClient.query<Rows>(
-      `select distinct p.*,
+      `select p.*,
         (select c.name from product_categories pc join categories c on c.id_category = pc.category_id where pc.product_id = p.id_product and c.name in ('Homme', 'Femme') limit 1) as category_name,
         (select c.slug from product_categories pc join categories c on c.id_category = pc.category_id where pc.product_id = p.id_product and c.name in ('Homme', 'Femme') limit 1) as category_slug,
         (select c.name from product_categories pc join categories c on c.id_category = pc.category_id where pc.product_id = p.id_product and c.name not in ('Homme', 'Femme') limit 1) as subcategory_name,
-        pv.id_variant, pv.size, pv.color, pv.price, pv.stock_quantity,
-        (select pi.url from product_images pi where pi.product_id = p.id_product and (pi.color = pv.color or pi.color is null) order by (pi.color = pv.color) desc, pi.position limit 1) as image,
-        (select pi.alt_text from product_images pi where pi.product_id = p.id_product and (pi.color = pv.color or pi.color is null) order by (pi.color = pv.color) desc, pi.position limit 1) as alt_text,
-        (select pi.focal_point from product_images pi where pi.product_id = p.id_product and (pi.color = pv.color or pi.color is null) order by (pi.color = pv.color) desc, pi.position limit 1) as focal_point${unitsSoldColumn}
+        rv.id_variant, rv.size, rv.color, rv.price, rv.stock_quantity,
+        (select pi.url from product_images pi where pi.product_id = p.id_product and (pi.color = rv.color or pi.color is null) order by (pi.color = rv.color) desc, pi.position limit 1) as image,
+        (select pi.alt_text from product_images pi where pi.product_id = p.id_product and (pi.color = rv.color or pi.color is null) order by (pi.color = rv.color) desc, pi.position limit 1) as alt_text,
+        (select pi.focal_point from product_images pi where pi.product_id = p.id_product and (pi.color = rv.color or pi.color is null) order by (pi.color = rv.color) desc, pi.position limit 1) as focal_point,
+        (select group_concat(distinct pv3.color order by pv3.color separator ',') from product_variants pv3 where pv3.product_id = p.id_product and pv3.color is not null) as colors
       from products p
-      ${salesJoin}
-      left join product_variants pv on pv.product_id = p.id_product${where}
+      left join (
+        select pv.*, row_number() over (partition by pv.product_id order by pv.id_variant) as rn
+        from product_variants pv
+      ) rv on rv.product_id = p.id_product and rv.rn = 1
+      ${salesJoin}${where}
       ${orderBy}`,
       values,
     );
-    return rows;
+    return rows.map((row) => ({
+      ...row,
+      colors: typeof row.colors === "string" ? row.colors.split(",") : [],
+    }));
   }
 
   async findById(id: number) {
