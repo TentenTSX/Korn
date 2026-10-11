@@ -40,8 +40,8 @@ function HomeBestSeller() {
                     src={product.image}
                     alt={product.alt_text ?? product.name}
                     style={focalPointStyle(product.focal_point)}
-                    width={805}
-                    height={1200}
+                    width={1920}
+                    height={2862}
                     loading="lazy"
                   />
                 )}

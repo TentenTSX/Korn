@@ -6,8 +6,8 @@ function CollectionHero() {
       <img
         src="/images/hero/man-black-tee-white-pants.webp"
         alt="Sélection de vêtements de la collection Korn"
-        width={805}
-        height={1200}
+        width={1920}
+        height={2862}
       />
       <div className="collection-hero-content">
         <span className="collection-hero-eyebrow">La sélection Korn</span>

@@ -8,8 +8,8 @@ function Hero() {
         <img
           src="/images/hero/man-red-tee-running.webp"
           alt=""
-          width={805}
-          height={1200}
+          width={1920}
+          height={2862}
         />
         <div className="hero-text-div">
           <i className="home-hero-text">Collection été 2027</i>
@@ -33,8 +33,8 @@ function Hero() {
           <img
             src="/images/hero/woman-green-set.webp"
             alt="Femme portant une tenue de mode"
-            width={805}
-            height={1200}
+            width={1920}
+            height={2862}
             loading="lazy"
           />
           <span className="grid-img-label">FEMME</span>
@@ -43,8 +43,8 @@ function Hero() {
           <img
             src="/images/hero/man-white-tee.webp"
             alt="Homme portant une tenue de mode"
-            width={805}
-            height={1200}
+            width={1920}
+            height={2862}
             loading="lazy"
           />
           <span className="grid-img-label">HOMME</span>
@@ -56,8 +56,8 @@ function Hero() {
           <img
             src="/images/hero/man-grey-tee.webp"
             alt="Nouveautés de la collection Korn"
-            width={805}
-            height={1200}
+            width={1920}
+            height={2862}
             loading="lazy"
           />
           <span className="grid-img-label">NOUVEAUTES</span>
@@ -69,8 +69,8 @@ function Hero() {
           <img
             src="/images/hero/man-black-tee-white-pants.webp"
             alt="Vêtements en promotion pendant les soldes"
-            width={805}
-            height={1200}
+            width={1920}
+            height={2862}
             loading="lazy"
           />
           <span className="grid-img-label">SOLDES</span>

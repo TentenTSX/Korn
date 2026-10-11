@@ -77,8 +77,8 @@ function NavbarSearch({
                   <img
                     src={product.image}
                     alt=""
-                    width={805}
-                    height={1200}
+                    width={1920}
+                    height={2862}
                     loading="lazy"
                   />
                 )}

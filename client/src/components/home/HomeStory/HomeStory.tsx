@@ -26,8 +26,8 @@ function HomeStory() {
         <img
           src="/images/hero/woman-black-set-side.webp"
           alt="Femme portant une tenue de sport dans un stade"
-          width={805}
-          height={1200}
+          width={1920}
+          height={2862}
           loading="lazy"
         />
       </div>

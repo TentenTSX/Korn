@@ -108,8 +108,8 @@ function Product() {
             src={displayedEntry.url}
             alt={activeVariant.alt_text ?? activeVariant.name}
             style={focalPointStyle(displayedEntry.focal_point)}
-            width={805}
-            height={1200}
+            width={1920}
+            height={2862}
           />
         )}
         {gallery.length > 1 && (
@@ -131,8 +131,8 @@ function Product() {
                   src={image.url}
                   alt=""
                   style={focalPointStyle(image.focal_point)}
-                  width={805}
-                  height={1200}
+                  width={1920}
+                  height={2862}
                   loading="lazy"
                 />
               </button>

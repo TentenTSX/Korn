@@ -6,8 +6,8 @@ function GirlHero() {
       <img
         src="/images/hero/woman-bra-detail-bordeaux.webp"
         alt="Femme en entraînement dans une salle de sport"
-        width={805}
-        height={1200}
+        width={1920}
+        height={2862}
       />
       <div className="girl-hero-content">
         <span className="girl-hero-eyebrow">Performance féminine</span>

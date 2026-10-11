@@ -23,8 +23,8 @@ function CartLineItem({
         <img
           src={item.image}
           alt={item.name}
-          width={805}
-          height={1200}
+          width={1920}
+          height={2862}
           loading="lazy"
         />
       ) : (
