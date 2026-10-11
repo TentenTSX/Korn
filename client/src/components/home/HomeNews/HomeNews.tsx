@@ -55,18 +55,9 @@ function HomeNews() {
               to={`/product/${product.id_product}`}
             >
               <h3>{product.name}</h3>
-              {product.sale_price != null ? (
-                <span className="home-news-price home-news-price-sale">
-                  <span className="home-news-price-original">
-                    {money.format(Number(product.price))}
-                  </span>
-                  {money.format(Number(product.sale_price))}
-                </span>
-              ) : (
-                <span className="home-news-price">
-                  {money.format(Number(product.price))}
-                </span>
-              )}
+              <span className="home-news-price">
+                {money.format(Number(product.price))}
+              </span>
               <p>{product.description ?? product.category_name}</p>
               {product.colors && product.colors.length > 1 && (
                 <div

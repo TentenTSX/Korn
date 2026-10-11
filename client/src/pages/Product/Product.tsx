@@ -146,18 +146,9 @@ function Product() {
         </span>
         <h1>{activeVariant.name}</h1>
         {activeVariant.description && <p>{activeVariant.description}</p>}
-        {activeVariant.sale_price != null ? (
-          <strong className="product-page-price product-page-price-sale">
-            <span className="product-page-price-original">
-              {money.format(activeVariant.price)}
-            </span>
-            {money.format(activeVariant.sale_price)}
-          </strong>
-        ) : (
-          <strong className="product-page-price">
-            {money.format(activeVariant.price)}
-          </strong>
-        )}
+        <strong className="product-page-price">
+          {money.format(activeVariant.price)}
+        </strong>
 
         {colors.length > 1 && (
           <fieldset className="product-page-colors">

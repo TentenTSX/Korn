@@ -89,20 +89,6 @@
   font-size: 1.25rem;
 }
 
-.product-page-price-sale {
-  display: flex;
-  align-items: baseline;
-  gap: 0.6rem;
-  color: var(--color-sale);
-}
-
-.product-page-price-original {
-  color: var(--color-muted);
-  font-size: 1rem;
-  font-weight: 400;
-  text-decoration: line-through;
-}
-
 .product-page-colors,
 .product-page-sizes {
   margin: 0;

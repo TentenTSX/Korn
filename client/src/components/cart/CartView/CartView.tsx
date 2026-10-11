@@ -1,7 +1,9 @@
 import { X } from "lucide-react";
 import { useEffect, useState } from "react";
+import type { FormEvent } from "react";
 import { useAuthContext } from "../../../contexts/AuthContext";
 import { useCartContext } from "../../../contexts/CartContext";
+import { usePromoCode } from "../../../hooks/usePromoCode";
 import { currency } from "../../../utils/currency";
 import CartLineItem from "./CartLineItem";
 import "./CartView.css";
@@ -14,13 +16,34 @@ type CartViewProps = {
 
 function CartView({ onClose, onCheckout, asPage = false }: CartViewProps) {
   const { user, isLoading: isAuthLoading } = useAuthContext();
-  const { items, isLoading, error, updateItem, removeItem } = useCartContext();
+  const { items, isLoading, error, updateItem, removeItem, refresh } =
+    useCartContext();
   const [busyItemId, setBusyItemId] = useState<number | null>(null);
   const [actionError, setActionError] = useState<string | null>(null);
+  const [promoInput, setPromoInput] = useState("");
+  const [isApplyingPromo, setIsApplyingPromo] = useState(false);
+  const promo = usePromoCode();
   const total = items.reduce(
     (sum, item) => sum + Number(item.price_unit) * item.quantity,
     0,
   );
+
+  const handleApplyPromoCode = async (event: FormEvent) => {
+    event.preventDefault();
+    if (!promoInput.trim()) return;
+    setIsApplyingPromo(true);
+    const success = await promo.applyCode(promoInput.trim());
+    setIsApplyingPromo(false);
+    if (success) {
+      setPromoInput("");
+      await refresh();
+    }
+  };
+
+  const handleRemovePromoCode = async () => {
+    await promo.removeCode();
+    await refresh();
+  };
 
   useEffect(() => {
     if (asPage) return;
@@ -134,6 +157,43 @@ function CartView({ onClose, onCheckout, asPage = false }: CartViewProps) {
 
       {items.length > 0 && (
         <footer className="cart-modal-footer">
+          <div className="cart-promo-code">
+            {promo.code ? (
+              <div className="cart-promo-code-applied">
+                <span>
+                  Code <strong>{promo.code}</strong> appliqué (-
+                  {promo.discountPercent}%)
+                </span>
+                <button
+                  type="button"
+                  onClick={() => void handleRemovePromoCode()}
+                >
+                  Retirer
+                </button>
+              </div>
+            ) : (
+              <form onSubmit={handleApplyPromoCode}>
+                <label className="sr-only" htmlFor="cart-promo-input">
+                  Code promo
+                </label>
+                <input
+                  id="cart-promo-input"
+                  type="text"
+                  placeholder="Code promo"
+                  value={promoInput}
+                  onChange={(event) => setPromoInput(event.target.value)}
+                />
+                <button type="submit" disabled={isApplyingPromo}>
+                  {isApplyingPromo ? "..." : "Appliquer"}
+                </button>
+              </form>
+            )}
+            {promo.error && (
+              <p className="cart-message-error" role="alert">
+                {promo.error}
+              </p>
+            )}
+          </div>
           <div className="cart-subtotal">
             <span>Sous-total</span>
             <strong>{currency.format(total)}</strong>

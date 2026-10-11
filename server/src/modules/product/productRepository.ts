@@ -1,6 +1,5 @@
 import databaseClient from "../../../database/client";
 import type { Rows } from "../../../database/client";
-import { ACTIVE_DISCOUNT_PERCENT_SQL } from "../salePeriod/activeDiscountSql";
 
 class ProductRepository {
   async findAll(query: {
@@ -60,10 +59,6 @@ class ProductRepository {
         (select c.slug from product_categories pc join categories c on c.id_category = pc.category_id where pc.product_id = p.id_product and c.name in ('Homme', 'Femme') limit 1) as category_slug,
         (select c.name from product_categories pc join categories c on c.id_category = pc.category_id where pc.product_id = p.id_product and c.name not in ('Homme', 'Femme') limit 1) as subcategory_name,
         rv.id_variant, rv.size, rv.color, rv.price, rv.stock_quantity,
-        case when ${ACTIVE_DISCOUNT_PERCENT_SQL} is not null
-          then round(rv.price * (1 - ${ACTIVE_DISCOUNT_PERCENT_SQL} / 100), 2)
-          else null
-        end as sale_price,
         (select pi.url from product_images pi where pi.product_id = p.id_product and (pi.color = rv.color or pi.color is null) order by (pi.color = rv.color) desc, pi.position limit 1) as image,
         (select pi.alt_text from product_images pi where pi.product_id = p.id_product and (pi.color = rv.color or pi.color is null) order by (pi.color = rv.color) desc, pi.position limit 1) as alt_text,
         (select pi.focal_point from product_images pi where pi.product_id = p.id_product and (pi.color = rv.color or pi.color is null) order by (pi.color = rv.color) desc, pi.position limit 1) as focal_point,
@@ -86,10 +81,6 @@ class ProductRepository {
   async findById(id: number) {
     const [rows] = await databaseClient.query<Rows>(
       `select p.*, pv.id_variant, pv.size, pv.color, pv.price, pv.stock_quantity,
-        case when ${ACTIVE_DISCOUNT_PERCENT_SQL} is not null
-          then round(pv.price * (1 - ${ACTIVE_DISCOUNT_PERCENT_SQL} / 100), 2)
-          else null
-        end as sale_price,
         (select pi.url from product_images pi where pi.product_id = p.id_product and (pi.color = pv.color or pi.color is null) order by (pi.color = pv.color) desc, pi.position limit 1) as image,
         (select pi.alt_text from product_images pi where pi.product_id = p.id_product and (pi.color = pv.color or pi.color is null) order by (pi.color = pv.color) desc, pi.position limit 1) as alt_text,
         (select pi.focal_point from product_images pi where pi.product_id = p.id_product and (pi.color = pv.color or pi.color is null) order by (pi.color = pv.color) desc, pi.position limit 1) as focal_point

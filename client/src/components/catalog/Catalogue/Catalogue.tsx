@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, useSearchParams } from "react-router";
+import { useActiveSale } from "../../../hooks/useActiveSale";
 import { useProducts } from "../../../hooks/useProducts";
 import { isRecentlyAdded } from "../../../utils/productFreshness";
 import CatalogueFilters from "../CatalogueFilters/CatalogueFilters";
@@ -38,7 +39,6 @@ type CatalogueProduct = {
   name: string;
   category: string;
   price: number;
-  salePrice: number | null;
   badge?: string;
   isBestseller: boolean;
   categoryFilter: string;
@@ -54,6 +54,7 @@ type CatalogueProduct = {
 };
 
 function Catalogue({ gender }: CatalogueProps) {
+  const activeSale = useActiveSale();
   const { filter } = useParams();
   const [searchParams] = useSearchParams();
   const search = gender ? "" : (searchParams.get("search")?.trim() ?? "");
@@ -83,7 +84,6 @@ function Catalogue({ gender }: CatalogueProps) {
       product.description ??
       (gender ? `Collection ${gender}` : "Collection Korn"),
     price: Number(product.price),
-    salePrice: product.sale_price != null ? Number(product.sale_price) : null,
     categoryFilter:
       (gender ? product.subcategory_name : product.category_name) ?? "Tout",
     image: product.image ?? "",
@@ -103,30 +103,30 @@ function Catalogue({ gender }: CatalogueProps) {
     if (!gender) setActiveFilter(routeFilter ?? "Tout");
   }, [routeFilter, gender]);
 
+  // The sale discount is applied via a promo code entered in the cart, not
+  // per product, so there is nothing to list under "Soldes" — the catalogue
+  // points shoppers at the code instead.
   const visibleProducts =
-    activeFilter === "Tout"
-      ? uniqueProducts
-      : uniqueProducts.filter((product) => {
-          if (!gender && activeFilter === "Nouveautés") {
-            return product.badge === "NOUVEAU";
-          }
-          if (!gender && activeFilter === "Bestsellers") {
-            return product.isBestseller;
-          }
-          if (!gender && activeFilter === "Soldes") {
-            return product.salePrice != null;
-          }
-          return product.categoryFilter === activeFilter;
-        });
+    !gender && activeFilter === "Soldes"
+      ? []
+      : activeFilter === "Tout"
+        ? uniqueProducts
+        : uniqueProducts.filter((product) => {
+            if (!gender && activeFilter === "Nouveautés") {
+              return product.badge === "NOUVEAU";
+            }
+            if (!gender && activeFilter === "Bestsellers") {
+              return product.isBestseller;
+            }
+            return product.categoryFilter === activeFilter;
+          });
   const sortedProducts = [...visibleProducts].sort(
     (firstProduct, secondProduct) => {
-      const firstPrice = firstProduct.salePrice ?? firstProduct.price;
-      const secondPrice = secondProduct.salePrice ?? secondProduct.price;
       if (sort === "price-low") {
-        return firstPrice - secondPrice;
+        return firstProduct.price - secondProduct.price;
       }
       if (sort === "price-high") {
-        return secondPrice - firstPrice;
+        return secondProduct.price - firstProduct.price;
       }
       return 0;
     },
@@ -151,7 +151,9 @@ function Catalogue({ gender }: CatalogueProps) {
         {visibleProducts.length === 0 ? (
           <p className="catalogue-empty-state">
             {!gender && activeFilter === "Soldes"
-              ? "Nous ne sommes pas en période de solde, veuillez revenir plus tard."
+              ? activeSale
+                ? `Utilisez le code ${activeSale.code} dans votre panier pour profiter de -${activeSale.discount_percent}% sur votre commande.`
+                : "Nous ne sommes pas en période de solde, veuillez revenir plus tard."
               : search
                 ? `Aucun résultat pour "${search}".`
                 : "Aucun produit ne correspond à ce filtre."}

@@ -12,9 +12,6 @@ export type Product = {
   size: string | null;
   color: string | null;
   price: number;
-  // price with the active sale period's discount applied, or null when no
-  // sale is currently running.
-  sale_price: number | null;
   stock_quantity: number;
   image: string | null;
   alt_text: string | null;

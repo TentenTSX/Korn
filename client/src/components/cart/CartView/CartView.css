@@ -218,6 +218,72 @@
   background: var(--color-surface);
 }
 
+.cart-promo-code {
+  margin-bottom: 1rem;
+}
+
+.cart-promo-code form {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.cart-promo-code input {
+  flex: 1;
+  min-width: 0;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid var(--color-line);
+  font-family: var(--font-third);
+  font-size: 0.82rem;
+  text-transform: uppercase;
+}
+
+.cart-promo-code form button {
+  padding: 0.6rem 1rem;
+  border: 1px solid var(--color-ink);
+  background: var(--color-surface);
+  color: var(--color-ink);
+  cursor: pointer;
+  font-family: var(--font-body);
+  font-size: 0.68rem;
+  text-transform: uppercase;
+
+  &:hover:not(:disabled),
+  &:focus-visible {
+    border-color: var(--color-accent);
+    background: var(--color-accent);
+    color: var(--color-surface);
+    outline: none;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+}
+
+.cart-promo-code-applied {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid var(--color-sale);
+  color: var(--color-sale);
+  font-family: var(--font-third);
+  font-size: 0.82rem;
+}
+
+.cart-promo-code-applied button {
+  border: 0;
+  background: none;
+  color: var(--color-muted);
+  cursor: pointer;
+  font-family: var(--font-third);
+  font-size: 0.75rem;
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+
 .cart-subtotal {
   display: flex;
   justify-content: space-between;

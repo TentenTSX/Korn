@@ -1,14 +1,19 @@
 import databaseClient from "../../../database/client";
 import type { Result, Rows } from "../../../database/client";
-import { ACTIVE_DISCOUNT_PERCENT_SQL } from "../salePeriod/activeDiscountSql";
 import type CartOwner from "./CartOwner";
 
-// The effective unit price: the active sale's discount applied to the
-// variant's base price, or the base price unchanged when no sale is
-// running. This is what the customer actually pays, so it's what cart
+// The discount_percent for the CART's OWN promo_code, but only when that
+// code still matches a currently running sale period (a code applied
+// before a sale ended, or never valid to begin with, grants nothing).
+const CART_DISCOUNT_PERCENT_SQL =
+  "(select sp.discount_percent from sale_periods sp where sp.code = c.promo_code and curdate() between sp.start_date and sp.end_date limit 1)";
+
+// The effective unit price: the cart's own promo code discount applied to
+// the variant's base price, or the base price unchanged when no valid code
+// is set. This is what the customer actually pays, so it's what cart
 // display and checkout totals use.
-const EFFECTIVE_PRICE_SQL = `case when ${ACTIVE_DISCOUNT_PERCENT_SQL} is not null
-  then round(pv.price * (1 - ${ACTIVE_DISCOUNT_PERCENT_SQL} / 100), 2)
+const EFFECTIVE_PRICE_SQL = `case when ${CART_DISCOUNT_PERCENT_SQL} is not null
+  then round(pv.price * (1 - ${CART_DISCOUNT_PERCENT_SQL} / 100), 2)
   else pv.price
 end`;
 
@@ -183,6 +188,12 @@ class CartRepository {
         `delete ci from cart_items ci join carts c on c.id_cart = ci.cart_id where ${filter.clause} and ci.quantity <= 0`,
         [filter.value],
       );
+      // The discount is now locked into the completed order's price_unit;
+      // the cart itself should start fresh for next time.
+      await connection.query(
+        `update carts c set c.promo_code = null where ${filter.clause}`,
+        [filter.value],
+      );
       await connection.commit();
     } catch (error) {
       await connection.rollback();
@@ -198,6 +209,34 @@ class CartRepository {
       `delete ci from cart_items ci join carts c on c.id_cart = ci.cart_id where ${filter.clause}`,
       [filter.value],
     );
+  }
+
+  async setPromoCode(owner: CartOwner, code: string) {
+    const cartId = await this.ensureCart(owner);
+    await databaseClient.query<Result>(
+      "update carts set promo_code = ? where id_cart = ?",
+      [code, cartId],
+    );
+  }
+
+  async clearPromoCode(owner: CartOwner) {
+    const filter = ownerFilter(owner);
+    await databaseClient.query<Result>(
+      `update carts c set c.promo_code = null where ${filter.clause}`,
+      [filter.value],
+    );
+  }
+
+  async findPromoCodeStatus(owner: CartOwner) {
+    const filter = ownerFilter(owner);
+    const [rows] = await databaseClient.query<Rows>(
+      `select c.promo_code as code, ${CART_DISCOUNT_PERCENT_SQL} as discount_percent
+       from carts c where ${filter.clause}`,
+      [filter.value],
+    );
+    return rows[0] as
+      | { code: string | null; discount_percent: number | null }
+      | undefined;
   }
 }
 

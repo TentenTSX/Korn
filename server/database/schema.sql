@@ -89,6 +89,7 @@ CREATE TABLE carts (
     id_cart INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NULL,
     guest_token_hash CHAR(64) NULL,
+    promo_code VARCHAR(50) NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         ON UPDATE CURRENT_TIMESTAMP,
@@ -184,6 +185,7 @@ CREATE TABLE sale_periods (
     id_sale_period INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
     slug VARCHAR(100) NOT NULL UNIQUE,
+    code VARCHAR(50) NOT NULL UNIQUE,
     discount_percent INT NOT NULL,
     start_date DATE NOT NULL,
     end_date DATE NOT NULL
@@ -433,7 +435,7 @@ INSERT INTO product_images (product_id, url, alt_text, position, color, focal_po
     (@product_id, '/images/products/short-brassiere-ensemble/rouge.webp', 'Femme portant un short de sport rouge', 0, 'Rouge', '100%'),
     (@product_id, '/images/products/short-brassiere-ensemble2/rouge.webp', 'Femme portant un short de sport rouge, photo alternative', 1, 'Rouge', NULL);
 
-INSERT INTO sale_periods (name, slug, discount_percent, start_date, end_date) VALUES
-    ('Soldes d''hiver', 'winter', 30, '2026-01-07', '2026-02-03'),
-    ('Soldes d''ete', 'summer', 40, '2026-06-24', '2026-07-21'),
-    ('Soldes d''automne', 'autumn', 20, '2026-09-23', '2026-10-20');
+INSERT INTO sale_periods (name, slug, code, discount_percent, start_date, end_date) VALUES
+    ('Soldes d''hiver', 'winter', 'WINTER30', 30, '2026-01-07', '2026-02-03'),
+    ('Soldes d''ete', 'summer', 'SUMMER40', 40, '2026-06-24', '2026-07-21'),
+    ('Soldes d''automne', 'autumn', 'AUTUMN20', 20, '2026-09-23', '2026-10-20');

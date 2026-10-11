@@ -2,6 +2,7 @@ import { Outlet, ScrollRestoration, useLocation } from "react-router";
 import { useNavigate } from "react-router";
 import Footer from "./components/Footer/Footer";
 import Navbar from "./components/Navbar/Navbar";
+import SaleBanner from "./components/SaleBanner/SaleBanner";
 import CartView from "./components/cart/CartView/CartView";
 import { useCartContext } from "./contexts/CartContext";
 import "./App.css";
@@ -15,6 +16,7 @@ function App() {
   return (
     <>
       <ScrollRestoration />
+      <SaleBanner />
       <Navbar />
       <Outlet />
       {!hideFooter && <Footer />}
