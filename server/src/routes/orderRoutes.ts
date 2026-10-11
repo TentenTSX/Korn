@@ -8,6 +8,13 @@ import { currentUserId, runAction } from "./routeHelpers";
 const router = express.Router();
 
 router.get(
+  "/api/shipping-fee",
+  runAction(async (_req, res) => {
+    res.json(orderActions.getShippingFeeAction());
+  }),
+);
+
+router.get(
   "/api/users/:userId/orders",
   authenticate,
   runAction(async (req, res) => {

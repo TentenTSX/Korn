@@ -132,6 +132,7 @@ CREATE TABLE orders (
     payment_email_claimed_at TIMESTAMP NULL,
     payment_email_sent_at TIMESTAMP NULL,
     total_price DECIMAL(10,2) NOT NULL,
+    shipping_fee DECIMAL(10,2) NOT NULL DEFAULT 0,
     status VARCHAR(30) NOT NULL DEFAULT 'pending',
     shipping_first_name VARCHAR(100) NOT NULL,
     shipping_last_name VARCHAR(100) NOT NULL,

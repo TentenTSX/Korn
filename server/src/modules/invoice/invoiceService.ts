@@ -87,13 +87,29 @@ export function createInvoicePdf(invoice: InvoiceData): Promise<Buffer> {
       .lineTo(543, rowY + 2)
       .strokeColor("#dedbd5")
       .stroke();
+
+    const shippingFee = Number(invoice.shipping_fee);
+    const subtotal = Number(invoice.total_price) - shippingFee;
+    document
+      .fontSize(10)
+      .fillColor("#706c67")
+      .text(`Sous-total : ${money.format(subtotal)}`, 330, rowY + 14, {
+        width: 213,
+        align: "right",
+      })
+      .text(
+        `Frais de livraison : ${money.format(shippingFee)}`,
+        330,
+        rowY + 30,
+        { width: 213, align: "right" },
+      );
     document
       .fontSize(12)
       .fillColor("#191817")
       .text(
         `Total payé : ${money.format(Number(invoice.total_price))}`,
         330,
-        rowY + 14,
+        rowY + 50,
         {
           width: 213,
           align: "right",

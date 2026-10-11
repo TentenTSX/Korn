@@ -104,6 +104,15 @@
   background: var(--color-surface);
 }
 
+.order-detail-line {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+  color: var(--color-muted);
+  font-family: var(--font-third);
+  font-size: 0.8rem;
+}
+
 .order-detail-total {
   display: flex;
   justify-content: space-between;

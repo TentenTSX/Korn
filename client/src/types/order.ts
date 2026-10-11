@@ -20,6 +20,7 @@ export type OrderItem = {
 export type OrderDetail = {
   id_order: number;
   total_price: number | string;
+  shipping_fee: number | string;
   status: string;
   created_at: string;
   invoice_number: string | null;
