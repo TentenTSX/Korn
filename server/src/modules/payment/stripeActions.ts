@@ -43,20 +43,30 @@ const createCheckoutSessionAction = async (
       expires_at: Math.floor(Date.now() / 1000) + 60 * 60,
       success_url: `${getClientUrl()}/checkout?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${getClientUrl()}/checkout?cancelled=1&order_id=${order.orderId}`,
-      line_items: order.items.map((item) => {
-        const options = [item.color, item.size].filter(Boolean).join(" / ");
-        return {
-          quantity: item.quantity,
+      line_items: [
+        ...order.items.map((item) => {
+          const options = [item.color, item.size].filter(Boolean).join(" / ");
+          return {
+            quantity: item.quantity,
+            price_data: {
+              currency: "eur",
+              unit_amount: Math.round(item.price_unit * 100),
+              product_data: {
+                name: item.name,
+                ...(options ? { description: options } : {}),
+              },
+            },
+          };
+        }),
+        {
+          quantity: 1,
           price_data: {
             currency: "eur",
-            unit_amount: Math.round(item.price_unit * 100),
-            product_data: {
-              name: item.name,
-              ...(options ? { description: options } : {}),
-            },
+            unit_amount: Math.round(order.shippingFee * 100),
+            product_data: { name: "Frais de livraison" },
           },
-        };
-      }),
+        },
+      ],
     });
     if (!session.url) throw new Error("Stripe did not return a checkout URL.");
     await orderRepository.attachStripeSession(order.orderId, session.id);

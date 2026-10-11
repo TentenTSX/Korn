@@ -129,10 +129,12 @@ describe("orderActions.createOrderAction", () => {
       validCheckoutInput,
     );
 
-    // 19.99 * 3 computed in cents to avoid floating point drift (5997 cents = 59.97).
+    // 19.99 * 3 computed in cents to avoid floating point drift (5997 cents = 59.97),
+    // plus the flat 4.90 shipping fee (64.87).
     expect(result).toEqual({
       orderId: 42,
-      totalPrice: 59.97,
+      totalPrice: 64.87,
+      shippingFee: 4.9,
       items: [
         {
           variant_id: 1,
@@ -148,7 +150,8 @@ describe("orderActions.createOrderAction", () => {
       expect.objectContaining({
         user_id: 1,
         customer_email: "ada@example.com",
-        total_price: 59.97,
+        total_price: 64.87,
+        shipping_fee: 4.9,
       }),
       expect.any(Array),
     );

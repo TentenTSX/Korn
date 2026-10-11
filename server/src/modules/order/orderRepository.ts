@@ -6,6 +6,7 @@ type OrderInput = {
   customer_email: string;
   guest_cart_token_hash: string | null;
   total_price: number;
+  shipping_fee: number;
   shipping_first_name: string;
   shipping_last_name: string;
   shipping_address: string;
@@ -26,6 +27,7 @@ export type InvoiceData = {
   invoice_issued_at: Date | string;
   customer_email: string;
   total_price: number | string;
+  shipping_fee: number | string;
   created_at: Date | string;
   shipping_first_name: string;
   shipping_last_name: string;
@@ -135,7 +137,7 @@ class OrderRepository {
     orderId: number,
   ): Promise<InvoiceData | undefined> {
     const [orderRows] = await databaseClient.query<Rows>(
-      "select id_order, invoice_number, invoice_issued_at, customer_email, total_price, created_at, shipping_first_name, shipping_last_name, shipping_address, shipping_city, shipping_postal_code, shipping_country from orders where id_order = ? and status = 'paid' and invoice_number is not null",
+      "select id_order, invoice_number, invoice_issued_at, customer_email, total_price, shipping_fee, created_at, shipping_first_name, shipping_last_name, shipping_address, shipping_city, shipping_postal_code, shipping_country from orders where id_order = ? and status = 'paid' and invoice_number is not null",
       [orderId],
     );
     if (orderRows.length === 0) return undefined;
@@ -189,12 +191,13 @@ class OrderRepository {
     try {
       await connection.beginTransaction();
       const [result] = await connection.query<Result>(
-        "insert into orders (user_id, customer_email, guest_cart_token_hash, total_price, shipping_first_name, shipping_last_name, shipping_address, shipping_city, shipping_postal_code, shipping_country) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+        "insert into orders (user_id, customer_email, guest_cart_token_hash, total_price, shipping_fee, shipping_first_name, shipping_last_name, shipping_address, shipping_city, shipping_postal_code, shipping_country) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
         [
           order.user_id,
           order.customer_email,
           order.guest_cart_token_hash,
           order.total_price,
+          order.shipping_fee,
           order.shipping_first_name,
           order.shipping_last_name,
           order.shipping_address,

@@ -5,6 +5,7 @@ import { useAuthContext } from "../../contexts/AuthContext";
 import { useCartContext } from "../../contexts/CartContext";
 import { useDocumentHead } from "../../hooks/useDocumentHead";
 import { usePaymentSession } from "../../hooks/usePaymentSession";
+import { useShippingFee } from "../../hooks/useShippingFee";
 import type { ShippingInput } from "../../types/cart";
 import CheckoutConfirmation from "./CheckoutConfirmation";
 import CheckoutForm from "./CheckoutForm";
@@ -38,10 +39,12 @@ function Checkout() {
     isLoading: isCheckingPayment,
     error: paymentError,
   } = usePaymentSession(stripeSessionId);
-  const total = items.reduce(
+  const subtotal = items.reduce(
     (sum, item) => sum + Number(item.price_unit) * item.quantity,
     0,
   );
+  const shippingFee = useShippingFee();
+  const total = subtotal + (shippingFee ?? 0);
 
   useEffect(() => {
     if (!user) return;
@@ -173,7 +176,11 @@ function Checkout() {
           />
         </section>
 
-        <CheckoutSummary items={items} total={total} />
+        <CheckoutSummary
+          items={items}
+          subtotal={subtotal}
+          shippingFee={shippingFee}
+        />
       </div>
     </main>
   );

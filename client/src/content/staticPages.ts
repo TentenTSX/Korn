@@ -75,7 +75,7 @@ export const staticPages: Record<string, StaticPageContent> = {
       {
         heading: "Frais de livraison",
         paragraphs: [
-          "Les frais de livraison sont calculés et affichés avant le paiement final, en fonction de votre adresse de livraison.",
+          "Un forfait de livraison unique de 4,90 € s'applique à toutes les commandes, quelle que soit votre adresse. Il est détaillé avant la validation du paiement.",
         ],
       },
       {

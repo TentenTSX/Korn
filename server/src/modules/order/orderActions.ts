@@ -2,6 +2,7 @@ import ActionError from "../ActionError";
 import type CartOwner from "../cart/CartOwner";
 import cartRepository from "../cart/cartRepository";
 import orderRepository from "./orderRepository";
+import { SHIPPING_FEE_EUR } from "./shippingFee";
 
 type CheckoutInput = {
   customer_email: string;
@@ -106,7 +107,8 @@ const createOrderAction = async (owner: CartOwner, input: CheckoutInput) => {
     };
   });
 
-  const totalPrice = totalCents / 100;
+  const shippingFeeCents = Math.round(SHIPPING_FEE_EUR * 100);
+  const totalPrice = (totalCents + shippingFeeCents) / 100;
   const orderId = await orderRepository.createWithItems(
     {
       user_id: owner.kind === "user" ? owner.userId : null,
@@ -114,6 +116,7 @@ const createOrderAction = async (owner: CartOwner, input: CheckoutInput) => {
       guest_cart_token_hash:
         owner.kind === "guest" ? owner.guestTokenHash : null,
       total_price: totalPrice,
+      shipping_fee: shippingFeeCents / 100,
       shipping_first_name: input.shipping_first_name.trim(),
       shipping_last_name: input.shipping_last_name.trim(),
       shipping_address: input.shipping_address.trim(),
@@ -123,11 +126,19 @@ const createOrderAction = async (owner: CartOwner, input: CheckoutInput) => {
     },
     orderItems,
   );
-  return { orderId, totalPrice, items: orderItems };
+  return {
+    orderId,
+    totalPrice,
+    shippingFee: shippingFeeCents / 100,
+    items: orderItems,
+  };
 };
+
+const getShippingFeeAction = () => ({ shippingFee: SHIPPING_FEE_EUR });
 
 export default {
   getOrdersAction,
   getOrderAction,
   createOrderAction,
+  getShippingFeeAction,
 };

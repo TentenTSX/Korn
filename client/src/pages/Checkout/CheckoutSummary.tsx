@@ -3,10 +3,15 @@ import { currency } from "../../utils/currency";
 
 type CheckoutSummaryProps = {
   items: CartItem[];
-  total: number;
+  subtotal: number;
+  shippingFee: number | null;
 };
 
-function CheckoutSummary({ items, total }: CheckoutSummaryProps) {
+function CheckoutSummary({
+  items,
+  subtotal,
+  shippingFee,
+}: CheckoutSummaryProps) {
   return (
     <aside className="checkout-summary" aria-labelledby="summary-title">
       <h2 id="summary-title">
@@ -37,14 +42,22 @@ function CheckoutSummary({ items, total }: CheckoutSummaryProps) {
           </article>
         ))}
       </div>
-      <div className="checkout-summary-total">
-        <span>Total produits</span>
-        <strong>{currency.format(total)}</strong>
+      <div className="checkout-summary-lines">
+        <div className="checkout-summary-line">
+          <span>Sous-total produits</span>
+          <strong>{currency.format(subtotal)}</strong>
+        </div>
+        <div className="checkout-summary-line">
+          <span>Frais de livraison</span>
+          <strong>
+            {shippingFee !== null ? currency.format(shippingFee) : "…"}
+          </strong>
+        </div>
       </div>
-      <p className="checkout-summary-footnote">
-        Les frais de livraison seront précisés avant la mise en place du
-        paiement.
-      </p>
+      <div className="checkout-summary-total">
+        <span>Total</span>
+        <strong>{currency.format(subtotal + (shippingFee ?? 0))}</strong>
+      </div>
     </aside>
   );
 }

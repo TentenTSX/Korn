@@ -98,6 +98,18 @@ function OrderDetail() {
 
         <aside className="order-detail-summary">
           <h2>Résumé</h2>
+          <div className="order-detail-line">
+            <span>Sous-total produits</span>
+            <strong>
+              {money.format(
+                Number(order.total_price) - Number(order.shipping_fee),
+              )}
+            </strong>
+          </div>
+          <div className="order-detail-line">
+            <span>Frais de livraison</span>
+            <strong>{money.format(Number(order.shipping_fee))}</strong>
+          </div>
           <div className="order-detail-total">
             <span>Total</span>
             <strong>{money.format(Number(order.total_price))}</strong>
