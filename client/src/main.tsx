@@ -15,6 +15,7 @@ import OrderDetail from "./pages/OrderDetail/OrderDetail";
 import Product from "./pages/Product/Product";
 import Profile from "./pages/Profile/Profile";
 import ProfileDashboard from "./pages/ProfileDashboard/ProfileDashboard";
+import ProfileSettings from "./pages/ProfileSettings/ProfileSettings";
 import ResetPassword from "./pages/ResetPassword/ResetPassword";
 import StaticPage from "./pages/StaticPage/StaticPage";
 
@@ -61,6 +62,10 @@ const router = createBrowserRouter([
       {
         path: "/profile/dashboard",
         element: <ProfileDashboard />,
+      },
+      {
+        path: "/profile/settings",
+        element: <ProfileSettings />,
       },
       {
         path: "/profile/orders/:orderId",

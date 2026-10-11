@@ -156,6 +156,7 @@ function ProfileDashboard({
             Les factures payées sont disponibles dans l’historique des
             commandes.
           </p>
+          <Link to="/profile/settings">Modifier mes informations</Link>
         </aside>
       </div>
     </section>

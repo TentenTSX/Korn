@@ -7,6 +7,7 @@ import authRepository from "./authRepository";
 import googleClient from "./googleClient";
 
 const PASSWORD_RESET_EXPIRY_MS = 60 * 60 * 1000;
+const DELETE_ACCOUNT_CONFIRMATION = "SUPPRIMER";
 
 type RegisterInput = {
   first_name: string;
@@ -103,19 +104,109 @@ const getCurrentUser = async (userId: number) => {
   return user;
 };
 
-const getProfile = async (
+function assertOwnAccount(
   authenticatedUserId: number,
   requestedUserId: number,
-) => {
+) {
   if (!Number.isInteger(requestedUserId) || requestedUserId < 1) {
     throw new ActionError("BAD_REQUEST", "Identifiant utilisateur invalide.");
   }
   if (authenticatedUserId !== requestedUserId) {
     throw new ActionError("FORBIDDEN", "Accès interdit.");
   }
+}
+
+const getProfile = async (
+  authenticatedUserId: number,
+  requestedUserId: number,
+) => {
+  assertOwnAccount(authenticatedUserId, requestedUserId);
   const user = await authRepository.findById(requestedUserId);
   if (!user) throw new ActionError("NOT_FOUND", "Utilisateur introuvable.");
   return user;
+};
+
+const updateProfileAction = async (
+  authenticatedUserId: number,
+  requestedUserId: number,
+  input: { first_name?: unknown; last_name?: unknown; email?: unknown },
+) => {
+  assertOwnAccount(authenticatedUserId, requestedUserId);
+  if (
+    typeof input?.first_name !== "string" ||
+    !input.first_name.trim() ||
+    typeof input.last_name !== "string" ||
+    !input.last_name.trim() ||
+    typeof input.email !== "string" ||
+    !input.email.trim()
+  ) {
+    throw new ActionError("BAD_REQUEST", "Prénom, nom et email sont requis.");
+  }
+
+  const email = input.email.trim().toLowerCase();
+  if (!/^\S+@\S+\.\S+$/.test(email)) {
+    throw new ActionError("BAD_REQUEST", "Adresse email invalide.");
+  }
+
+  const existing = await authRepository.findByEmail(email);
+  if (existing && existing.id_user !== requestedUserId) {
+    throw new ActionError("CONFLICT", "Un compte existe déjà avec cet email.");
+  }
+
+  await authRepository.updateProfile(requestedUserId, {
+    first_name: input.first_name.trim(),
+    last_name: input.last_name.trim(),
+    email,
+  });
+  return getCurrentUser(requestedUserId);
+};
+
+const changePasswordAction = async (
+  authenticatedUserId: number,
+  requestedUserId: number,
+  currentPasswordInput: unknown,
+  newPasswordInput: unknown,
+) => {
+  assertOwnAccount(authenticatedUserId, requestedUserId);
+  if (
+    typeof currentPasswordInput !== "string" ||
+    !currentPasswordInput ||
+    typeof newPasswordInput !== "string" ||
+    newPasswordInput.length < 8
+  ) {
+    throw new ActionError(
+      "BAD_REQUEST",
+      "Le mot de passe actuel est requis et le nouveau doit contenir au moins 8 caractères.",
+    );
+  }
+
+  const credentials = await authRepository.findCredentialsById(requestedUserId);
+  if (
+    !credentials ||
+    !(await argon2.verify(credentials.password_hash, currentPasswordInput))
+  ) {
+    throw new ActionError("UNAUTHORIZED", "Mot de passe actuel incorrect.");
+  }
+
+  await authRepository.updatePassword(
+    requestedUserId,
+    await argon2.hash(newPasswordInput),
+  );
+};
+
+const deleteAccountAction = async (
+  authenticatedUserId: number,
+  requestedUserId: number,
+  confirmationInput: unknown,
+) => {
+  assertOwnAccount(authenticatedUserId, requestedUserId);
+  if (confirmationInput !== DELETE_ACCOUNT_CONFIRMATION) {
+    throw new ActionError(
+      "BAD_REQUEST",
+      `Merci de saisir « ${DELETE_ACCOUNT_CONFIRMATION} » pour confirmer.`,
+    );
+  }
+  await authRepository.deleteUser(requestedUserId);
 };
 
 const logout = () => undefined;
@@ -208,6 +299,9 @@ export default {
   login,
   getCurrentUser,
   getProfile,
+  updateProfileAction,
+  changePasswordAction,
+  deleteAccountAction,
   logout,
   requestPasswordReset,
   confirmPasswordReset,

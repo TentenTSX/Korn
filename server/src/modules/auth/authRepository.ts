@@ -27,6 +27,14 @@ class authRepository {
     return rows[0] as Omit<User, "password_hash" | "google_id"> | undefined;
   }
 
+  async findCredentialsById(id: number) {
+    const [rows] = await databaseClient.query<Rows>(
+      "select password_hash from users where id_user = ?",
+      [id],
+    );
+    return rows[0] as { password_hash: string } | undefined;
+  }
+
   async findByGoogleId(googleId: string) {
     const [rows] = await databaseClient.query<Rows>(
       "select * from users where google_id = ?",
@@ -69,6 +77,39 @@ class authRepository {
       "update users set password_hash = ? where id_user = ?",
       [passwordHash, userId],
     );
+  }
+
+  async updateProfile(
+    userId: number,
+    profile: { first_name: string; last_name: string; email: string },
+  ) {
+    await databaseClient.query<Result>(
+      "update users set first_name = ?, last_name = ?, email = ? where id_user = ?",
+      [profile.first_name, profile.last_name, profile.email, userId],
+    );
+  }
+
+  async deleteUser(userId: number) {
+    const connection = await databaseClient.getConnection();
+    try {
+      await connection.beginTransaction();
+      // Orders keep their shipping/email details independently of users, so
+      // anonymizing them (same as a guest order) preserves order history
+      // without the orders.user_id foreign key blocking the deletion.
+      await connection.query<Result>(
+        "update orders set user_id = null where user_id = ?",
+        [userId],
+      );
+      await connection.query<Result>("delete from users where id_user = ?", [
+        userId,
+      ]);
+      await connection.commit();
+    } catch (error) {
+      await connection.rollback();
+      throw error;
+    } finally {
+      connection.release();
+    }
   }
 
   async createPasswordReset(
