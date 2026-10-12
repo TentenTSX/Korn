@@ -55,3 +55,24 @@ EMAIL_FROM=Korn <orders@example.com>
 Le dashboard calcule les commandes en cours, factures disponibles et paiements
 en attente à partir des statuts et paiements enregistrés en base. Une facture
 n’est jamais proposée pour une commande non payée.
+
+## Livraison
+
+Les frais de livraison sont un forfait fixe (`server/src/modules/order/shippingFee.ts`),
+pas un vrai calcul transporteur. Aucun transporteur (Chronopost, Colissimo,
+Shippo, etc.) n'est branché : KORN ne vend pas encore de produits réels, donc
+intégrer un vrai transporteur maintenant n'apporterait rien. Le statut d'une
+commande (préparée / expédiée / livrée) se met à jour manuellement depuis
+l'espace admin plutôt que par webhook transporteur. À revisiter uniquement
+quand il y aura de vraies ventes à expédier.
+
+## Espace admin
+
+Un compte avec `role = 'admin'` accède à `/admin/orders` (lien visible dans la
+navbar une fois connecté) pour voir toutes les commandes et faire avancer leur
+statut. Aucune inscription admin en self-service n'existe volontairement :
+promouvoir un compte se fait directement en base :
+
+```sql
+UPDATE users SET role = 'admin' WHERE email = 'vous@exemple.com';
+```

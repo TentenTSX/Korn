@@ -16,6 +16,82 @@ afterEach(() => {
   jest.restoreAllMocks();
 });
 
+describe("orderActions.getAdminOrdersAction", () => {
+  test("returns every order without any ownership check", async () => {
+    const orders = [
+      { id_order: 1, customer_email: "ada@example.com", status: "paid" },
+      { id_order: 2, customer_email: "grace@example.com", status: "shipped" },
+    ];
+    const findSpy = jest
+      .spyOn(orderRepository, "findAllAdmin")
+      .mockResolvedValue(orders as never);
+
+    const result = await orderActions.getAdminOrdersAction();
+
+    expect(result).toBe(orders);
+    expect(findSpy).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe("orderActions.getAdminOrderAction", () => {
+  test("rejects an invalid order id", async () => {
+    await expect(orderActions.getAdminOrderAction(-1)).rejects.toMatchObject({
+      code: "BAD_REQUEST",
+    });
+  });
+
+  test("rejects when the order does not exist", async () => {
+    jest.spyOn(orderRepository, "findByIdAdmin").mockResolvedValue(undefined);
+
+    await expect(orderActions.getAdminOrderAction(1)).rejects.toMatchObject({
+      code: "NOT_FOUND",
+    });
+  });
+
+  test("returns the order when found, for any owner", async () => {
+    const order = { id_order: 1, status: "paid", items: [] };
+    jest
+      .spyOn(orderRepository, "findByIdAdmin")
+      .mockResolvedValue(order as never);
+
+    const result = await orderActions.getAdminOrderAction(1);
+
+    expect(result).toBe(order);
+  });
+});
+
+describe("orderActions.updateOrderStatusAction", () => {
+  test("rejects an invalid order id", async () => {
+    await expect(
+      orderActions.updateOrderStatusAction(-1, "shipped"),
+    ).rejects.toMatchObject({ code: "BAD_REQUEST" });
+  });
+
+  test("rejects a status outside the admin-settable list", async () => {
+    await expect(
+      orderActions.updateOrderStatusAction(1, "pending"),
+    ).rejects.toMatchObject({ code: "BAD_REQUEST" });
+  });
+
+  test("rejects when the order can't be updated (wrong state or missing)", async () => {
+    jest.spyOn(orderRepository, "updateStatus").mockResolvedValue(0);
+
+    await expect(
+      orderActions.updateOrderStatusAction(1, "shipped"),
+    ).rejects.toMatchObject({ code: "CONFLICT" });
+  });
+
+  test("updates the status when the order is in a settable state", async () => {
+    const updateSpy = jest
+      .spyOn(orderRepository, "updateStatus")
+      .mockResolvedValue(1);
+
+    await orderActions.updateOrderStatusAction(1, "shipped");
+
+    expect(updateSpy).toHaveBeenCalledWith(1, "shipped");
+  });
+});
+
 describe("orderActions.getOrdersAction", () => {
   test("rejects when the authenticated user does not match", async () => {
     await expect(orderActions.getOrdersAction(1, 2)).rejects.toMatchObject({

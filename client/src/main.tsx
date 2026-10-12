@@ -4,6 +4,7 @@ import { RouterProvider, createBrowserRouter } from "react-router";
 import App from "./App";
 import { AuthProvider } from "./contexts/AuthContext";
 import { CartProvider } from "./contexts/CartContext";
+import AdminOrders from "./pages/Admin/AdminOrders";
 import Cart from "./pages/Cart/Cart";
 import Checkout from "./pages/Checkout/Checkout";
 import Collection from "./pages/Collection/Collection";
@@ -54,6 +55,10 @@ const router = createBrowserRouter([
       {
         path: "/product/:id",
         element: <Product />,
+      },
+      {
+        path: "/admin/orders",
+        element: <AdminOrders />,
       },
       {
         path: "/profile",

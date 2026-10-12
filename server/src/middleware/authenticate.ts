@@ -25,7 +25,7 @@ async function attachAuthenticatedUser(
   if (!user) {
     throw new Error("Authenticated user no longer exists.");
   }
-  req.authUser = { id_user: payload.id_user };
+  req.authUser = { id_user: payload.id_user, role: user.role };
 }
 
 const authenticate: RequestHandler = async (req, res, next) => {
@@ -52,6 +52,14 @@ export const authenticateOptional: RequestHandler = async (req, _res, next) => {
       // Invalid, expired or stale (deleted account) token: fall back to
       // guest behaviour instead of rejecting the whole request.
     }
+  }
+  next();
+};
+
+export const requireAdmin: RequestHandler = (req, res, next) => {
+  if (req.authUser?.role !== "admin") {
+    res.status(403).json({ message: "Accès interdit." });
+    return;
   }
   next();
 };

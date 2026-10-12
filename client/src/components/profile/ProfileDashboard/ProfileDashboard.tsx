@@ -1,6 +1,10 @@
 import { Link } from "react-router";
 import type { OrderSummary } from "../../../types/order";
 import { currency as money } from "../../../utils/currency";
+import {
+  ORDER_STATUS_LABELS,
+  PAYMENT_STATUS_LABELS,
+} from "../../../utils/orderStatusLabels";
 import "./ProfileDashboard.css";
 
 type ProfileDashboardProps = {
@@ -10,23 +14,6 @@ type ProfileDashboardProps = {
   isLoading: boolean;
   orders?: OrderSummary[];
   onLogout: () => void;
-};
-
-const orderStatusLabels: Record<string, string> = {
-  pending: "En attente de paiement",
-  paid: "Payée, en préparation",
-  processing: "En préparation",
-  shipped: "Expédiée",
-  delivered: "Livrée",
-  checkout_failed: "Paiement à reprendre",
-  checkout_expired: "Paiement expiré",
-};
-
-const paymentStatusLabels: Record<string, string> = {
-  paid: "Payé",
-  pending: "En attente",
-  failed: "Échec",
-  refunded: "Remboursé",
 };
 
 function ProfileDashboard({
@@ -121,11 +108,11 @@ function ProfileDashboard({
                   </div>
                   <div className="profile-order-payment">
                     <span className="profile-order-status">
-                      {orderStatusLabels[order.status] ?? order.status}
+                      {ORDER_STATUS_LABELS[order.status] ?? order.status}
                     </span>
                     <span>
                       Paiement :{" "}
-                      {paymentStatusLabels[order.payment_status ?? ""] ??
+                      {PAYMENT_STATUS_LABELS[order.payment_status ?? ""] ??
                         "Non confirmé"}
                     </span>
                   </div>

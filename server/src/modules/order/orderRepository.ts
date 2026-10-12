@@ -61,6 +61,40 @@ class OrderRepository {
     return rows;
   }
 
+  async findAllAdmin() {
+    const [rows] = await databaseClient.query<Rows>(
+      "select o.id_order, o.customer_email, o.shipping_first_name, o.shipping_last_name, o.total_price, o.status, o.created_at, o.invoice_number, (select p.status from payments p where p.order_id = o.id_order order by p.created_at desc limit 1) as payment_status from orders o order by o.created_at desc",
+    );
+    return rows;
+  }
+
+  async findByIdAdmin(orderId: number) {
+    const [rows] = await databaseClient.query<Rows>(
+      "select * from orders where id_order = ?",
+      [orderId],
+    );
+    const order = rows[0];
+    if (!order) return undefined;
+
+    const [itemRows] = await databaseClient.query<Rows>(
+      "select p.id_product, p.name, pv.size, pv.color, oi.quantity, oi.price_unit, (select pi.url from product_images pi where pi.product_id = p.id_product and (pi.color = pv.color or pi.color is null) order by (pi.color = pv.color) desc, pi.position limit 1) as image from order_items oi join product_variants pv on pv.id_variant = oi.variant_id join products p on p.id_product = pv.product_id where oi.order_id = ? order by oi.id_order_item",
+      [orderId],
+    );
+    return { ...order, items: itemRows } as typeof order & { items: Rows };
+  }
+
+  // Only a paid order can be progressed further, and only through the
+  // fulfillment states an admin actually owns — pending/checkout_failed/
+  // checkout_expired are Stripe's payment-lifecycle states, not this
+  // endpoint's to set.
+  async updateStatus(orderId: number, status: string) {
+    const [result] = await databaseClient.query<Result>(
+      "update orders set status = ? where id_order = ? and status in ('paid', 'processing', 'shipped', 'delivered')",
+      [status, orderId],
+    );
+    return result.affectedRows;
+  }
+
   async findById(userId: number, orderId: number) {
     const [rows] = await databaseClient.query<Rows>(
       "select * from orders where user_id = ? and id_order = ?",
