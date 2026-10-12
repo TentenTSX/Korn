@@ -1,6 +1,7 @@
 import { Menu, ShoppingBag, UserRound, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router";
+import { useAuthContext } from "../../contexts/AuthContext";
 import { useCartContext } from "../../contexts/CartContext";
 import { useActiveSale } from "../../hooks/useActiveSale";
 import { useSearchSuggestions } from "../../hooks/useSearchSuggestions";
@@ -9,6 +10,7 @@ import "../Navbar/Navbar.css";
 
 function Navbar() {
   const navigate = useNavigate();
+  const { user } = useAuthContext();
   const { itemCount, openCart } = useCartContext();
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [search, setSearch] = useState("");
@@ -132,6 +134,16 @@ function Navbar() {
               <span aria-label={`${activeSale.discount_percent}% de réduction`}>
                 -{activeSale.discount_percent}%
               </span>
+            </li>
+          )}
+          {user?.role === "admin" && (
+            <li className="nav-link">
+              <Link
+                to="/admin/orders"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Admin
+              </Link>
             </li>
           )}
           <li className="nav-link nav-link-auth">

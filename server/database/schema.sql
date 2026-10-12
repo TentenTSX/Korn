@@ -9,6 +9,7 @@ CREATE TABLE users (
     email VARCHAR(255) NOT NULL UNIQUE,
     password_hash VARCHAR(255) NOT NULL,
     google_id VARCHAR(255) NULL UNIQUE,
+    role VARCHAR(20) NOT NULL DEFAULT 'customer',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 

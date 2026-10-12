@@ -1,5 +1,5 @@
 import express from "express";
-import authenticate from "../middleware/authenticate";
+import authenticate, { requireAdmin } from "../middleware/authenticate";
 import ActionError from "../modules/ActionError";
 import invoiceActions from "../modules/invoice/invoiceActions";
 import orderActions from "../modules/order/orderActions";
@@ -11,6 +11,39 @@ router.get(
   "/api/shipping-fee",
   runAction(async (_req, res) => {
     res.json(orderActions.getShippingFeeAction());
+  }),
+);
+
+router.get(
+  "/api/admin/orders",
+  authenticate,
+  requireAdmin,
+  runAction(async (_req, res) => {
+    res.json(await orderActions.getAdminOrdersAction());
+  }),
+);
+
+router.get(
+  "/api/admin/orders/:orderId",
+  authenticate,
+  requireAdmin,
+  runAction(async (req, res) => {
+    res.json(
+      await orderActions.getAdminOrderAction(Number(req.params.orderId)),
+    );
+  }),
+);
+
+router.patch(
+  "/api/admin/orders/:orderId/status",
+  authenticate,
+  requireAdmin,
+  runAction(async (req, res) => {
+    await orderActions.updateOrderStatusAction(
+      Number(req.params.orderId),
+      req.body?.status,
+    );
+    res.sendStatus(204);
   }),
 );
 

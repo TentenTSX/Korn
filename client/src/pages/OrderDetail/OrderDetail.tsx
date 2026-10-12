@@ -4,17 +4,8 @@ import { useAuthContext } from "../../contexts/AuthContext";
 import { useDocumentHead } from "../../hooks/useDocumentHead";
 import { useOrder } from "../../hooks/useOrder";
 import { currency as money } from "../../utils/currency";
+import { ORDER_STATUS_LABELS } from "../../utils/orderStatusLabels";
 import "./OrderDetail.css";
-
-const orderStatusLabels: Record<string, string> = {
-  pending: "En attente de paiement",
-  paid: "Payée, en préparation",
-  processing: "En préparation",
-  shipped: "Expédiée",
-  delivered: "Livrée",
-  checkout_failed: "Paiement à reprendre",
-  checkout_expired: "Paiement expiré",
-};
 
 function OrderDetail() {
   const navigate = useNavigate();
@@ -60,7 +51,7 @@ function OrderDetail() {
           <h1>Commande #{order.id_order}</h1>
         </div>
         <span className="order-detail-status">
-          {orderStatusLabels[order.status] ?? order.status}
+          {ORDER_STATUS_LABELS[order.status] ?? order.status}
         </span>
       </header>
 

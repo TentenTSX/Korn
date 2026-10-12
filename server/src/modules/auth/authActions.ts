@@ -23,12 +23,14 @@ function publicUser(user: {
   first_name: string;
   last_name: string;
   email: string;
+  role: string;
 }) {
   return {
     id_user: user.id_user,
     first_name: user.first_name,
     last_name: user.last_name,
     email: user.email,
+    role: user.role,
   };
 }
 

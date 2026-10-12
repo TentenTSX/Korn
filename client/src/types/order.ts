@@ -32,3 +32,19 @@ export type OrderDetail = {
   shipping_country: string;
   items: OrderItem[];
 };
+
+export type AdminOrderSummary = {
+  id_order: number;
+  customer_email: string;
+  shipping_first_name: string;
+  shipping_last_name: string;
+  total_price: number | string;
+  status: string;
+  created_at: string;
+  invoice_number: string | null;
+  payment_status: string | null;
+};
+
+export type AdminOrderDetail = OrderDetail & {
+  customer_email: string;
+};

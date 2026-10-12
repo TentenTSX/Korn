@@ -30,6 +30,37 @@ function parseId(value: number, label: string) {
   return value;
 }
 
+const ADMIN_SETTABLE_STATUSES = ["paid", "processing", "shipped", "delivered"];
+
+const getAdminOrdersAction = () => orderRepository.findAllAdmin();
+
+const getAdminOrderAction = async (orderIdValue: number) => {
+  const orderId = parseId(orderIdValue, "Commande");
+  const order = await orderRepository.findByIdAdmin(orderId);
+  if (!order) throw new ActionError("NOT_FOUND", "Commande introuvable.");
+  return order;
+};
+
+const updateOrderStatusAction = async (
+  orderIdValue: number,
+  statusInput: unknown,
+) => {
+  const orderId = parseId(orderIdValue, "Commande");
+  if (
+    typeof statusInput !== "string" ||
+    !ADMIN_SETTABLE_STATUSES.includes(statusInput)
+  ) {
+    throw new ActionError("BAD_REQUEST", "Statut invalide.");
+  }
+  const changedRows = await orderRepository.updateStatus(orderId, statusInput);
+  if (changedRows === 0) {
+    throw new ActionError(
+      "CONFLICT",
+      "Cette commande ne peut pas être mise à jour.",
+    );
+  }
+};
+
 const getOrdersAction = async (userId: number, authenticatedUserId: number) => {
   assertOwner(userId, authenticatedUserId);
   return orderRepository.findAllByUser(userId);
@@ -141,4 +172,7 @@ export default {
   getOrderAction,
   createOrderAction,
   getShippingFeeAction,
+  getAdminOrdersAction,
+  getAdminOrderAction,
+  updateOrderStatusAction,
 };

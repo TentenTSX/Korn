@@ -1,0 +1,101 @@
+.admin-order-row {
+  border-bottom: 1px solid var(--color-line);
+  padding: 1.25rem 0;
+}
+
+.admin-order-summary {
+  display: grid;
+  width: 100%;
+  grid-template-columns: 1.2fr 1.2fr 1fr auto;
+  align-items: center;
+  gap: var(--space-4);
+  border: 0;
+  background: none;
+  color: var(--color-ink);
+  cursor: pointer;
+  text-align: left;
+
+  div strong,
+  div span {
+    display: block;
+    font-family: var(--font-third);
+    font-size: 0.85rem;
+  }
+
+  div span {
+    margin-top: 0.35rem;
+    color: var(--color-muted);
+  }
+
+  > span {
+    font-family: var(--font-third);
+    font-size: 0.85rem;
+    color: var(--color-muted);
+  }
+
+  > strong {
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+  }
+}
+
+.admin-order-status-select,
+.admin-order-status-readonly {
+  display: inline-block;
+  margin-top: 0.75rem;
+}
+
+.admin-order-status-select select {
+  min-height: 2.25rem;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--color-line);
+  background: var(--color-surface);
+  color: var(--color-ink);
+  cursor: pointer;
+  font-family: var(--font-third);
+  font-size: 0.8rem;
+}
+
+.admin-order-status-readonly {
+  color: var(--color-muted);
+  font-family: var(--font-third);
+  font-size: 0.8rem;
+}
+
+.admin-order-error {
+  margin-top: 0.5rem;
+  color: var(--color-accent-dark);
+  font-family: var(--font-third);
+  font-size: 0.8rem;
+}
+
+.admin-order-details {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px dashed var(--color-line);
+  color: var(--color-muted);
+  font-family: var(--font-third);
+  font-size: 0.82rem;
+
+  address {
+    font-style: normal;
+    line-height: 1.5;
+  }
+
+  ul {
+    margin-top: 0.75rem;
+    padding-left: 1.1rem;
+    list-style: disc;
+  }
+
+  li {
+    margin-top: 0.3rem;
+  }
+}
+
+@media (max-width: 800px) {
+  .admin-order-summary {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+}

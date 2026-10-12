@@ -1,0 +1,43 @@
+.admin-orders-page {
+  min-height: calc(100vh - var(--nav-height));
+  padding: 3rem;
+  background: var(--color-paper);
+  color: var(--color-ink);
+}
+
+.admin-orders-header {
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--color-line);
+}
+
+.admin-orders-eyebrow {
+  color: var(--color-accent);
+  font-family: var(--font-body);
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.admin-orders-header h1 {
+  margin-top: 0.35rem;
+  font-family: var(--font-display);
+  font-size: clamp(1.75rem, 3vw, 2.5rem);
+  font-weight: 500;
+}
+
+.admin-orders-list {
+  max-width: 60rem;
+  margin-top: 1rem;
+}
+
+.admin-orders-empty {
+  margin-top: 2rem;
+  color: var(--color-muted);
+  font-family: var(--font-third);
+}
+
+@media (max-width: 600px) {
+  .admin-orders-page {
+    padding: 2rem 1.25rem;
+  }
+}

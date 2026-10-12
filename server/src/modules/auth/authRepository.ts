@@ -8,6 +8,7 @@ type User = {
   email: string;
   password_hash: string;
   google_id: string | null;
+  role: string;
 };
 
 class authRepository {
@@ -21,7 +22,7 @@ class authRepository {
 
   async findById(id: number) {
     const [rows] = await databaseClient.query<Rows>(
-      "select id_user, first_name, last_name, email, created_at from users where id_user = ?",
+      "select id_user, first_name, last_name, email, role, created_at from users where id_user = ?",
       [id],
     );
     return rows[0] as Omit<User, "password_hash" | "google_id"> | undefined;

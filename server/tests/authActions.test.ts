@@ -14,6 +14,7 @@ function buildUser(overrides: Partial<Record<string, unknown>> = {}) {
     email: "ada@example.com",
     password_hash: "hashed",
     google_id: null,
+    role: "customer",
     ...overrides,
   };
 }
@@ -41,6 +42,7 @@ describe("authActions.register", () => {
       first_name: "Ada",
       last_name: "Lovelace",
       email: "ada@example.com",
+      role: "customer",
     });
     expect(typeof result.token).toBe("string");
     expect(authRepository.create).toHaveBeenCalledWith(
