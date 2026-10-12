@@ -143,7 +143,7 @@ Depuis la racine du projet :
 | Commande | Effet |
 | --- | --- |
 | `npm run dev` | Lance client + serveur en développement |
-| `npm run build` | Build de production (client + migration serveur) |
+| `npm run build` | Build de production du client (ne touche pas à la base) |
 | `npm start` | Démarre le serveur en mode production |
 | `npm test` | Lance les tests (Jest, côté serveur) |
 | `npm run check` | Biome (lint/format) + vérification TypeScript |
@@ -291,23 +291,24 @@ Node + MySQL sans aucune adaptation de code).
 
 1. Créer un projet Railway, y ajouter un service **MySQL** (plugin en un
    clic) et un second service pointant sur ce dépôt.
-2. Si Railway propose de construire via le `Dockerfile` présent à la racine,
-   le remplacer par le builder **Nixpacks** dans les réglages du service
-   (Settings → Build) — ce `Dockerfile` est un reliquat du template de
-   l'école, sans commande de démarrage autonome ; Nixpacks détecte
-   `npm run build` / `npm start` directement depuis `package.json`.
+2. Dans les réglages du service : builder **Railpack**, build `npm run build`,
+   start `npm start` (le `Dockerfile` est un reliquat du template de l'école,
+   sans commande de démarrage).
 3. Renseigner les variables d'environnement du service (onglet *Variables*),
    en reprenant celles de [server/.env](#variables-denvironnement) :
-   - `DB_HOST`, `DB_PORT`, `DB_USER`, `DB_PASSWORD`, `DB_NAME` via les
-     références Railway du service MySQL (ex. `${{MySQL.MYSQLHOST}}`).
+   - `DB_HOST`, `DB_PORT`, `DB_USER`, `DB_PASSWORD` via les références
+     Railway du service MySQL (ex. `${{MySQL.MYSQLHOST}}`), et `DB_NAME=Korn`
+     (`schema.sql` fait `USE Korn;`).
    - `NODE_ENV=production`
    - `JWT_SECRET`, `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`
    - `SMTP_*` / `EMAIL_FROM` d'un vrai fournisseur (Mailpit n'existe qu'en
      local)
    - `CLIENT_URL` et `GOOGLE_REDIRECT_URI`, une fois le domaine Railway
      attribué après le premier déploiement.
-4. Après le premier déploiement, appliquer le schéma sur la base Railway
-   (ex. via la CLI Railway : `railway run npm run db:migrate --workspace=server`).
+4. Initialiser la base **une seule fois**, depuis un poste local, en pointant
+   `server/.env` sur l'URL publique (TCP proxy) du MySQL Railway puis
+   `npm run db:migrate`. Le build ne lance plus la migration : elle supprime
+   et recrée la base, et elle refuse de tourner quand `NODE_ENV=production`.
 5. Créer l'endpoint webhook Stripe pointant vers
    `https://<domaine-railway>/api/payments/stripe/webhook` et renseigner son
    secret dans `STRIPE_WEBHOOK_SECRET`.
