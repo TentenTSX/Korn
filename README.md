@@ -29,7 +29,7 @@ comptes utilisateurs et un espace admin de gestion des commandes.
 - **Backend** : Node.js, Express, TypeScript
 - **Base de données** : MySQL
 - **Paiement** : Stripe Checkout + webhooks
-- **Emails** : Nodemailer (SMTP), PDF généré avec PDFKit
+- **Emails** : API HTTP Brevo en production, Nodemailer (SMTP / Mailpit) en local, PDF généré avec PDFKit
 - **Authentification** : JWT (cookie httpOnly) + OAuth Google
 - **Qualité** : Biome (lint/format), Jest (tests), TypeScript strict
 - **Gestionnaire de paquets** : npm (workspaces)
@@ -169,7 +169,8 @@ Scripts spécifiques au serveur (`--workspace=server`) :
 | `JWT_SECRET`, `JWT_EXPIRES_IN` | Signature et durée de vie des sessions |
 | `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `GOOGLE_REDIRECT_URI` | Connexion Google OAuth |
 | `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET` | Paiement Stripe (voir [Paiement Stripe](#paiement-stripe)) |
-| `SMTP_HOST`, `SMTP_PORT`, `SMTP_SECURE`, `SMTP_USER`, `SMTP_PASSWORD`, `EMAIL_FROM` | Envoi d'emails |
+| `SMTP_HOST`, `SMTP_PORT`, `SMTP_SECURE`, `SMTP_USER`, `SMTP_PASSWORD`, `EMAIL_FROM` | Envoi d'emails (SMTP, en local) |
+| `BREVO_API_KEY` | Si définie, envoi via l'API Brevo à la place du SMTP (production) |
 | `CLIENT_URL` | URL du frontend, utilisée pour le CORS et les liens dans les emails |
 | `NODE_ENV` | `production` en prod : active les cookies sécurisés (HTTPS uniquement) |
 
@@ -301,8 +302,9 @@ Node + MySQL sans aucune adaptation de code).
      (`schema.sql` fait `USE Korn;`).
    - `NODE_ENV=production`
    - `JWT_SECRET`, `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`
-   - `SMTP_*` / `EMAIL_FROM` d'un vrai fournisseur (Mailpit n'existe qu'en
-     local)
+   - `BREVO_API_KEY` et `EMAIL_FROM` (expéditeur vérifié dans Brevo) :
+     Railway bloque le SMTP sortant hors offre Pro, les emails passent donc
+     par l'API HTTP de Brevo
    - `CLIENT_URL` et `GOOGLE_REDIRECT_URI`, une fois le domaine Railway
      attribué après le premier déploiement.
 4. Initialiser la base **une seule fois**, depuis un poste local, en pointant
