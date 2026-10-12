@@ -8,7 +8,6 @@
     "db:migrate:commerce": "tsx ./src/bin/migrateCommerce",
     "db:seed:test-products": "tsx ./src/bin/seedTestProducts.ts --seed-demo",
     "db:seed": "tsx ./bin/seed",
-    "build": "tsx ./bin/migrate",
     "start": "tsx ./src/main",
     "test": "jest --verbose",
     "test:ci": "jest --verbose --testPathIgnorePatterns=install.test.ts"
