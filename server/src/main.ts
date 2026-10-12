@@ -9,8 +9,9 @@ import "../database/checkConnection";
 // Import the Express application from ./app
 import app from "./app";
 
-// Get the port from the environment variables
-const port = process.env.APP_PORT;
+// Railway (and most PaaS hosts) inject PORT and expect the app to listen on
+// it; APP_PORT is the local/.env fallback for development.
+const port = process.env.PORT ?? process.env.APP_PORT;
 
 // Start the server and listen on the specified port
 app
