@@ -53,6 +53,9 @@ class ProductRepository {
     // the representative shown on the card (price, image, add-to-cart), and
     // the colors subquery lists every distinct color it comes in, so the
     // frontend no longer has to dedupe a row-per-variant result itself.
+    // total_stock sums every variant instead, since a product shouldn't read
+    // as "out of stock" just because its one representative variant is —
+    // another size/color might still be available.
     const [rows] = await databaseClient.query<Rows>(
       `select p.*,
         (select c.name from product_categories pc join categories c on c.id_category = pc.category_id where pc.product_id = p.id_product and c.name in ('Homme', 'Femme') limit 1) as category_name,
@@ -62,7 +65,8 @@ class ProductRepository {
         (select pi.url from product_images pi where pi.product_id = p.id_product and (pi.color = rv.color or pi.color is null) order by (pi.color = rv.color) desc, pi.position limit 1) as image,
         (select pi.alt_text from product_images pi where pi.product_id = p.id_product and (pi.color = rv.color or pi.color is null) order by (pi.color = rv.color) desc, pi.position limit 1) as alt_text,
         (select pi.focal_point from product_images pi where pi.product_id = p.id_product and (pi.color = rv.color or pi.color is null) order by (pi.color = rv.color) desc, pi.position limit 1) as focal_point,
-        (select group_concat(distinct pv3.color order by pv3.color separator ',') from product_variants pv3 where pv3.product_id = p.id_product and pv3.color is not null) as colors
+        (select group_concat(distinct pv3.color order by pv3.color separator ',') from product_variants pv3 where pv3.product_id = p.id_product and pv3.color is not null) as colors,
+        (select coalesce(sum(pv4.stock_quantity), 0) from product_variants pv4 where pv4.product_id = p.id_product) as total_stock
       from products p
       left join (
         select pv.*, row_number() over (partition by pv.product_id order by pv.id_variant) as rn

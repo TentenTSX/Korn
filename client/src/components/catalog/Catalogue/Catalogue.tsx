@@ -4,8 +4,11 @@ import { useActiveSale } from "../../../hooks/useActiveSale";
 import { useProducts } from "../../../hooks/useProducts";
 import { isRecentlyAdded } from "../../../utils/productFreshness";
 import CatalogueFilters from "../CatalogueFilters/CatalogueFilters";
+import CataloguePagination from "../CataloguePagination/CataloguePagination";
 import CatalogueProductCard from "../CatalogueProductCard/CatalogueProductCard";
 import "./Catalogue.css";
+
+const PAGE_SIZE = 12;
 
 const SUBCATEGORY_FILTERS: Record<"Homme" | "Femme", string[]> = {
   Homme: ["Tout", "Débardeurs", "Pantalons", "Shorts", "Sweats", "T-shirts"],
@@ -51,6 +54,7 @@ type CatalogueProduct = {
   color?: string | null;
   colors?: string[];
   stockQuantity?: number;
+  outOfStock: boolean;
 };
 
 function Catalogue({ gender }: CatalogueProps) {
@@ -73,6 +77,8 @@ function Catalogue({ gender }: CatalogueProps) {
     !gender && filter ? filterByRoute[filter.toLowerCase()] : undefined;
   const [activeFilter, setActiveFilter] = useState(routeFilter ?? "Tout");
   const [sort, setSort] = useState("newest");
+  const [showOutOfStock, setShowOutOfStock] = useState(false);
+  const [page, setPage] = useState(1);
   const bestsellerIds = new Set(
     bestsellerProducts.map((product) => product.id_product),
   );
@@ -97,6 +103,7 @@ function Catalogue({ gender }: CatalogueProps) {
     color: product.color,
     colors: product.colors ?? [],
     stockQuantity: product.stock_quantity,
+    outOfStock: Number(product.total_stock) <= 0,
   }));
 
   useEffect(() => {
@@ -106,12 +113,15 @@ function Catalogue({ gender }: CatalogueProps) {
   // The sale discount is applied via a promo code entered in the cart, not
   // per product, so there is nothing to list under "Soldes" — the catalogue
   // points shoppers at the code instead.
+  const stockFilteredProducts = showOutOfStock
+    ? uniqueProducts
+    : uniqueProducts.filter((product) => !product.outOfStock);
   const visibleProducts =
     !gender && activeFilter === "Soldes"
       ? []
       : activeFilter === "Tout"
-        ? uniqueProducts
-        : uniqueProducts.filter((product) => {
+        ? stockFilteredProducts
+        : stockFilteredProducts.filter((product) => {
             if (!gender && activeFilter === "Nouveautés") {
               return product.badge === "NOUVEAU";
             }
@@ -131,6 +141,14 @@ function Catalogue({ gender }: CatalogueProps) {
       return 0;
     },
   );
+  const totalPages = Math.max(1, Math.ceil(sortedProducts.length / PAGE_SIZE));
+  // Clamp rather than reset via effect: switching to a filter with fewer
+  // pages snaps back into range on its own, without an extra render pass.
+  const safePage = Math.min(page, totalPages);
+  const paginatedProducts = sortedProducts.slice(
+    (safePage - 1) * PAGE_SIZE,
+    safePage * PAGE_SIZE,
+  );
 
   const filters = gender ? SUBCATEGORY_FILTERS[gender] : COLLECTION_FILTERS;
   const breadcrumbLabel = gender ?? "Collection";
@@ -141,8 +159,10 @@ function Catalogue({ gender }: CatalogueProps) {
         filters={filters}
         breadcrumbLabel={breadcrumbLabel}
         initialFilter={routeFilter ?? "Tout"}
+        showOutOfStock={showOutOfStock}
         onFilterChange={setActiveFilter}
         onSortChange={setSort}
+        onShowOutOfStockChange={setShowOutOfStock}
       />
       <section className="catalogue" aria-labelledby="catalogue-products-title">
         <h2 id="catalogue-products-title" className="catalogue-product-count">
@@ -159,14 +179,21 @@ function Catalogue({ gender }: CatalogueProps) {
                 : "Aucun produit ne correspond à ce filtre."}
           </p>
         ) : (
-          <div className="catalogue-product-grid">
-            {sortedProducts.map((product) => (
-              <CatalogueProductCard
-                key={`${product.name}-${product.variantId ?? "demo"}`}
-                {...product}
-              />
-            ))}
-          </div>
+          <>
+            <div className="catalogue-product-grid">
+              {paginatedProducts.map((product) => (
+                <CatalogueProductCard
+                  key={`${product.name}-${product.variantId ?? "demo"}`}
+                  {...product}
+                />
+              ))}
+            </div>
+            <CataloguePagination
+              page={safePage}
+              totalPages={totalPages}
+              onPageChange={setPage}
+            />
+          </>
         )}
       </section>
     </>

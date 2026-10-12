@@ -19,6 +19,7 @@ type CatalogueProductCardProps = {
   color?: string | null;
   colors?: string[];
   stockQuantity?: number;
+  outOfStock?: boolean;
 };
 
 function CatalogueProductCard({
@@ -35,6 +36,7 @@ function CatalogueProductCard({
   color,
   colors,
   stockQuantity,
+  outOfStock,
 }: CatalogueProductCardProps) {
   return (
     <article className="catalogue-product-card">
@@ -52,7 +54,18 @@ function CatalogueProductCard({
             loading="lazy"
           />
         )}
-        {badge && <span className="catalogue-product-card-badge">{badge}</span>}
+        {(badge || outOfStock) && (
+          <div className="catalogue-product-card-badges">
+            {badge && (
+              <span className="catalogue-product-card-badge">{badge}</span>
+            )}
+            {outOfStock && (
+              <span className="catalogue-product-card-badge catalogue-product-card-badge--stock">
+                Bientôt disponible
+              </span>
+            )}
+          </div>
+        )}
       </Link>
       <div className="catalogue-product-card-info">
         <div>

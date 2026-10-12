@@ -13,6 +13,9 @@ export type Product = {
   color: string | null;
   price: number;
   stock_quantity: number;
+  // Summed across every variant, unlike stock_quantity which only reflects
+  // the single representative variant shown on the card.
+  total_stock: number;
   image: string | null;
   alt_text: string | null;
   // The CSS object-position vertical anchor for `image`, e.g. "85%". Lets a
