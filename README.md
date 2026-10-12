@@ -292,9 +292,10 @@ Node + MySQL sans aucune adaptation de code).
 
 1. Créer un projet Railway, y ajouter un service **MySQL** (plugin en un
    clic) et un second service pointant sur ce dépôt.
-2. Dans les réglages du service : builder **Railpack**, build `npm run build`,
-   start `npm start` (le `Dockerfile` est un reliquat du template de l'école,
-   sans commande de démarrage).
+2. Railway construit l'image avec `server/railway.Dockerfile`, désignée par la
+   variable `RAILWAY_DOCKERFILE_PATH=server/railway.Dockerfile` (le
+   `Dockerfile` racine est celui du template de l'école : Alpine, où `argon2`
+   ne compile pas, et sans étape de build ni de démarrage).
 3. Renseigner les variables d'environnement du service (onglet *Variables*),
    en reprenant celles de [server/.env](#variables-denvironnement) :
    - `DB_HOST`, `DB_PORT`, `DB_USER`, `DB_PASSWORD` via les références
