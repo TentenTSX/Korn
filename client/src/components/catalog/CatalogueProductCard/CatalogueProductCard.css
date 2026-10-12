@@ -25,10 +25,16 @@
   transform: scale(1.04);
 }
 
-.catalogue-product-card-badge {
+.catalogue-product-card-badges {
   position: absolute;
   top: 1rem;
   left: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.catalogue-product-card-badge {
   padding: 0.6rem 0.8rem;
   background: var(--color-ink);
   color: var(--color-surface);
@@ -36,6 +42,10 @@
   font-size: 0.62rem;
   font-weight: 600;
   letter-spacing: 0.12em;
+}
+
+.catalogue-product-card-badge--stock {
+  background: var(--color-muted);
 }
 
 .catalogue-product-card-info {

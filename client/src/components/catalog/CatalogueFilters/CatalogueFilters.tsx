@@ -5,16 +5,20 @@ type CatalogueFiltersProps = {
   filters: string[];
   breadcrumbLabel: string;
   initialFilter: string;
+  showOutOfStock: boolean;
   onFilterChange: (filter: string) => void;
   onSortChange: (sort: string) => void;
+  onShowOutOfStockChange: (showOutOfStock: boolean) => void;
 };
 
 function CatalogueFilters({
   filters,
   breadcrumbLabel,
   initialFilter,
+  showOutOfStock,
   onFilterChange,
   onSortChange,
+  onShowOutOfStockChange,
 }: CatalogueFiltersProps) {
   const [activeFilter, setActiveFilter] = useState(initialFilter);
 
@@ -47,18 +51,28 @@ function CatalogueFilters({
             </li>
           ))}
         </ul>
-        <label>
-          <span className="sr-only">Trier les produits</span>
-          <select
-            className="catalogue-sort-select"
-            defaultValue="newest"
-            onChange={(event) => onSortChange(event.target.value)}
-          >
-            <option value="newest">Trier : nouveautés</option>
-            <option value="price-low">Prix croissant</option>
-            <option value="price-high">Prix décroissant</option>
-          </select>
-        </label>
+        <div className="catalogue-filter-controls">
+          <label className="catalogue-stock-toggle">
+            <input
+              type="checkbox"
+              checked={showOutOfStock}
+              onChange={(event) => onShowOutOfStockChange(event.target.checked)}
+            />
+            Afficher les produits bientôt disponibles
+          </label>
+          <label>
+            <span className="sr-only">Trier les produits</span>
+            <select
+              className="catalogue-sort-select"
+              defaultValue="newest"
+              onChange={(event) => onSortChange(event.target.value)}
+            >
+              <option value="newest">Trier : nouveautés</option>
+              <option value="price-low">Prix croissant</option>
+              <option value="price-high">Prix décroissant</option>
+            </select>
+          </label>
+        </div>
       </div>
     </div>
   );

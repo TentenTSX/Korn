@@ -69,6 +69,29 @@
   cursor: pointer;
 }
 
+.catalogue-filter-controls {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.catalogue-stock-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #586174;
+  font-family: var(--font-body);
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.catalogue-stock-toggle input {
+  cursor: pointer;
+}
+
 @media (max-width: 640px) {
   .catalogue-filters {
     align-items: stretch;
@@ -83,6 +106,11 @@
 
   .catalogue-filter-button {
     flex: 0 0 auto;
+  }
+
+  .catalogue-filter-controls {
+    flex-direction: column;
+    align-items: stretch;
   }
 
   .catalogue-sort-select {
